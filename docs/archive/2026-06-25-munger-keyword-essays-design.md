@@ -1,3 +1,5 @@
+> **📦 已归档(2026-06-26)** — 这是芒格项目最初的一次性设计文档,内容已被吸收进:文章模板 `articles/_TEMPLATE.md`(含语气清单)、通用方法论 `docs/playbooks/corpus-to-articles-pipeline.md`、校验脚本 `tools/check_article.py`。**流程以那三处为准,本文仅作历史留存,不再更新。**
+
 # 设计文档:芒格关键词深度长文
 
 **日期**:2026-06-25

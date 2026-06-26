@@ -272,4 +272,4 @@
 
 每篇文章遵循统一的八节骨架：题记 → 钩子 → 他怎么定义 → 跨年代的回响 → **反过来想** → **跨学科透镜** → 落到实处 → 边界与误读 → 给今天的你 → 出处索引。其中"反过来想"与"跨学科透镜"两节为芒格思维的两根支柱，每篇必有。
 
-写作规范、引用约束与验证脚本详见 [`docs/superpowers/specs/`](../docs/superpowers/specs/) 与 [`docs/superpowers/plans/`](../docs/superpowers/plans/)。验证脚本：[`tools/check_article.py`](../tools/check_article.py)。
+生成流程与写作规范详见通用方法论 [`docs/playbooks/corpus-to-articles-pipeline.md`](../docs/playbooks/corpus-to-articles-pipeline.md);文章模板 [`articles/_TEMPLATE.md`](_TEMPLATE.md);引用硬门槛由验证脚本 [`tools/check_article.py`](../tools/check_article.py) 强制。最初的设计规范与实施计划已归档在 [`docs/archive/`](../docs/archive/)。

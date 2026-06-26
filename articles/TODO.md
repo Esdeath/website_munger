@@ -4,14 +4,16 @@
 > 流程见本文末「## 如何生成下一篇(可复制的操作)」。
 
 相关文件:
-- 🔧 通用方法论(并行 agent 流水线 + 省 token):[`docs/playbooks/corpus-to-articles-pipeline.md`](../docs/playbooks/corpus-to-articles-pipeline.md)
-- 设计规范:[`docs/superpowers/specs/2026-06-25-munger-keyword-essays-design.md`](../docs/superpowers/specs/2026-06-25-munger-keyword-essays-design.md)
-- 实施计划:[`docs/superpowers/plans/2026-06-25-munger-keyword-essays.md`](../docs/superpowers/plans/2026-06-25-munger-keyword-essays.md)
-- 文章模板:[`articles/_TEMPLATE.md`](../articles/_TEMPLATE.md)
-- 验证脚本:[`tools/check_article.py`](../tools/check_article.py)
+- 🔧 **流程权威**(怎么生成一批文章 · 通用方法论 + 省 token):[`docs/playbooks/corpus-to-articles-pipeline.md`](../docs/playbooks/corpus-to-articles-pipeline.md)
+- 文章模板(8 小节骨架 + 语气清单):[`articles/_TEMPLATE.md`](../articles/_TEMPLATE.md)
+- 验证脚本(硬门槛 / 合同):[`tools/check_article.py`](../tools/check_article.py)
 - 文章索引:[`articles/README.md`](../articles/README.md)
+- 历史归档(最初的设计规范 + 第 1 批实施计划,仅留存):[`docs/archive/`](../docs/archive/)
 
-「覆盖」= 出现在 83 篇语料中的多少篇(代表"常说"的程度);「频次」= 总出现次数。
+> 本文件只管**项目状态**:待办池、进度、本项目特有的选词坑、语料路径。**「怎么做」的完整流程不在这里,见上面的 playbook。**
+
+「覆盖」= 出现在语料中的多少篇(代表"常说"的程度);「频次」= 总出现次数。
+语料路径:`shareholders/`(34 篇)+ `speech/`(49 篇)。
 
 ---
 
@@ -211,67 +213,12 @@
 
 ---
 
-## 🔧 如何生成下一篇(可复制的操作)
+## 🔧 如何生成下一批
 
-每篇文章 = 一个独立任务,严格走以下 5 步。这与已完成文章用的流程**完全一致**。
+**完整可复制流程见 [`docs/playbooks/corpus-to-articles-pipeline.md`](../docs/playbooks/corpus-to-articles-pipeline.md)**(控制器预挖 `file:line` 清单 → 并行写手窄读 → 校验器 PASS 门槛 → 独立事实核查 → 控制器统一提交)。这里只记本项目的两条快捷参数:
 
-### 第 1 步:采集原文(grep + 读文件)
-针对关键词及其同义表述,在 83 篇语料里搜索,带文件名和行号:
-```bash
-cd /Users/ruimin/Desktop/code/website_munger
-grep -rn -E "关键词|同义词1|同义词2|相关比喻" shareholders speech | head -100
-```
-然后**打开命中的 .md 文件**读上下文,逐字核对,并确认**说话人是芒格本人**(不是访谈者/巴菲特/观众/施罗德等)。
-
-### 第 2 步:筛选引用(≥12 处,跨 ≥4 来源)
-按"跨年代 / 跨场合"挑出 ≥12 处引用,覆盖 ≥4 个不同来源文件/年份。各小节大致分配:
-- 定义节:芒格自己的定义(1–2 处)
-- 跨年代节:不同年份反复强调(3–4 处,每条标年份)→ 这是"常说"的证据
-- 反过来想节:从反面/失败角度切入 + 反面案例
-- 跨学科节:用某学科模型解释"为什么成立"
-- 落到实处节:一个真实公司/事件案例
-
-### 第 3 步:套模板成文
-```bash
-cp articles/_TEMPLATE.md "articles/关键词-副标题.md"
-```
-按 8 小节骨架填充(题记 → 钩子 → 定义 → 跨年代回响 → **反过来想** → **跨学科透镜** → 落到实处 → 边界与误读 → 给今天的你 → 出处索引)。
-- frontmatter 填 `keyword` / `category` / `quote_count`(= 实际引用数,须与脚本输出的「引用数」一致)/ `sources`(列出**全部**被引来源,一条一个)。
-- 引用**逐字照抄**,放 blockquote,保留原文加粗;出处以 `——` 开头:`> ——《篇名》年份`。
-- 省略中间内容用 `……` 连接(脚本按 `……` 切片核验)。
-- **解读文字是编者第三人称口吻**("芒格认为…/他说…"),不要第一人称冒充芒格。
-- **标题/小标题的比喻也要有据**:若用了某个意象当副标题(如"坐在火药桶上"),它必须是语料里芒格自己用过的词,别自创比喻让读者误以为是原话。
-
-### 第 4 步:验证(必须 PASS)
-```bash
-python3 tools/check_article.py "articles/关键词-副标题.md"; echo "exit=$?"
-```
-必须输出 `PASS` 且 `exit=0`,引用数 ≥12、来源数 ≥4。
-- 若报「引用未在语料中找到」→ 你抄错了字或漏字,回源文件逐字重抄,或换一条真引文。
-- 若引用数/来源数不足 → 补引文。
-
-### 第 5 步:提交
-```bash
-git add "articles/关键词-副标题.md"
-git commit -m "article: 关键词"
-```
-
-### 第 6 步(可选但推荐):质量审查
-脚本只能保证"引文逐字存在",**不能**保证:出处年份对不对、说话人是不是芒格、解读有没有过度引申、年龄/数字/史实对不对。建议每篇成文后,人工或用一个独立审查再核一遍:
-1. 抽查 4–5 条引文,grep 找到真实出处文件,核对年份/场合;
-2. 读源文件上下文,确认说话人是芒格;
-3. 检查解读是否"用引文证明了它没说的话";
-4. 核对涉及的人物、数字、史实、年龄。
-(已写文章都跑过这一步,抓出了多处脚本发现不了的错误——第 2 批就修正了芒格年龄误写和一处自创副标题比喻。)
-
-### 收尾:更新索引
-全部写完后,把新文章加进 [`articles/README.md`](../articles/README.md),并对全部文章跑一遍脚本复验:
-```bash
-for f in articles/*.md; do
-  b=$(basename "$f"); { [ "$b" = "_TEMPLATE.md" ] || [ "$b" = "README.md" ]; } && continue
-  python3 tools/check_article.py "$f"
-done
-```
+- 采集命令形:`grep -rn -E "关键词|同义词|相关比喻" shareholders speech`,然后用 `Read` 的 `offset/limit` **只读命中处前后 ~30 行**,不要整篇读(高频词尤其重要)。
+- 提交约定:每篇一个 `git commit -m "article: 关键词"`,最后一个索引提交更新 `README.md` + 本文件。直推 `main`,不开分支/PR。
 
 ---
 

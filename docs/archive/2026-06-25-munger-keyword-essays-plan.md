@@ -1,3 +1,5 @@
+> **📦 已归档(2026-06-26)** — 这是第 1 批 8 篇的一次性 bootstrap 计划,早已完成(现已 46 篇)。后续批次的可复制流程见 `docs/playbooks/corpus-to-articles-pipeline.md` 与 `articles/TODO.md`。本文仅作历史留存,不再更新。
+
 # 芒格关键词深度长文 实施计划
 
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
