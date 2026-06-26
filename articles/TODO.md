@@ -4,6 +4,7 @@
 > 流程见本文末「## 如何生成下一篇(可复制的操作)」。
 
 相关文件:
+- 🔧 通用方法论(并行 agent 流水线 + 省 token):[`docs/playbooks/corpus-to-articles-pipeline.md`](../docs/playbooks/corpus-to-articles-pipeline.md)
 - 设计规范:[`docs/superpowers/specs/2026-06-25-munger-keyword-essays-design.md`](../docs/superpowers/specs/2026-06-25-munger-keyword-essays-design.md)
 - 实施计划:[`docs/superpowers/plans/2026-06-25-munger-keyword-essays.md`](../docs/superpowers/plans/2026-06-25-munger-keyword-essays.md)
 - 文章模板:[`articles/_TEMPLATE.md`](../articles/_TEMPLATE.md)
