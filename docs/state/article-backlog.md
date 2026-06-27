@@ -1,16 +1,16 @@
-# 芒格关键词文章 · 待办清单(TODO Backlog)
+# 芒格关键词文章 · 状态清单
 
-> 这份清单登记**尚未成文**的关键词。每个词都可以用与已完成文章**完全相同的流程和模板**生成一篇深度长文。
-> 流程见本文末「## 如何生成下一篇(可复制的操作)」。
+> 这份清单记录关键词文章的完成状态、分类和选词注意事项。
+> 本文件只记录项目状态,不承载完整操作流程。
 
 相关文件:
-- 🔧 **流程权威**(怎么生成一批文章 · 通用方法论 + 省 token):[`docs/playbooks/corpus-to-articles-pipeline.md`](../docs/playbooks/corpus-to-articles-pipeline.md)
-- 文章模板(8 小节骨架 + 语气清单):[`articles/_TEMPLATE.md`](../articles/_TEMPLATE.md)
-- 验证脚本(硬门槛 / 合同):[`tools/check_article.py`](../tools/check_article.py)
-- 文章索引:[`articles/README.md`](../articles/README.md)
-- 历史归档(最初的设计规范 + 第 1 批实施计划,仅留存):[`docs/archive/`](../docs/archive/)
+- 🔧 **最佳实践**(以后照着做):[`docs/workflows/generate-articles-best-practices.md`](../workflows/generate-articles-best-practices.md)
+- 通用流水线方法论:[`docs/workflows/corpus-to-articles-pipeline.md`](../workflows/corpus-to-articles-pipeline.md)
+- 文章模板(8 小节骨架 + 语气清单):[`docs/reference/article-template.md`](../reference/article-template.md)
+- 验证脚本(硬门槛 / 合同):[`tools/check_article.py`](../../tools/check_article.py)
+- 文章索引:[`docs/reference/article-index.md`](../reference/article-index.md)
 
-> 本文件只管**项目状态**:待办池、进度、本项目特有的选词坑、语料路径。**「怎么做」的完整流程不在这里,见上面的 playbook。**
+> 本文件只管**项目状态**:待办池、进度、本项目特有的选词坑、语料路径。**怎么做**见最佳实践文档。
 
 「覆盖」= 出现在语料中的多少篇(代表"常说"的程度);「频次」= 总出现次数。
 语料路径:`shareholders/`(34 篇)+ `speech/`(49 篇)。
@@ -139,24 +139,7 @@
 
 ---
 
-## ⭐ 第 3 批推荐与完成记录
-
-按"覆盖广 + 频次高 + 与已写不重复"挑选。原建议先写 8 个;本轮继续时另从完整待办池补入 2 个高相关投资原则主题。
-
-- [x] **长期持有**(投资原则)— `长期持有-坐等伟大公司复利增长.md` — 覆盖最广;角度"复利需要时间 + 低换手"
-- [x] **耐心 · 等待 · 好球区**(投资原则)— `耐心等待好球区-只挥好球.md` — 几十年只挥几次棒
-- [x] **复利**(投资原则 / 商业模式)— `复利-让时间替你工作.md` — 时间的朋友
-- [x] **概率 · 赔率 · 期望值**(思维方法)— `概率赔率期望值-把赌注押在错价上.md` — 费马-帕斯卡系统
-- [x] **承诺一致性倾向**(人性偏误)— `承诺一致性倾向-别被旧想法锁死.md` — 25 种误判心理学里覆盖最广的一种
-- [x] **勤奋 · 努力**(品格处世)— `勤奋努力-把眼前的事做好.md` — 覆盖最广
-- [x] **李光耀**(常引用人物)— `李光耀-芒格的另一尊半身像.md` — 芒格的另一尊半身像
-- [x] **可口可乐**(公司案例)— `可口可乐-心理学护城河范本.md` — 心理学护城河范本
-- [x] **数学 / 复利**(学科体系)— `数学复利-时间和指数的朋友.md` — 费马-帕斯卡、排列组合
-- [x] **利率**(宏观警示)— `利率-资金的重力与估值的温度.md` — 覆盖最广的宏观变量
-
----
-
-## 📋 完整待办池(按分类)
+## 📋 关键词池(按分类)
 
 ### 投资原则 / 商业模式
 - [x] 护城河 — `护城河-宽且不断变宽的护城河.md`(第 2 批已完成)
@@ -247,16 +230,16 @@
 
 ---
 
-## 🔧 如何生成下一批
+## 状态维护规则
 
-**完整可复制流程见 [`docs/playbooks/corpus-to-articles-pipeline.md`](../docs/playbooks/corpus-to-articles-pipeline.md)**(控制器预挖 `file:line` 清单 → 并行写手窄读 → 校验器 PASS 门槛 → 独立事实核查 → 控制器统一提交)。这里只记本项目的两条快捷参数:
-
-- 采集命令形:`grep -rn -E "关键词|同义词|相关比喻" shareholders speech`,然后用 `Read` 的 `offset/limit` **只读命中处前后 ~30 行**,不要整篇读(高频词尤其重要)。
-- 提交约定:每篇一个 `git commit -m "article: 关键词"`,最后一个索引提交更新 `README.md` + 本文件。直推 `main`,不开分支/PR。
+- 新增文章后,只在这里更新完成批次、勾选状态、引用总数和选词注意事项。
+- 引用数必须来自 `python3 tools/check_article.py <article>` 的真实输出。
+- 不在这里写完整操作步骤;完整步骤见 [`docs/workflows/generate-articles-best-practices.md`](../workflows/generate-articles-best-practices.md)。
+- 不在这里维护成品文章介绍;成品介绍见 [`docs/reference/article-index.md`](../reference/article-index.md)。
 
 ---
 
 ## 进度
 
-- 已完成:**54 / 约 60+** 个候选关键词
-- 下一批目标:从完整待办池继续按覆盖广、频次高、与已写不重复挑选
+- 已完成:**70 篇,共 1281 处引用**
+- 当前关键词池没有未完成条目。新增候选词时,按分类加入“关键词池”,并先做覆盖和来源数预检。

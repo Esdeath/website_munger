@@ -1,57 +1,31 @@
-# docs/ —— 文档索引
+# docs/ 文档导航
 
-本项目「从语料库提取关键词、再由关键词批量生成逐字可考的文章」这套做法的全部文档。
-**先读哪份、各管什么,看下面。**
+本目录只记录一件事:如何从 `shareholders/` 和 `speech/` 的原始 Markdown 语料,生成 `articles/` 里的芒格关键词文章,并持续维护这套文章库。
 
----
+## 先读哪份
 
-## ⭐ 主文档(从这里开始)
+1. **以后要照着做一批文章**:读 [`workflows/generate-articles-best-practices.md`](workflows/generate-articles-best-practices.md)。
+2. **想理解整套方法论**:读 [`workflows/corpus-to-articles-pipeline.md`](workflows/corpus-to-articles-pipeline.md)。
+3. **要选下一篇题目**:读 [`state/article-backlog.md`](state/article-backlog.md)。
+4. **要复制文章骨架**:用 [`reference/article-template.md`](reference/article-template.md)。
+5. **要更新成品目录**:改 [`reference/article-index.md`](reference/article-index.md)。
 
-### [`playbooks/corpus-to-articles-pipeline.md`](playbooks/corpus-to-articles-pipeline.md)
-**这是主文档,也是流程的唯一权威。** 通用方法论(corpus-agnostic),讲清楚整条流水线:
-控制器 + 并行写手 + 独立事实核查 + 统一提交、机器可核验的 PASS 门槛、如何把 token 成本压到最低、编码/标点坑、失败恢复、可复用的 writer/checker prompt 骨架。
-其中 **§0「从零搭建路线图」** 专门讲:换一套全新资料时,如何一步步搭一个同类知识库(备料 → 提关键词 → 立合同 → 试产 → 量产)。
+## 目录职责
 
----
+| 目录 | 只负责什么 | 不负责什么 |
+|---|---|---|
+| `workflows/` | 操作步骤、方法论、最佳实践 | 记录当前完成了哪些文章 |
+| `reference/` | 可复用参考件:模板、成品索引 | 记录待办状态 |
+| `state/` | 当前项目状态:待办池、完成批次、进度 | 讲完整操作流程 |
 
-## 配套文件(不在 docs/,但属于这套体系)
+## 当前关键文件
 
-这两个是**运行件**,不是阅读文档,所以留在原位(移动会破坏脚本的语料定位和写手的 `cp` 路径):
+- [`../tools/check_article.py`](../tools/check_article.py):硬门槛校验器。文章必须通过它才算完成。
+- [`../articles/`](../articles/):成品文章目录。这里应只放最终文章,不要放流程文档、模板或待办清单。
+- [`../shareholders/`](../shareholders/) 与 [`../speech/`](../speech/):原始语料目录。所有引用必须逐字来自这里。
 
-- **合同 / 硬门槛** —— [`../tools/check_article.py`](../tools/check_article.py)
-  逐字存在性 + 引用数下限 + 来源数下限 + 必备小节 + frontmatter 完整。任何一篇文章必须 `PASS` 才算合格。
-- **文章模板(结构 + 写作语气清单)** —— [`../articles/_TEMPLATE.md`](../articles/_TEMPLATE.md)
-  8 小节骨架;文末注释里有 9 条「写作语气清单」(成文前删)。
+## 维护原则
 
-项目状态(待办池 / 进度 / 本项目选词坑 / 语料路径)在 [`../articles/TODO.md`](../articles/TODO.md);成品索引在 [`../articles/README.md`](../articles/README.md)。
-
----
-
-## 归档(只读历史,不再更新)
-
-[`archive/`](archive/) —— 芒格项目最初的一次性文档,内容已被主文档 + 模板 + 校验脚本吸收:
-- `2026-06-25-munger-keyword-essays-design.md` —— 最初的设计规范
-- `2026-06-25-munger-keyword-essays-plan.md` —— 第 1 批 8 篇的实施计划
-
----
-
-## 怎么读(按你的目的选一条路)
-
-**A. 我想了解这套体系是怎么运作的(通读)**
-1. 本文件(全景 + 各文档职责)
-2. 主文档 `playbooks/corpus-to-articles-pipeline.md` §1–§2(编排模式 + 为什么要有 PASS 门槛)
-3. `tools/check_article.py` 的开头注释 + 常量(看「合格」到底由什么定义)
-4. `articles/_TEMPLATE.md`(一篇文章长什么样)
-5. 随便翻一篇成品,如 `articles/能力圈-知道自己不知道什么.md`,对照模板看实际效果
-
-**B. 我要给同一个知识库再生成一批文章(干活)**
-1. `articles/TODO.md`(选题:从待办池挑关键词、看本项目选词坑)
-2. 主文档 §3(省 token)+ §6(prompt 骨架)+ §7(控制器运行清单)——照着跑
-3. 用 `tools/check_article.py` 验,直到 PASS
-
-**C. 我要用一套全新资料从零搭一个同类知识库(迁移)**
-1. 主文档 **§0「从零搭建路线图」**——这是为你写的,6 个阶段一步步来
-2. 主文档 §8「迁移替换表」——逐个部件对照,知道要把哪些换成自己的
-3. 回到 §2 立合同(先写校验器)+ §9 模板,然后进 §7 稳态循环
-
-> 一句话内核(换任何资料都不变):**先定合同(校验器)+ 分类 → 从语料提关键词建待办池 → 试产 1 篇校准 → 然后控制器预挖+窄读省 token、写手并行、独立核查兜语义、统一提交。**
+- 一个文件只做一件事:流程归流程,状态归状态,模板归模板,索引归索引。
+- 生成文章时,先按 `workflows/generate-articles-best-practices.md` 执行。
+- 任何文章引用数、来源数、完成状态,都以 `tools/check_article.py` 的输出为准。
