@@ -1,0 +1,59 @@
+import { describe, expect, it } from "vitest";
+import { extractExcerpt, extractHeadings, parseMarkdownDocument } from "../src/lib/markdown";
+
+const articleMarkdown = `---
+title: 多元思维模型:把知识挂上格栅
+keyword: 多元思维模型
+category: 思维方法
+quote_count: 17
+sources:
+  - 论基本的、普世的智慧，及其与投资管理和商业的关系(1994)
+  - 每日期刊股东会讲话(2017)
+date: 2026-06-25
+---
+
+> 「你们必须在头脑中拥有一些思维模型。」
+
+## 一、拿着一把锤子，你能看见什么
+
+一个商学院毕业生进入咨询行业。
+
+## 二、他怎么定义
+
+知识的碎片毫无用处。
+`;
+
+describe("parseMarkdownDocument", () => {
+  it("parses front matter and body", () => {
+    const parsed = parseMarkdownDocument("articles/多元思维模型-把知识挂上格栅.md", articleMarkdown);
+
+    expect(parsed.data.title).toBe("多元思维模型:把知识挂上格栅");
+    expect(parsed.data.keyword).toBe("多元思维模型");
+    expect(parsed.data.category).toBe("思维方法");
+    expect(parsed.data.quote_count).toBe(17);
+    expect(parsed.data.sources).toEqual([
+      "论基本的、普世的智慧，及其与投资管理和商业的关系(1994)",
+      "每日期刊股东会讲话(2017)"
+    ]);
+    expect(parsed.body).toContain("一个商学院毕业生进入咨询行业。");
+  });
+});
+
+describe("extractHeadings", () => {
+  it("extracts level two headings with ids", () => {
+    const parsed = parseMarkdownDocument("articles/多元思维模型-把知识挂上格栅.md", articleMarkdown);
+
+    expect(extractHeadings(parsed.body)).toEqual([
+      { depth: 2, text: "一、拿着一把锤子，你能看见什么", slug: "一-拿着一把锤子-你能看见什么" },
+      { depth: 2, text: "二、他怎么定义", slug: "二-他怎么定义" }
+    ]);
+  });
+});
+
+describe("extractExcerpt", () => {
+  it("uses the first non-heading and non-quote paragraph", () => {
+    const parsed = parseMarkdownDocument("articles/多元思维模型-把知识挂上格栅.md", articleMarkdown);
+
+    expect(extractExcerpt(parsed.body, 30)).toBe("一个商学院毕业生进入咨询行业。");
+  });
+});
