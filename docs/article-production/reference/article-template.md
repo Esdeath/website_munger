@@ -61,5 +61,5 @@ date: 2026-06-25
 7. 引经据典:点出他援引的思想源头(富兰克林、达尔文、孔子、凯恩斯)。
 8. 谦逊自嘲:保留他承认错误、自我调侃的口吻。
 9. 大白话:不用学术黑话(他自己就刻意避开「锚定」「损失厌恶」等术语)。
-完整流程见 docs/workflows/generate-articles-best-practices.md;通用迁移方法见 docs/workflows/corpus-to-articles-pipeline.md;硬门槛见 tools/check_article.py。
+完整流程见 docs/article-production/workflow/04-generate-articles.md;硬门槛见 tools/check_article.py。
 完成前必须确认:逐字引用正确、人工语义核查完成、论述密度不低于既有长文。-->

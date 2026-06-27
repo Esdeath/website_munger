@@ -1,36 +1,41 @@
 # docs/ 文档导航
 
-本目录只记录一件事:如何从固定 Markdown 语料生成 `articles/` 里的主题文章,并维护这套文章库。
+本目录只保留总入口。当前“语料到文章”的生产流程统一收在 `article-production/`,后续知识库网站文档可以另建目录,避免混在一起。
 
-当前项目的语料是 `shareholders/` 和 `speech/`。换到其他资料库时,仍然沿用同一套方法:固定语料、建立校验合同、窄读取证、生成文章、同步状态。
+## 工作路径
+
+1. 自己收集原始资料,加入 `shareholders/` 或 `speech/`。
+2. AI 清洗原始语料:改错别字和符号,不改意思、不补事实。
+3. 从原始资料提取关键词,写入关键词注册表。
+4. 按文章模板把关键词生成 `articles/` 文章。
+5. 运行校验,同步状态和成品索引。
 
 ## 先读哪份
 
-1. **要在本仓库继续生成文章**:读 [`workflows/generate-articles-best-practices.md`](workflows/generate-articles-best-practices.md)。
-2. **要把方法迁移到另一个资料库**:读 [`workflows/corpus-to-articles-pipeline.md`](workflows/corpus-to-articles-pipeline.md)。
-3. **要选题或看进度**:读 [`state/article-backlog.md`](state/article-backlog.md)。
-4. **要创建单篇文章**:复制 [`reference/article-template.md`](reference/article-template.md)。
-5. **要维护成品目录**:更新 [`reference/article-index.md`](reference/article-index.md)。
+| 场景 | 读 |
+|---|---|
+| 想了解全流程 | [`article-production/workflow/00-overview.md`](article-production/workflow/00-overview.md) |
+| 新增原始资料 | [`article-production/workflow/01-build-corpus.md`](article-production/workflow/01-build-corpus.md) |
+| 清洗语料 | [`article-production/workflow/02-clean-corpus.md`](article-production/workflow/02-clean-corpus.md) |
+| 提取关键词 | [`article-production/workflow/03-extract-keywords.md`](article-production/workflow/03-extract-keywords.md) |
+| 生成文章 | [`article-production/workflow/04-generate-articles.md`](article-production/workflow/04-generate-articles.md) |
+| 校验和维护 | [`article-production/workflow/05-verify-and-maintain.md`](article-production/workflow/05-verify-and-maintain.md) |
 
-## 文件职责
+## 状态文件
 
-| 文件 | 单一任务 | 不负责 |
-|---|---|---|
-| `workflows/generate-articles-best-practices.md` | 本仓库的逐步执行手册 | 方法论解释、状态记录 |
-| `workflows/corpus-to-articles-pipeline.md` | 可迁移到其他资料库的通用方法 | 本仓库批次状态 |
-| `state/article-backlog.md` | 选题池、完成状态、选词注意事项 | 完整操作流程 |
-| `reference/article-template.md` | 单篇文章骨架 | 选题、索引、状态 |
-| `reference/article-index.md` | 成品文章索引 | 写作规则、待办状态 |
+- [`article-production/state/corpus-manifest.md`](article-production/state/corpus-manifest.md):每篇原始资料的来源链接、书名/资料名、年份、清洗状态。
+- [`article-production/state/keyword-registry.md`](article-production/state/keyword-registry.md):从语料提取出的关键词池和选词注意事项。
+- [`article-production/state/article-status.md`](article-production/state/article-status.md):文章批次、总数、引用数和当前进度。
 
-## 维护原则
+## 参考文件
 
-- **正确第一**:引用必须逐字来自语料,引用数和来源数以 `tools/check_article.py` 为准。
-- **先省时间**:先搜索和预检,材料不足的题目不进入写作。
-- **再省 token**:只读命中行附近上下文,不要把整篇语料塞进上下文。
-- **单一职责**:流程归流程,状态归状态,模板归模板,索引归索引。
+- [`article-production/reference/article-template.md`](article-production/reference/article-template.md):单篇文章骨架。
+- [`article-production/reference/article-style.md`](article-production/reference/article-style.md):写作语气、密度和禁忌。
+- [`article-production/reference/article-index.md`](article-production/reference/article-index.md):成品文章索引。
 
-## 关键路径
+## 总原则
 
-- 原始语料:`../shareholders/`、`../speech/`
-- 成品文章:`../articles/`
-- 校验脚本:`../tools/check_article.py`
+- **正确第一**:原始资料、关键词、引用、事实都要可追溯。
+- **先省时间**:材料不足的关键词不进入写作。
+- **再省 token**:搜索优先,窄读优先,不整篇吞文件。
+- **单一职责**:流程、状态、模板、索引分开维护。
