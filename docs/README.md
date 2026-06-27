@@ -1,31 +1,36 @@
 # docs/ 文档导航
 
-本目录只记录一件事:如何从 `shareholders/` 和 `speech/` 的原始 Markdown 语料,生成 `articles/` 里的芒格关键词文章,并持续维护这套文章库。
+本目录只记录一件事:如何从固定 Markdown 语料生成 `articles/` 里的主题文章,并维护这套文章库。
+
+当前项目的语料是 `shareholders/` 和 `speech/`。换到其他资料库时,仍然沿用同一套方法:固定语料、建立校验合同、窄读取证、生成文章、同步状态。
 
 ## 先读哪份
 
-1. **以后要照着做一批文章**:读 [`workflows/generate-articles-best-practices.md`](workflows/generate-articles-best-practices.md)。
-2. **想理解整套方法论**:读 [`workflows/corpus-to-articles-pipeline.md`](workflows/corpus-to-articles-pipeline.md)。
-3. **要选下一篇题目**:读 [`state/article-backlog.md`](state/article-backlog.md)。
-4. **要复制文章骨架**:用 [`reference/article-template.md`](reference/article-template.md)。
-5. **要更新成品目录**:改 [`reference/article-index.md`](reference/article-index.md)。
+1. **要在本仓库继续生成文章**:读 [`workflows/generate-articles-best-practices.md`](workflows/generate-articles-best-practices.md)。
+2. **要把方法迁移到另一个资料库**:读 [`workflows/corpus-to-articles-pipeline.md`](workflows/corpus-to-articles-pipeline.md)。
+3. **要选题或看进度**:读 [`state/article-backlog.md`](state/article-backlog.md)。
+4. **要创建单篇文章**:复制 [`reference/article-template.md`](reference/article-template.md)。
+5. **要维护成品目录**:更新 [`reference/article-index.md`](reference/article-index.md)。
 
-## 目录职责
+## 文件职责
 
-| 目录 | 只负责什么 | 不负责什么 |
+| 文件 | 单一任务 | 不负责 |
 |---|---|---|
-| `workflows/` | 操作步骤、方法论、最佳实践 | 记录当前完成了哪些文章 |
-| `reference/` | 可复用参考件:模板、成品索引 | 记录待办状态 |
-| `state/` | 当前项目状态:待办池、完成批次、进度 | 讲完整操作流程 |
-
-## 当前关键文件
-
-- [`../tools/check_article.py`](../tools/check_article.py):硬门槛校验器。文章必须通过它才算完成。
-- [`../articles/`](../articles/):成品文章目录。这里应只放最终文章,不要放流程文档、模板或待办清单。
-- [`../shareholders/`](../shareholders/) 与 [`../speech/`](../speech/):原始语料目录。所有引用必须逐字来自这里。
+| `workflows/generate-articles-best-practices.md` | 本仓库的逐步执行手册 | 方法论解释、状态记录 |
+| `workflows/corpus-to-articles-pipeline.md` | 可迁移到其他资料库的通用方法 | 本仓库批次状态 |
+| `state/article-backlog.md` | 选题池、完成状态、选词注意事项 | 完整操作流程 |
+| `reference/article-template.md` | 单篇文章骨架 | 选题、索引、状态 |
+| `reference/article-index.md` | 成品文章索引 | 写作规则、待办状态 |
 
 ## 维护原则
 
-- 一个文件只做一件事:流程归流程,状态归状态,模板归模板,索引归索引。
-- 生成文章时,先按 `workflows/generate-articles-best-practices.md` 执行。
-- 任何文章引用数、来源数、完成状态,都以 `tools/check_article.py` 的输出为准。
+- **正确第一**:引用必须逐字来自语料,引用数和来源数以 `tools/check_article.py` 为准。
+- **先省时间**:先搜索和预检,材料不足的题目不进入写作。
+- **再省 token**:只读命中行附近上下文,不要把整篇语料塞进上下文。
+- **单一职责**:流程归流程,状态归状态,模板归模板,索引归索引。
+
+## 关键路径
+
+- 原始语料:`../shareholders/`、`../speech/`
+- 成品文章:`../articles/`
+- 校验脚本:`../tools/check_article.py`
