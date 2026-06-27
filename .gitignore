@@ -4,3 +4,6 @@ __pycache__/
 
 # macOS
 .DS_Store
+
+# Local worktrees
+.worktrees/
