@@ -1,0 +1,27 @@
+{
+  "name": "website-munger",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "check": "astro check && vitest run"
+  },
+  "dependencies": {
+    "@astrojs/check": "^0.9.4",
+    "astro": "^4.16.18",
+    "gray-matter": "^4.0.3",
+    "github-slugger": "^2.0.0",
+    "remark": "^15.0.1",
+    "remark-gfm": "^4.0.0",
+    "remark-html": "^16.0.1",
+    "typescript": "^5.6.3",
+    "unist-util-visit": "^5.0.0"
+  },
+  "devDependencies": {
+    "vitest": "^2.1.8"
+  }
+}
