@@ -1,0 +1,58 @@
+import { describe, expect, it } from "vitest";
+import {
+  loadArticles,
+  loadCorpusManifest,
+  loadOriginalSources,
+  parseCorpusManifest
+} from "../src/lib/corpus";
+
+const manifestMarkdown = `# 原始语料清单
+
+| 本地文件 | 年份 | 书名/资料名 | 类型 | 来源链接 | 清洗状态 |
+|---|---|---|---|---|---|
+| \`shareholders/2023年 每日期刊股东会讲话.md\` | 2023 | 2023年 每日期刊股东会讲话 | 股东信/股东会 | 未记录 | 需复核 |
+| \`speech/查理芒格：2023年《最后的访谈CNBC》.md\` | 2023 | 查理芒格：2023年《最后的访谈CNBC》 | 访谈 | 未记录 | 需复核 |
+`;
+
+describe("parseCorpusManifest", () => {
+  it("parses corpus rows from the manifest table", () => {
+    expect(parseCorpusManifest(manifestMarkdown)).toEqual([
+      {
+        filePath: "shareholders/2023年 每日期刊股东会讲话.md",
+        year: "2023",
+        title: "2023年 每日期刊股东会讲话",
+        type: "股东信/股东会",
+        sourceUrl: "未记录",
+        status: "需复核"
+      },
+      {
+        filePath: "speech/查理芒格：2023年《最后的访谈CNBC》.md",
+        year: "2023",
+        title: "查理芒格：2023年《最后的访谈CNBC》",
+        type: "访谈",
+        sourceUrl: "未记录",
+        status: "需复核"
+      }
+    ]);
+  });
+});
+
+describe("loaders against repository content", () => {
+  it("loads completed articles", () => {
+    const articles = loadArticles();
+    expect(articles.length).toBeGreaterThanOrEqual(70);
+    expect(articles.find((article) => article.keyword === "能力圈")).toBeDefined();
+  });
+
+  it("loads original source files", () => {
+    const sources = loadOriginalSources();
+    expect(sources.length).toBeGreaterThanOrEqual(80);
+    expect(sources.find((source) => source.filePath.includes("2023年 每日期刊股东会讲话"))).toBeDefined();
+  });
+
+  it("loads corpus manifest metadata", () => {
+    const manifest = loadCorpusManifest();
+    expect(manifest.length).toBeGreaterThanOrEqual(80);
+    expect(manifest.find((entry) => entry.filePath === "shareholders/2023年 每日期刊股东会讲话.md")).toBeDefined();
+  });
+});
