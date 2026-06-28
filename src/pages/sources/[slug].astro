@@ -3,6 +3,7 @@ import BaseLayout from "../../layouts/BaseLayout.astro";
 import { loadArticles, loadOriginalSources } from "../../lib/corpus";
 import { renderMarkdownToHtml } from "../../lib/render";
 import { buildSourceArticleMap } from "../../lib/relations";
+import { buildBreadcrumbSchema, buildCreativeWorkSchema, sourceTypeLabel } from "../../lib/seo";
 
 export function getStaticPaths() {
   return loadOriginalSources().map((source) => ({ params: { slug: source.slug }, props: { source } }));
@@ -21,9 +22,24 @@ const keywordLinks = articles.map((article) => ({
   href: `/articles/${article.slug}/`
 }));
 const rendered = await renderMarkdownToHtml(bodyWithoutDuplicateTitle, { keywordLinks });
+const sourceLabel = sourceTypeLabel(source);
+const structuredData = [
+  buildCreativeWorkSchema({
+    title: source.title,
+    description: source.excerpt,
+    pathname: `/sources/${source.slug}/`,
+    sourceTypeLabel: sourceLabel,
+    year: source.year
+  }),
+  buildBreadcrumbSchema([
+    { name: "首页", pathname: "/" },
+    { name: "原文资料", pathname: "/sources/" },
+    { name: source.title, pathname: `/sources/${source.slug}/` }
+  ])
+];
 ---
 
-<BaseLayout title={source.title} description={source.excerpt} shell="reader">
+<BaseLayout title={source.title} description={source.excerpt} shell="reader" structuredData={structuredData}>
   <article class="reader-layout">
     <div class="reader-content">
       <header class="reader-header">
@@ -36,7 +52,7 @@ const rendered = await renderMarkdownToHtml(bodyWithoutDuplicateTitle, { keyword
     <aside class="reader-aside">
       <section class="info-panel">
         <h2>原文信息</h2>
-        <p>{source.type === "shareholder" ? "股东会与股东信" : "演讲与访谈"} · 第 {source.year} 年</p>
+        <p>{sourceLabel} · 第 {source.year} 年</p>
         <p>{citedBy.length} 篇解读引用</p>
       </section>
 

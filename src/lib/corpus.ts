@@ -72,6 +72,16 @@ function titleFromMarkdown(filePath: string, body: string): string {
   return path.parse(filePath).name;
 }
 
+function normalizeDate(value: unknown): string | undefined {
+  if (value instanceof Date) {
+    return value.toISOString().slice(0, 10);
+  }
+  if (typeof value === "string") {
+    return value;
+  }
+  return undefined;
+}
+
 function isExternalOrAbsoluteUrl(url: string): boolean {
   return /^(?:[a-z][a-z0-9+.-]*:|\/|#)/i.test(url);
 }
@@ -118,7 +128,7 @@ export function loadArticles(): KnowledgeArticle[] {
       category: parsed.data.category ?? "未分类",
       quoteCount: parsed.data.quote_count ?? 0,
       sources: parsed.data.sources ?? [],
-      date: parsed.data.date,
+      date: normalizeDate(parsed.data.date),
       excerpt: extractExcerpt(parsed.body),
       body: parsed.body,
       headings: extractHeadings(parsed.body)

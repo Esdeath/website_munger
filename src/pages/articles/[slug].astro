@@ -3,6 +3,7 @@ import BaseLayout from "../../layouts/BaseLayout.astro";
 import { loadArticles, loadOriginalSources } from "../../lib/corpus";
 import { renderMarkdownToHtml } from "../../lib/render";
 import { relatedArticles, sourcesForArticle } from "../../lib/relations";
+import { buildArticleSchema, buildBreadcrumbSchema, canonicalUrl } from "../../lib/seo";
 
 export function getStaticPaths() {
   return loadArticles().map((article) => ({ params: { slug: article.slug }, props: { article } }));
@@ -21,9 +22,28 @@ const rendered = await renderMarkdownToHtml(article.body, {
   currentHref: `/articles/${article.slug}/`,
   keywordLinks
 });
+const structuredData = [
+  buildArticleSchema({
+    title: article.title,
+    description: article.excerpt,
+    pathname: `/articles/${article.slug}/`,
+    keyword: article.keyword,
+    category: article.category,
+    citations:
+      matchedSources.length > 0
+        ? matchedSources.map((source) => canonicalUrl(`/sources/${source.slug}/`))
+        : article.sources,
+    datePublished: article.date
+  }),
+  buildBreadcrumbSchema([
+    { name: "首页", pathname: "/" },
+    { name: "解释文章", pathname: "/articles/" },
+    { name: article.title, pathname: `/articles/${article.slug}/` }
+  ])
+];
 ---
 
-<BaseLayout title={article.title} description={article.excerpt} shell="reader">
+<BaseLayout title={article.title} description={article.excerpt} shell="reader" type="article" structuredData={structuredData}>
   <article class="reader-layout">
     <div class="reader-content">
       <header class="reader-header">

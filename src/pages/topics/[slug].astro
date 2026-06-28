@@ -3,6 +3,7 @@ import { TOPICS } from "../../content/site";
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import { loadArticles, loadOriginalSources } from "../../lib/corpus";
 import { articlesForTopic, sourcesForArticle } from "../../lib/relations";
+import { buildBreadcrumbSchema, buildCollectionPageSchema, canonicalUrl } from "../../lib/seo";
 
 export function getStaticPaths() {
   return TOPICS.map((topic) => ({ params: { slug: topic.slug }, props: { topic } }));
@@ -18,9 +19,22 @@ const researchSources = Array.from(
       .map((source) => [source.slug, source])
   ).values()
 ).slice(0, 10);
+const structuredData = [
+  buildCollectionPageSchema({
+    title: topic.title,
+    description: topic.description,
+    pathname: `/topics/${topic.slug}/`,
+    itemUrls: articles.map((article) => canonicalUrl(`/articles/${article.slug}/`))
+  }),
+  buildBreadcrumbSchema([
+    { name: "首页", pathname: "/" },
+    { name: "主题", pathname: "/topics/" },
+    { name: topic.title, pathname: `/topics/${topic.slug}/` }
+  ])
+];
 ---
 
-<BaseLayout title={topic.title} description={topic.description}>
+<BaseLayout title={topic.title} description={topic.description} structuredData={structuredData}>
   <section class="page">
     <p class="eyebrow">主题</p>
     <h1 class="hero-title">{topic.title}</h1>

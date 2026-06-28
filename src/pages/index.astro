@@ -3,6 +3,7 @@ import BaseLayout from "../layouts/BaseLayout.astro";
 import { TOPICS } from "../content/site";
 import { loadArticles, loadOriginalSources } from "../lib/corpus";
 import { buildArchiveCards } from "../lib/navigation";
+import { buildCollectionPageSchema, buildWebsiteSchema, canonicalUrl } from "../lib/seo";
 
 const articles = loadArticles();
 const sources = loadOriginalSources();
@@ -23,9 +24,22 @@ const originalCards = [
     count: sources.filter((source) => source.type === "speech").length
   }
 ];
+const structuredData = [
+  buildWebsiteSchema(),
+  buildCollectionPageSchema({
+    title: "芒格总纲",
+    description: "查理·芒格思想知识库首页，按原文资料和解释文章组织阅读入口。",
+    pathname: "/",
+    itemUrls: [
+      canonicalUrl("/sources/"),
+      canonicalUrl("/articles/"),
+      ...TOPICS.map((topic) => canonicalUrl(`/topics/${topic.slug}/`))
+    ]
+  })
+];
 ---
 
-<BaseLayout title="首页">
+<BaseLayout title="首页" structuredData={structuredData}>
   <section class="overview-page">
     <header class="overview-hero">
       <div class="hero-rule hero-rule-top" aria-hidden="true"></div>

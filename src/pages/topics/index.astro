@@ -1,9 +1,17 @@
 ---
 import { TOPICS } from "../../content/site";
 import BaseLayout from "../../layouts/BaseLayout.astro";
+import { buildCollectionPageSchema, canonicalUrl } from "../../lib/seo";
+
+const structuredData = buildCollectionPageSchema({
+  title: "主题索引",
+  description: "查理·芒格思想的六个主题入口。",
+  pathname: "/topics/",
+  itemUrls: TOPICS.map((topic) => canonicalUrl(`/topics/${topic.slug}/`))
+});
 ---
 
-<BaseLayout title="主题">
+<BaseLayout title="主题" description="查理·芒格思想的六个主题入口。" structuredData={structuredData}>
   <section class="page">
     <p class="eyebrow">主题索引</p>
     <h1 class="hero-title">芒格思想的六个入口。</h1>

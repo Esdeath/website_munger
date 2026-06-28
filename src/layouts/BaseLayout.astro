@@ -1,18 +1,33 @@
 ---
 import "../styles/global.css";
-import { SITE_DESCRIPTION, SITE_TITLE } from "../content/site";
+import { SITE_AUTHOR, SITE_DESCRIPTION, SITE_KEYWORDS, SITE_TITLE } from "../content/site";
 import { loadArticles, loadOriginalSources } from "../lib/corpus";
 import { buildSidebarSections } from "../lib/navigation";
+import { absoluteUrl, canonicalUrl } from "../lib/seo";
 
 interface Props {
   title?: string;
   description?: string;
   shell?: "archive" | "reader";
+  type?: "website" | "article";
+  image?: string;
+  noindex?: boolean;
+  structuredData?: Record<string, unknown> | Record<string, unknown>[];
 }
 
 const pageTitle = Astro.props.title ? `${Astro.props.title} | ${SITE_TITLE}` : SITE_TITLE;
 const description = Astro.props.description ?? SITE_DESCRIPTION;
 const shell = Astro.props.shell ?? "archive";
+const pageType = Astro.props.type ?? "website";
+const robots = Astro.props.noindex ? "noindex,nofollow" : "index,follow";
+const pageUrl = canonicalUrl(Astro.url.pathname);
+const imageUrl = Astro.props.image ? absoluteUrl(Astro.props.image) : undefined;
+const structuredData = Astro.props.structuredData
+  ? Array.isArray(Astro.props.structuredData)
+    ? Astro.props.structuredData
+    : [Astro.props.structuredData]
+  : [];
+const structuredDataJson = structuredData.length === 1 ? JSON.stringify(structuredData[0]) : JSON.stringify(structuredData);
 const sidebarSections = buildSidebarSections(loadArticles(), loadOriginalSources(), decodeURIComponent(Astro.url.pathname));
 ---
 
@@ -22,6 +37,22 @@ const sidebarSections = buildSidebarSections(loadArticles(), loadOriginalSources
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="description" content={description} />
+    <meta name="author" content={SITE_AUTHOR} />
+    <meta name="keywords" content={SITE_KEYWORDS.join(",")} />
+    <meta name="robots" content={robots} />
+    <link rel="canonical" href={pageUrl} />
+    <meta property="og:title" content={pageTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content={pageType === "article" ? "article" : "website"} />
+    <meta property="og:url" content={pageUrl} />
+    <meta property="og:site_name" content={SITE_TITLE} />
+    <meta property="og:locale" content="zh_CN" />
+    {imageUrl && <meta property="og:image" content={imageUrl} />}
+    <meta name="twitter:card" content={imageUrl ? "summary_large_image" : "summary"} />
+    <meta name="twitter:title" content={pageTitle} />
+    <meta name="twitter:description" content={description} />
+    {imageUrl && <meta name="twitter:image" content={imageUrl} />}
+    {structuredData.length > 0 && <script is:inline type="application/ld+json" set:html={structuredDataJson}></script>}
     <title>{pageTitle}</title>
   </head>
   <body class:list={[`shell-${shell}`]}>

@@ -5,8 +5,21 @@ export interface TopicDefinition {
   keywords: string[];
 }
 
+export const SITE_URL = "https://munger.ayaseeri.com/";
 export const SITE_TITLE = "查理·芒格知识库";
-export const SITE_DESCRIPTION = "一个按主题地图组织的查理·芒格思想知识库。";
+export const SITE_AUTHOR = "滚雪球的Star";
+export const SITE_DESCRIPTION = "按主题地图组织的查理·芒格思想知识库，连接解释文章、股东会记录、演讲访谈与原文出处。";
+export const SITE_KEYWORDS = [
+  "查理·芒格",
+  "芒格",
+  "Charlie Munger",
+  "投资",
+  "价值投资",
+  "多元思维模型",
+  "心理学误判",
+  "股东会",
+  "演讲访谈"
+];
 
 export const TOPICS: TopicDefinition[] = [
   {

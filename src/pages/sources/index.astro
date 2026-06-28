@@ -1,6 +1,7 @@
 ---
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import { loadOriginalSources } from "../../lib/corpus";
+import { buildCollectionPageSchema, canonicalUrl } from "../../lib/seo";
 
 const sources = loadOriginalSources().sort(
   (a, b) => a.year.localeCompare(b.year) || a.title.localeCompare(b.title, "zh-Hans-CN")
@@ -17,9 +18,15 @@ const sourceGroups = [
     sources: sources.filter((source) => source.type === "speech")
   }
 ];
+const structuredData = buildCollectionPageSchema({
+  title: "原文资料",
+  description: "查理·芒格股东会、股东信、演讲、访谈与声明原文资料索引。",
+  pathname: "/sources/",
+  itemUrls: sources.map((source) => canonicalUrl(`/sources/${source.slug}/`))
+});
 ---
 
-<BaseLayout title="原文资料">
+<BaseLayout title="原文资料" description="查理·芒格股东会、股东信、演讲、访谈与声明原文资料索引。" structuredData={structuredData}>
   <section class="page">
     <p class="eyebrow">原文语境层</p>
     <h1 class="hero-title">股东会、演讲、访谈与声明。</h1>

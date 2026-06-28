@@ -2,6 +2,7 @@
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import { loadArticles } from "../../lib/corpus";
 import { categoryHref } from "../../lib/navigation";
+import { buildCollectionPageSchema, canonicalUrl } from "../../lib/seo";
 import { textToSlug } from "../../lib/slug";
 
 const articles = loadArticles().sort(
@@ -14,9 +15,15 @@ const categoryGroups = Array.from(new Map(articles.map((article) => [article.cat
     articles: articles.filter((article) => article.category === category)
   })
 );
+const structuredData = buildCollectionPageSchema({
+  title: "全部专题文章",
+  description: "按主题分类阅读查理·芒格思想解释文章，并回到原文资料核验出处。",
+  pathname: "/articles/",
+  itemUrls: articles.map((article) => canonicalUrl(`/articles/${article.slug}/`))
+});
 ---
 
-<BaseLayout title="全部文章">
+<BaseLayout title="全部文章" description="按主题分类阅读查理·芒格思想解释文章，并回到原文资料核验出处。" structuredData={structuredData}>
   <section class="page">
     <p class="eyebrow">解释层</p>
     <h1 class="hero-title">全部专题文章。</h1>

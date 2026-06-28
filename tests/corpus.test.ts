@@ -44,6 +44,12 @@ describe("loaders against repository content", () => {
     expect(articles.find((article) => article.keyword === "能力圈")).toBeDefined();
   });
 
+  it("normalizes article dates to YYYY-MM-DD strings", () => {
+    const datedArticle = loadArticles().find((article) => article.date !== undefined);
+
+    expect(datedArticle?.date).toMatch(/^\d{4}-\d{2}-\d{2}$/);
+  });
+
   it("loads original source files", () => {
     const sources = loadOriginalSources();
     expect(sources.length).toBeGreaterThanOrEqual(80);
