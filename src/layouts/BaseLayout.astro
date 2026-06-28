@@ -41,6 +41,8 @@ const sidebarSections = buildSidebarSections(loadArticles(), loadOriginalSources
     <meta name="keywords" content={SITE_KEYWORDS.join(",")} />
     <meta name="robots" content={robots} />
     <link rel="canonical" href={pageUrl} />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="theme-color" content="#f4f0e8" />
     <meta property="og:title" content={pageTitle} />
     <meta property="og:description" content={description} />
     <meta property="og:type" content={pageType === "article" ? "article" : "website"} />
