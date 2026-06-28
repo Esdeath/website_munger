@@ -124,7 +124,8 @@ input:focus-visible {
   font-weight: 700;
 }
 
-.sidebar-section ul,
+.sidebar-tree,
+.sidebar-leaves,
 .link-list,
 .keyword-list {
   padding: 0;
@@ -132,11 +133,11 @@ input:focus-visible {
   list-style: none;
 }
 
-.sidebar-section li + li {
-  margin-top: 8px;
+.sidebar-tree > li + li {
+  margin-top: 6px;
 }
 
-.sidebar-section a {
+.sidebar-tree summary {
   display: grid;
   grid-template-columns: 18px minmax(0, 1fr) auto;
   gap: 8px;
@@ -147,10 +148,52 @@ input:focus-visible {
   border-radius: 5px;
   font-size: 20px;
   font-weight: 800;
+  cursor: pointer;
+  list-style: none;
 }
 
-.sidebar-section a:hover,
-.sidebar-section a.is-active {
+.sidebar-tree summary::-webkit-details-marker {
+  display: none;
+}
+
+.sidebar-tree summary:hover {
+  background: var(--green-soft);
+  border-left-color: var(--green);
+}
+
+.sidebar-tree .chevron {
+  transition: transform 0.15s ease;
+}
+
+.sidebar-tree details[open] > summary .chevron {
+  transform: rotate(90deg);
+}
+
+.sidebar-leaves {
+  margin: 4px 0 8px;
+  padding-left: 26px;
+}
+
+.sidebar-leaves li + li {
+  margin-top: 2px;
+}
+
+.sidebar-leaves a {
+  display: block;
+  padding: 5px 8px;
+  color: var(--green-dark);
+  border-left: 3px solid transparent;
+  border-radius: 5px;
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 1.5;
+}
+
+.sidebar-leaves a:hover {
+  background: var(--green-soft);
+}
+
+.sidebar-leaves a.is-active {
   background: var(--green-soft);
   border-left-color: var(--green);
 }
