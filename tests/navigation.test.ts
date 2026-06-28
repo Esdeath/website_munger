@@ -54,15 +54,37 @@ const sources = [
 ] satisfies OriginalSource[];
 
 describe("buildSidebarSections", () => {
-  it("builds original-source and article sections with counts", () => {
+  it("builds original-source and article sections with grouped counts", () => {
     const sections = buildSidebarSections(articles, sources);
 
     expect(sections.map((section) => section.title)).toEqual(["原文", "解读"]);
-    expect(sections[0].items.map((item) => [item.label, item.count])).toEqual([
+    expect(sections[0].groups.map((group) => [group.label, group.count])).toEqual([
       ["股东会与股东信", 1],
       ["演讲与访谈", 1]
     ]);
-    expect(sections[1].items.map((item) => item.label)).toContain("投资原则");
+    expect(sections[0].groups[0].children.map((leaf) => leaf.label)).toEqual([
+      "2017年 每日期刊股东会讲话"
+    ]);
+    expect(sections[1].groups.map((group) => group.label)).toContain("投资原则");
+  });
+
+  it("marks the active leaf and opens its parent group", () => {
+    const sections = buildSidebarSections(articles, sources, "/sources/查理芒格-1995年哈佛法学院演讲/");
+
+    const speech = sections[0].groups.find((group) => group.label === "演讲与访谈")!;
+    expect(speech.open).toBe(true);
+    expect(speech.children[0].active).toBe(true);
+
+    const shareholder = sections[0].groups.find((group) => group.label === "股东会与股东信")!;
+    expect(shareholder.open).toBe(false);
+  });
+
+  it("normalizes trailing slashes when matching the active leaf", () => {
+    const open = (path: string) =>
+      buildSidebarSections(articles, sources, path)[1].groups.find((group) => group.label === "投资原则")!.open;
+
+    expect(open("/articles/能力圈-知道自己不知道什么/")).toBe(true);
+    expect(open("/articles/能力圈-知道自己不知道什么")).toBe(true);
   });
 });
 

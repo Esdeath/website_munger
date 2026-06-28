@@ -3,16 +3,22 @@ import type { KnowledgeArticle, OriginalSource } from "./corpus";
 import { articlesForTopic } from "./relations";
 import { textToSlug } from "./slug";
 
-export interface SidebarItem {
+export interface SidebarLeaf {
   label: string;
   href: string;
+  active: boolean;
+}
+
+export interface SidebarGroup {
+  label: string;
   count: number;
-  active?: boolean;
+  open: boolean;
+  children: SidebarLeaf[];
 }
 
 export interface SidebarSection {
   title: string;
-  items: SidebarItem[];
+  groups: SidebarGroup[];
 }
 
 export interface ArchiveCard {
@@ -28,55 +34,56 @@ const sourceLabels = {
   speech: "演讲与访谈"
 } as const;
 
-function countSourcesByType(sources: OriginalSource[], type: OriginalSource["type"]): number {
-  return sources.filter((source) => source.type === type).length;
+function normalizePath(path: string): string {
+  if (!path) {
+    return "/";
+  }
+  return path.endsWith("/") ? path : `${path}/`;
 }
 
 export function categoryHref(category: string): string {
   return `/articles/#${textToSlug(category)}`;
 }
 
+function toLeaf(label: string, href: string, currentPath: string): SidebarLeaf {
+  return { label, href, active: normalizePath(currentPath) === normalizePath(href) };
+}
+
+function makeGroup(label: string, children: SidebarLeaf[]): SidebarGroup {
+  return { label, count: children.length, children, open: children.some((leaf) => leaf.active) };
+}
+
 export function buildSidebarSections(
   articles: KnowledgeArticle[],
   sources: OriginalSource[],
-  activeHref?: string
+  currentPath = ""
 ): SidebarSection[] {
-  const sections: SidebarSection[] = [
-    {
-      title: "原文",
-      items: [
-        {
-          label: sourceLabels.shareholder,
-          href: "/sources/#shareholder",
-          count: countSourcesByType(sources, "shareholder")
-        },
-        {
-          label: sourceLabels.speech,
-          href: "/sources/#speech",
-          count: countSourcesByType(sources, "speech")
-        }
-      ]
-    },
-    {
-      title: "解读",
-      items: Array.from(new Map(articles.map((article) => [article.category, article])).keys())
-        .sort((a, b) => a.localeCompare(b, "zh-Hans-CN"))
-        .map((category) => {
-          const href = categoryHref(category);
-          return {
-            label: category,
-            href,
-            count: articles.filter((article) => article.category === category).length,
-            active: activeHref === href
-          };
-        })
-    }
-  ];
+  const sourceGroup = (type: OriginalSource["type"]): SidebarGroup =>
+    makeGroup(
+      sourceLabels[type],
+      sources
+        .filter((source) => source.type === type)
+        .sort((a, b) => a.year.localeCompare(b.year) || a.title.localeCompare(b.title, "zh-Hans-CN"))
+        .map((source) => toLeaf(source.title, `/sources/${source.slug}/`, currentPath))
+    );
 
-  return sections.map((section) => ({
-    ...section,
-    items: section.items.map((item) => ({ ...item, active: item.active || activeHref === item.href }))
-  }));
+  const categories = Array.from(new Set(articles.map((article) => article.category))).sort((a, b) =>
+    a.localeCompare(b, "zh-Hans-CN")
+  );
+
+  const articleGroup = (category: string): SidebarGroup =>
+    makeGroup(
+      category,
+      articles
+        .filter((article) => article.category === category)
+        .sort((a, b) => b.quoteCount - a.quoteCount)
+        .map((article) => toLeaf(article.title, `/articles/${article.slug}/`, currentPath))
+    );
+
+  return [
+    { title: "原文", groups: [sourceGroup("shareholder"), sourceGroup("speech")] },
+    { title: "解读", groups: categories.map(articleGroup) }
+  ];
 }
 
 export function buildArchiveCards(topics: TopicDefinition[], articles: KnowledgeArticle[]): ArchiveCard[] {
