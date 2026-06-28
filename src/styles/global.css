@@ -250,8 +250,15 @@ input:focus-visible {
 .hero-rule {
   width: 138px;
   height: 4px;
-  margin: 48px 0 30px;
   background: var(--green);
+}
+
+.hero-rule-top {
+  margin: 0 0 34px;
+}
+
+.hero-rule-bottom {
+  margin: 34px 0 30px;
 }
 
 .hero-laws {
