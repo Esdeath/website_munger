@@ -1,9 +1,7 @@
 ---
-import { remark } from "remark";
-import remarkGfm from "remark-gfm";
-import remarkHtml from "remark-html";
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import { loadArticles, loadOriginalSources } from "../../lib/corpus";
+import { renderMarkdownToHtml } from "../../lib/render";
 import { buildSourceArticleMap } from "../../lib/relations";
 
 export function getStaticPaths() {
@@ -17,7 +15,7 @@ const citedBy = sourceArticleMap.get(source.slug) ?? [];
 const sameYear = loadOriginalSources()
   .filter((item) => item.slug !== source.slug && item.year === source.year)
   .slice(0, 8);
-const rendered = await remark().use(remarkGfm).use(remarkHtml).process(source.body);
+const rendered = await renderMarkdownToHtml(source.body);
 ---
 
 <BaseLayout title={source.title} description={source.excerpt}>
@@ -27,7 +25,7 @@ const rendered = await remark().use(remarkGfm).use(remarkHtml).process(source.bo
     <p class="meta">{source.year}</p>
 
     <div class="split">
-      <div class="article-body" set:html={rendered.toString()} />
+      <div class="article-body" set:html={rendered} />
       <aside class="side-panel">
         <h2>被这些文章引用</h2>
         <ul>

@@ -16,6 +16,7 @@
     "astro": "^4.16.18",
     "github-slugger": "^2.0.0",
     "gray-matter": "^4.0.3",
+    "hast-util-sanitize": "^5.0.2",
     "remark": "^15.0.1",
     "remark-gfm": "^4.0.0",
     "remark-html": "^16.0.1",

@@ -1,9 +1,7 @@
 ---
-import { remark } from "remark";
-import remarkGfm from "remark-gfm";
-import remarkHtml from "remark-html";
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import { loadArticles, loadOriginalSources } from "../../lib/corpus";
+import { renderMarkdownToHtml } from "../../lib/render";
 import { relatedArticles, sourcesForArticle } from "../../lib/relations";
 
 export function getStaticPaths() {
@@ -15,7 +13,7 @@ const allArticles = loadArticles();
 const sources = loadOriginalSources();
 const matchedSources = sourcesForArticle(article, sources);
 const related = relatedArticles(article, allArticles);
-const rendered = await remark().use(remarkGfm).use(remarkHtml).process(article.body);
+const rendered = await renderMarkdownToHtml(article.body);
 ---
 
 <BaseLayout title={article.title} description={article.excerpt}>
@@ -26,7 +24,7 @@ const rendered = await remark().use(remarkGfm).use(remarkHtml).process(article.b
     <p class="meta">{article.quoteCount} 处引用 / {article.sources.length} 个来源</p>
 
     <div class="split">
-      <div class="article-body" set:html={rendered.toString()} />
+      <div class="article-body" set:html={rendered} />
       <aside class="side-panel">
         <h2>目录</h2>
         <ul>

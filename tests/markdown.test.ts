@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { extractExcerpt, extractHeadings, parseMarkdownDocument } from "../src/lib/markdown";
+import { renderMarkdownToHtml } from "../src/lib/render";
 
 const articleMarkdown = `---
 title: 多元思维模型:把知识挂上格栅
@@ -55,5 +56,15 @@ describe("extractExcerpt", () => {
     const parsed = parseMarkdownDocument("articles/多元思维模型-把知识挂上格栅.md", articleMarkdown);
 
     expect(extractExcerpt(parsed.body, 30)).toBe("一个商学院毕业生进入咨询行业。");
+  });
+});
+
+describe("renderMarkdownToHtml", () => {
+  it("adds stable ids to rendered headings", async () => {
+    const parsed = parseMarkdownDocument("articles/多元思维模型-把知识挂上格栅.md", articleMarkdown);
+
+    await expect(renderMarkdownToHtml(parsed.body)).resolves.toContain(
+      '<h2 id="一-拿着一把锤子-你能看见什么">一、拿着一把锤子，你能看见什么</h2>'
+    );
   });
 });
