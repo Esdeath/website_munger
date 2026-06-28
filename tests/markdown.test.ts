@@ -60,11 +60,45 @@ describe("extractExcerpt", () => {
 });
 
 describe("renderMarkdownToHtml", () => {
+  const abilityCircleHref = "/articles/能力圈-知道自己不知道什么/";
+  const moatHref = "/articles/护城河-宽且不断变宽的护城河/";
+
   it("adds stable ids to rendered headings", async () => {
     const parsed = parseMarkdownDocument("articles/多元思维模型-把知识挂上格栅.md", articleMarkdown);
 
     await expect(renderMarkdownToHtml(parsed.body)).resolves.toContain(
       '<h2 id="一-拿着一把锤子-你能看见什么">一、拿着一把锤子，你能看见什么</h2>'
     );
+  });
+
+  it("links keyword mentions to their article pages", async () => {
+    await expect(
+      renderMarkdownToHtml("能力圈和护城河需要一起看。", {
+        keywordLinks: [
+          { keyword: "能力圈", href: abilityCircleHref },
+          { keyword: "护城河", href: moatHref }
+        ]
+      })
+    ).resolves.toContain(`<a href="${encodeURI(abilityCircleHref)}">能力圈</a>和<a href="${encodeURI(moatHref)}">护城河</a>`);
+  });
+
+  it("does not nest keyword links inside existing links", async () => {
+    await expect(
+      renderMarkdownToHtml(`[能力圈](${abilityCircleHref})和护城河。`, {
+        keywordLinks: [{ keyword: "能力圈", href: abilityCircleHref }]
+      })
+    ).resolves.toContain(`<a href="${encodeURI(abilityCircleHref)}">能力圈</a>和护城河。`);
+  });
+
+  it("does not link the current article keyword to itself", async () => {
+    await expect(
+      renderMarkdownToHtml("能力圈和护城河。", {
+        currentHref: abilityCircleHref,
+        keywordLinks: [
+          { keyword: "能力圈", href: abilityCircleHref },
+          { keyword: "护城河", href: moatHref }
+        ]
+      })
+    ).resolves.toContain(`能力圈和<a href="${encodeURI(moatHref)}">护城河</a>`);
   });
 });

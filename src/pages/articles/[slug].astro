@@ -13,7 +13,14 @@ const allArticles = loadArticles();
 const sources = loadOriginalSources();
 const matchedSources = sourcesForArticle(article, sources);
 const related = relatedArticles(article, allArticles);
-const rendered = await renderMarkdownToHtml(article.body);
+const keywordLinks = allArticles.map((item) => ({
+  keyword: item.keyword,
+  href: `/articles/${item.slug}/`
+}));
+const rendered = await renderMarkdownToHtml(article.body, {
+  currentHref: `/articles/${article.slug}/`,
+  keywordLinks
+});
 ---
 
 <BaseLayout title={article.title} description={article.excerpt} shell="reader">

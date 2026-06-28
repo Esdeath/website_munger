@@ -67,5 +67,13 @@ const sidebarSections = buildSidebarSections(loadArticles(), loadOriginalSources
         <slot />
       </main>
     </div>
+    <script>
+      import { setupSidebarScrollPersistence } from "../lib/sidebar-scroll";
+
+      const sidebar = document.querySelector<HTMLElement>(".archive-sidebar");
+      if (sidebar) {
+        setupSidebarScrollPersistence(sidebar);
+      }
+    </script>
   </body>
 </html>

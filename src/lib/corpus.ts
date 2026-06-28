@@ -72,6 +72,21 @@ function titleFromMarkdown(filePath: string, body: string): string {
   return path.parse(filePath).name;
 }
 
+function isExternalOrAbsoluteUrl(url: string): boolean {
+  return /^(?:[a-z][a-z0-9+.-]*:|\/|#)/i.test(url);
+}
+
+function rewriteRelativeImagePaths(body: string, filePath: string): string {
+  const sourceDirectory = path.posix.dirname(filePath.split(path.sep).join(path.posix.sep));
+  return body.replace(/(!\[[^\]]*\]\()([^)\s]+)(\))/g, (match, prefix: string, imagePath: string, suffix: string) => {
+    if (isExternalOrAbsoluteUrl(imagePath)) {
+      return match;
+    }
+    const publicPath = path.posix.normalize(path.posix.join("/", sourceDirectory, imagePath));
+    return `${prefix}${publicPath}${suffix}`;
+  });
+}
+
 export function parseCorpusManifest(markdown: string): CorpusManifestEntry[] {
   return markdown
     .split("\n")
@@ -117,6 +132,7 @@ export function loadOriginalSources(): OriginalSource[] {
       const raw = readRepoFile(filePath);
       const parsed = parseMarkdownDocument(filePath, raw);
       const title = titleFromMarkdown(filePath, parsed.body);
+      const body = rewriteRelativeImagePaths(parsed.body, filePath);
       return {
         slug: filePathToSlug(filePath),
         filePath,
@@ -124,7 +140,7 @@ export function loadOriginalSources(): OriginalSource[] {
         type: directory === "shareholders" ? "shareholder" : "speech",
         year: inferYear(filePath, parsed.body),
         excerpt: extractExcerpt(parsed.body),
-        body: parsed.body,
+        body,
         headings: extractHeadings(parsed.body)
       };
     })

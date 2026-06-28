@@ -50,6 +50,13 @@ describe("loaders against repository content", () => {
     expect(sources.find((source) => source.filePath.includes("2023年 每日期刊股东会讲话"))).toBeDefined();
   });
 
+  it("rewrites original source relative image paths to source-directory absolute paths", () => {
+    const source = loadOriginalSources().find((item) => item.filePath === "shareholders/1987年 西科金融股东会讲话.md");
+
+    expect(source?.body).toContain("](/shareholders/images/image_-2856457156250514870.png)");
+    expect(source?.body).not.toContain("](images/image_-2856457156250514870.png)");
+  });
+
   it("loads corpus manifest metadata", () => {
     const manifest = loadCorpusManifest();
     expect(manifest.length).toBeGreaterThanOrEqual(80);
