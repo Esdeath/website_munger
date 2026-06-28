@@ -1,9 +1,18 @@
 ---
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import { loadArticles } from "../../lib/corpus";
+import { categoryHref } from "../../lib/navigation";
+import { textToSlug } from "../../lib/slug";
 
 const articles = loadArticles().sort(
   (a, b) => a.category.localeCompare(b.category, "zh-Hans-CN") || b.quoteCount - a.quoteCount
+);
+const categoryGroups = Array.from(new Map(articles.map((article) => [article.category, article.category])).keys()).map(
+  (category) => ({
+    category,
+    id: textToSlug(category),
+    articles: articles.filter((article) => article.category === category)
+  })
 );
 ---
 
@@ -11,14 +20,22 @@ const articles = loadArticles().sort(
   <section class="page">
     <p class="eyebrow">解释层</p>
     <h1 class="hero-title">全部专题文章。</h1>
-    <div class="grid">
-      {articles.map((article) => (
-        <article class="card">
-          <h2><a href={`/articles/${article.slug}/`}>{article.title}</a></h2>
-          <p>{article.excerpt}</p>
-          <p class="meta">{article.category} / {article.quoteCount} 处引用 / {article.sources.length} 个来源</p>
-        </article>
-      ))}
-    </div>
+    <p class="hero-copy">按主题分类阅读，进入文章后可以回到原文资料核验。</p>
+    {categoryGroups.map((group) => (
+      <section class="archive-section" id={group.id}>
+        <p class="section-kicker">{group.category} · {group.articles.length} 篇</p>
+        <div class="grid">
+          {group.articles.map((article) => (
+            <article class="card">
+              <h2><a href={`/articles/${article.slug}/`}>{article.title}</a></h2>
+              <p>{article.excerpt}</p>
+              <p class="meta">
+                <a href={categoryHref(article.category)}>{article.category}</a> / {article.quoteCount} 处引用 / {article.sources.length} 个来源
+              </p>
+            </article>
+          ))}
+        </div>
+      </section>
+    ))}
   </section>
 </BaseLayout>

@@ -1,57 +1,78 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
-import { READING_PATH_KEYWORDS, TOPICS } from "../content/site";
+import { TOPICS } from "../content/site";
 import { loadArticles, loadOriginalSources } from "../lib/corpus";
+import { buildArchiveCards } from "../lib/navigation";
 
 const articles = loadArticles();
 const sources = loadOriginalSources();
-const readingPath = READING_PATH_KEYWORDS.map((keyword) =>
-  articles.find((article) => article.keyword.includes(keyword) || article.title.includes(keyword))
-).filter((article) => article !== undefined);
-const featured = articles.slice().sort((a, b) => b.quoteCount - a.quoteCount).slice(0, 6);
+const archiveCards = buildArchiveCards(TOPICS, articles);
+const originalCards = [
+  {
+    mark: "会",
+    title: "股东会与股东信",
+    description: "历年股东会、股东信与问答记录",
+    href: "/sources/#shareholder",
+    count: sources.filter((source) => source.type === "shareholder").length
+  },
+  {
+    mark: "访",
+    title: "演讲与访谈",
+    description: "公开演讲、访谈、文章与声明",
+    href: "/sources/#speech",
+    count: sources.filter((source) => source.type === "speech").length
+  }
+];
 ---
 
 <BaseLayout title="首页">
-  <section class="page">
-    <p class="eyebrow">主题地图</p>
-    <h1 class="hero-title">从主题进入芒格，而不是从语录进入芒格。</h1>
-    <p class="hero-copy">
-      这里把现有 {articles.length} 篇解释文章、{sources.length} 篇原文资料组织成一个可阅读、可追溯的知识库。
-    </p>
+  <section class="overview-page">
+    <header class="overview-hero">
+      <h1>芒格总纲</h1>
+      <div class="hero-rule" aria-hidden="true"></div>
+      <p class="hero-laws">第一条规则：永远不要愚蠢</p>
+      <p class="hero-laws">第二条规则：永远记住第一条</p>
+      <a class="source-card author-card" href="/sources/">
+        <span>
+          <strong>资料：本仓库原文语料</strong>
+          <small>articles / shareholders / speech</small>
+        </span>
+        <span class="card-arrow">›</span>
+      </a>
+    </header>
 
-    <h2 class="section-title">六条主线</h2>
-    <div class="grid">
-      {TOPICS.map((topic) => (
-        <article class="card">
-          <h2><a href={`/topics/${topic.slug}/`}>{topic.title}</a></h2>
-          <p>{topic.description}</p>
-          <ul class="tag-list">
-            {topic.keywords.slice(0, 6).map((keyword) => <li><span>{keyword}</span></li>)}
-          </ul>
-        </article>
-      ))}
-    </div>
+    <section class="archive-section">
+      <p class="section-kicker">原文 · {sources.length} 篇</p>
+      <p class="section-copy">先原文，后观点；先证据，后文章。一切回到芒格自己的话。</p>
+      <div class="archive-grid">
+        {originalCards.map((card) => (
+          <a class="archive-card" href={card.href}>
+            <span class="archive-mark">{card.mark}</span>
+            <span class="archive-card-body">
+              <strong>{card.title}</strong>
+              <small>{card.description}</small>
+            </span>
+            <span class="archive-count">{card.count} 篇</span>
+          </a>
+        ))}
+      </div>
+    </section>
 
-    <h2 class="section-title">新读者路径</h2>
-    <div class="grid">
-      {readingPath.map((article) => (
-        <article class="card">
-          <h3><a href={`/articles/${article.slug}/`}>{article.title}</a></h3>
-          <p>{article.excerpt}</p>
-          <p class="meta">{article.quoteCount} 处引用</p>
-        </article>
-      ))}
-    </div>
-
-    <h2 class="section-title">高引用文章</h2>
-    <div class="grid">
-      {featured.map((article) => (
-        <article class="card">
-          <h3><a href={`/articles/${article.slug}/`}>{article.title}</a></h3>
-          <p>{article.excerpt}</p>
-          <p class="meta">{article.category} / {article.quoteCount} 处引用</p>
-        </article>
-      ))}
-    </div>
+    <section class="archive-section">
+      <p class="section-kicker">解读 · {archiveCards.length} 个分类</p>
+      <p class="section-copy">围绕主题整理的解释文章，每条都标注原文出处。</p>
+      <div class="archive-grid">
+        {archiveCards.map((card) => (
+          <a class="archive-card" href={card.href}>
+            <span class="archive-mark">{card.mark}</span>
+            <span class="archive-card-body">
+              <strong>{card.title}</strong>
+              <small>{card.description}</small>
+            </span>
+            <span class="archive-count">{card.count} 篇</span>
+          </a>
+        ))}
+      </div>
+    </section>
   </section>
 </BaseLayout>

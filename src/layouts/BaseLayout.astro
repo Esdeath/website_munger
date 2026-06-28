@@ -1,14 +1,20 @@
 ---
 import "../styles/global.css";
 import { SITE_DESCRIPTION, SITE_TITLE } from "../content/site";
+import { loadArticles, loadOriginalSources } from "../lib/corpus";
+import { buildSidebarSections } from "../lib/navigation";
 
 interface Props {
   title?: string;
   description?: string;
+  activeHref?: string;
+  shell?: "archive" | "reader";
 }
 
 const pageTitle = Astro.props.title ? `${Astro.props.title} | ${SITE_TITLE}` : SITE_TITLE;
 const description = Astro.props.description ?? SITE_DESCRIPTION;
+const shell = Astro.props.shell ?? "archive";
+const sidebarSections = buildSidebarSections(loadArticles(), loadOriginalSources(), Astro.props.activeHref);
 ---
 
 <!doctype html>
@@ -19,20 +25,39 @@ const description = Astro.props.description ?? SITE_DESCRIPTION;
     <meta name="description" content={description} />
     <title>{pageTitle}</title>
   </head>
-  <body>
-    <header class="site-header">
-      <a class="site-brand" href="/">{SITE_TITLE}</a>
-      <nav class="site-nav" aria-label="主导航">
-        <a href="/topics/">主题</a>
-        <a href="/articles/">文章</a>
-        <a href="/sources/">原文</a>
-      </nav>
-    </header>
-    <main>
-      <slot />
-    </main>
-    <footer class="site-footer">
-      <p>基于本仓库的文章、股东会资料、演讲与访谈生成。</p>
-    </footer>
+  <body class:list={[`shell-${shell}`]}>
+    <div class="app-shell">
+      <aside class="archive-sidebar" aria-label="知识库导航">
+        <a class="site-brand" href="/">{SITE_TITLE}</a>
+        <p class="sidebar-tagline">慢慢读，反复看，用原文校准判断。</p>
+        <label class="search-box">
+          <span class="sr-only">搜索</span>
+          <input type="search" placeholder="搜索关键词、文章..." />
+        </label>
+
+        <nav class="sidebar-nav">
+          {sidebarSections.map((section) => (
+            <section class="sidebar-section">
+              <h2>{section.title}</h2>
+              <ul>
+                {section.items.map((item) => (
+                  <li>
+                    <a class:list={[item.active && "is-active"]} href={item.href}>
+                      <span class="chevron">›</span>
+                      <span>{item.label}</span>
+                      <span class="sidebar-count">· {item.count}</span>
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </section>
+          ))}
+        </nav>
+      </aside>
+
+      <main class="main-stage">
+        <slot />
+      </main>
+    </div>
   </body>
 </html>

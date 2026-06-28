@@ -1,6 +1,7 @@
 ---
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import { loadArticles, loadOriginalSources } from "../../lib/corpus";
+import { categoryHref } from "../../lib/navigation";
 import { renderMarkdownToHtml } from "../../lib/render";
 import { relatedArticles, sourcesForArticle } from "../../lib/relations";
 
@@ -14,40 +15,54 @@ const sources = loadOriginalSources();
 const matchedSources = sourcesForArticle(article, sources);
 const related = relatedArticles(article, allArticles);
 const rendered = await renderMarkdownToHtml(article.body);
+const activeHref = categoryHref(article.category);
 ---
 
-<BaseLayout title={article.title} description={article.excerpt}>
-  <article class="page">
-    <p class="eyebrow">{article.category}</p>
-    <h1 class="hero-title">{article.title}</h1>
-    <p class="hero-copy">{article.excerpt}</p>
-    <p class="meta">{article.quoteCount} 处引用 / {article.sources.length} 个来源</p>
-
-    <div class="split">
+<BaseLayout title={article.title} description={article.excerpt} activeHref={activeHref} shell="reader">
+  <article class="reader-layout">
+    <div class="reader-content">
+      <header class="reader-header">
+        <h1>{article.title}</h1>
+        <p>{article.category}</p>
+        <p class="reader-intro">{article.excerpt}</p>
+      </header>
       <div class="article-body" set:html={rendered} />
-      <aside class="side-panel">
-        <h2>目录</h2>
-        <ul>
+    </div>
+
+    <aside class="reader-aside">
+      <section class="info-panel">
+        <h2>文章信息</h2>
+        <p>{article.category} · {article.quoteCount} 处引用</p>
+        <p>{article.sources.length} 个原文来源</p>
+      </section>
+
+      <section class="info-panel">
+        <h2>本篇目录（{article.headings.length}）</h2>
+        <ul class="link-list">
           {article.headings.map((heading) => (
             <li><a href={`#${heading.slug}`}>{heading.text}</a></li>
           ))}
         </ul>
+      </section>
 
+      <section class="info-panel">
         <h2>来源追溯</h2>
-        <ul>
+        <ul class="link-list">
           {matchedSources.map((source) => (
             <li><a href={`/sources/${source.slug}/`}>{source.title}</a></li>
           ))}
           {matchedSources.length === 0 && article.sources.map((sourceLabel) => <li>{sourceLabel}</li>)}
         </ul>
+      </section>
 
+      <section class="info-panel">
         <h2>相关主题</h2>
-        <ul>
+        <ul class="link-list">
           {related.map((item) => (
-            <li><a href={`/articles/${item.slug}/`}>{item.keyword}</a></li>
+            <li><a href={`/articles/${item.slug}/`}>{item.keyword} →</a></li>
           ))}
         </ul>
-      </aside>
-    </div>
+      </section>
+    </aside>
   </article>
 </BaseLayout>
