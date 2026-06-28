@@ -1,0 +1,38 @@
+---
+import "../styles/global.css";
+import { SITE_DESCRIPTION, SITE_TITLE } from "../content/site";
+
+interface Props {
+  title?: string;
+  description?: string;
+}
+
+const pageTitle = Astro.props.title ? `${Astro.props.title} | ${SITE_TITLE}` : SITE_TITLE;
+const description = Astro.props.description ?? SITE_DESCRIPTION;
+---
+
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content={description} />
+    <title>{pageTitle}</title>
+  </head>
+  <body>
+    <header class="site-header">
+      <a class="site-brand" href="/">{SITE_TITLE}</a>
+      <nav class="site-nav" aria-label="主导航">
+        <a href="/topics/">主题</a>
+        <a href="/articles/">文章</a>
+        <a href="/sources/">原文</a>
+      </nav>
+    </header>
+    <main>
+      <slot />
+    </main>
+    <footer class="site-footer">
+      <p>基于本仓库的文章、股东会资料、演讲与访谈生成。</p>
+    </footer>
+  </body>
+</html>
