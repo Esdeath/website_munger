@@ -1,0 +1,22 @@
+---
+import { TOPICS } from "../../content/site";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+---
+
+<BaseLayout title="主题">
+  <section class="page">
+    <p class="eyebrow">主题索引</p>
+    <h1 class="hero-title">芒格思想的六个入口。</h1>
+    <div class="grid">
+      {TOPICS.map((topic) => (
+        <article class="card">
+          <h2><a href={`/topics/${topic.slug}/`}>{topic.title}</a></h2>
+          <p>{topic.description}</p>
+          <ul class="tag-list">
+            {topic.keywords.map((keyword) => <li><span>{keyword}</span></li>)}
+          </ul>
+        </article>
+      ))}
+    </div>
+  </section>
+</BaseLayout>

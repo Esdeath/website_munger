@@ -1,0 +1,57 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import { READING_PATH_KEYWORDS, TOPICS } from "../content/site";
+import { loadArticles, loadOriginalSources } from "../lib/corpus";
+
+const articles = loadArticles();
+const sources = loadOriginalSources();
+const readingPath = READING_PATH_KEYWORDS.map((keyword) =>
+  articles.find((article) => article.keyword.includes(keyword) || article.title.includes(keyword))
+).filter((article) => article !== undefined);
+const featured = articles.slice().sort((a, b) => b.quoteCount - a.quoteCount).slice(0, 6);
+---
+
+<BaseLayout title="首页">
+  <section class="page">
+    <p class="eyebrow">主题地图</p>
+    <h1 class="hero-title">从主题进入芒格，而不是从语录进入芒格。</h1>
+    <p class="hero-copy">
+      这里把现有 {articles.length} 篇解释文章、{sources.length} 篇原文资料组织成一个可阅读、可追溯的知识库。
+    </p>
+
+    <h2 class="section-title">六条主线</h2>
+    <div class="grid">
+      {TOPICS.map((topic) => (
+        <article class="card">
+          <h2><a href={`/topics/${topic.slug}/`}>{topic.title}</a></h2>
+          <p>{topic.description}</p>
+          <ul class="tag-list">
+            {topic.keywords.slice(0, 6).map((keyword) => <li><span>{keyword}</span></li>)}
+          </ul>
+        </article>
+      ))}
+    </div>
+
+    <h2 class="section-title">新读者路径</h2>
+    <div class="grid">
+      {readingPath.map((article) => (
+        <article class="card">
+          <h3><a href={`/articles/${article.slug}/`}>{article.title}</a></h3>
+          <p>{article.excerpt}</p>
+          <p class="meta">{article.quoteCount} 处引用</p>
+        </article>
+      ))}
+    </div>
+
+    <h2 class="section-title">高引用文章</h2>
+    <div class="grid">
+      {featured.map((article) => (
+        <article class="card">
+          <h3><a href={`/articles/${article.slug}/`}>{article.title}</a></h3>
+          <p>{article.excerpt}</p>
+          <p class="meta">{article.category} / {article.quoteCount} 处引用</p>
+        </article>
+      ))}
+    </div>
+  </section>
+</BaseLayout>
