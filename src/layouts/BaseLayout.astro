@@ -7,14 +7,13 @@ import { buildSidebarSections } from "../lib/navigation";
 interface Props {
   title?: string;
   description?: string;
-  activeHref?: string;
   shell?: "archive" | "reader";
 }
 
 const pageTitle = Astro.props.title ? `${Astro.props.title} | ${SITE_TITLE}` : SITE_TITLE;
 const description = Astro.props.description ?? SITE_DESCRIPTION;
 const shell = Astro.props.shell ?? "archive";
-const sidebarSections = buildSidebarSections(loadArticles(), loadOriginalSources(), Astro.props.activeHref);
+const sidebarSections = buildSidebarSections(loadArticles(), loadOriginalSources(), Astro.url.pathname);
 ---
 
 <!doctype html>
@@ -39,14 +38,23 @@ const sidebarSections = buildSidebarSections(loadArticles(), loadOriginalSources
           {sidebarSections.map((section) => (
             <section class="sidebar-section">
               <h2>{section.title}</h2>
-              <ul>
-                {section.items.map((item) => (
+              <ul class="sidebar-tree">
+                {section.groups.map((group) => (
                   <li>
-                    <a class:list={[item.active && "is-active"]} href={item.href}>
-                      <span class="chevron">›</span>
-                      <span>{item.label}</span>
-                      <span class="sidebar-count">· {item.count}</span>
-                    </a>
+                    <details open={group.open}>
+                      <summary>
+                        <span class="chevron">›</span>
+                        <span class="sidebar-group-label">{group.label}</span>
+                        <span class="sidebar-count">· {group.count}</span>
+                      </summary>
+                      <ul class="sidebar-leaves">
+                        {group.children.map((leaf) => (
+                          <li>
+                            <a class:list={[leaf.active && "is-active"]} href={leaf.href}>{leaf.label}</a>
+                          </li>
+                        ))}
+                      </ul>
+                    </details>
                   </li>
                 ))}
               </ul>

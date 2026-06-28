@@ -1,7 +1,6 @@
 ---
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import { loadArticles, loadOriginalSources } from "../../lib/corpus";
-import { categoryHref } from "../../lib/navigation";
 import { renderMarkdownToHtml } from "../../lib/render";
 import { relatedArticles, sourcesForArticle } from "../../lib/relations";
 
@@ -15,10 +14,9 @@ const sources = loadOriginalSources();
 const matchedSources = sourcesForArticle(article, sources);
 const related = relatedArticles(article, allArticles);
 const rendered = await renderMarkdownToHtml(article.body);
-const activeHref = categoryHref(article.category);
 ---
 
-<BaseLayout title={article.title} description={article.excerpt} activeHref={activeHref} shell="reader">
+<BaseLayout title={article.title} description={article.excerpt} shell="reader">
   <article class="reader-layout">
     <div class="reader-content">
       <header class="reader-header">

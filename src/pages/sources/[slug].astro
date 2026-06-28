@@ -16,10 +16,9 @@ const sameYear = loadOriginalSources()
   .filter((item) => item.slug !== source.slug && item.year === source.year)
   .slice(0, 8);
 const rendered = await renderMarkdownToHtml(source.body);
-const activeHref = source.type === "shareholder" ? "/sources/#shareholder" : "/sources/#speech";
 ---
 
-<BaseLayout title={source.title} description={source.excerpt} activeHref={activeHref} shell="reader">
+<BaseLayout title={source.title} description={source.excerpt} shell="reader">
   <article class="reader-layout">
     <div class="reader-content">
       <header class="reader-header">
