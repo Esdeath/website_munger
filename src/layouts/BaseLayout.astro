@@ -53,6 +53,15 @@ const sidebarSections = buildSidebarSections(loadArticles(), loadOriginalSources
     <meta name="twitter:description" content={description} />
     {imageUrl && <meta name="twitter:image" content={imageUrl} />}
     {structuredData.length > 0 && <script is:inline type="application/ld+json" set:html={structuredDataJson}></script>}
+    <script is:inline>
+      var _hmt = _hmt || [];
+      (function() {
+        var hm = document.createElement("script");
+        hm.src = "https://hm.baidu.com/hm.js?27ba6ea2e1b2f30c1acf9ed6977e1c8b";
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(hm, s);
+      })();
+    </script>
     <title>{pageTitle}</title>
   </head>
   <body class:list={[`shell-${shell}`]}>
