@@ -13,7 +13,7 @@ interface Props {
 const pageTitle = Astro.props.title ? `${Astro.props.title} | ${SITE_TITLE}` : SITE_TITLE;
 const description = Astro.props.description ?? SITE_DESCRIPTION;
 const shell = Astro.props.shell ?? "archive";
-const sidebarSections = buildSidebarSections(loadArticles(), loadOriginalSources(), Astro.url.pathname);
+const sidebarSections = buildSidebarSections(loadArticles(), loadOriginalSources(), decodeURIComponent(Astro.url.pathname));
 ---
 
 <!doctype html>
@@ -43,7 +43,7 @@ const sidebarSections = buildSidebarSections(loadArticles(), loadOriginalSources
                   <li>
                     <details open={group.open}>
                       <summary>
-                        <span class="chevron">›</span>
+                        <span class="chevron" aria-hidden="true">›</span>
                         <span class="sidebar-group-label">{group.label}</span>
                         <span class="sidebar-count">· {group.count}</span>
                       </summary>
