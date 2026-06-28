@@ -1,0 +1,55 @@
+---
+import { remark } from "remark";
+import remarkGfm from "remark-gfm";
+import remarkHtml from "remark-html";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import { loadArticles, loadOriginalSources } from "../../lib/corpus";
+import { relatedArticles, sourcesForArticle } from "../../lib/relations";
+
+export function getStaticPaths() {
+  return loadArticles().map((article) => ({ params: { slug: article.slug }, props: { article } }));
+}
+
+const { article } = Astro.props;
+const allArticles = loadArticles();
+const sources = loadOriginalSources();
+const matchedSources = sourcesForArticle(article, sources);
+const related = relatedArticles(article, allArticles);
+const rendered = await remark().use(remarkGfm).use(remarkHtml).process(article.body);
+---
+
+<BaseLayout title={article.title} description={article.excerpt}>
+  <article class="page">
+    <p class="eyebrow">{article.category}</p>
+    <h1 class="hero-title">{article.title}</h1>
+    <p class="hero-copy">{article.excerpt}</p>
+    <p class="meta">{article.quoteCount} 处引用 / {article.sources.length} 个来源</p>
+
+    <div class="split">
+      <div class="article-body" set:html={rendered.toString()} />
+      <aside class="side-panel">
+        <h2>目录</h2>
+        <ul>
+          {article.headings.map((heading) => (
+            <li><a href={`#${heading.slug}`}>{heading.text}</a></li>
+          ))}
+        </ul>
+
+        <h2>来源追溯</h2>
+        <ul>
+          {matchedSources.map((source) => (
+            <li><a href={`/sources/${source.slug}/`}>{source.title}</a></li>
+          ))}
+          {matchedSources.length === 0 && article.sources.map((sourceLabel) => <li>{sourceLabel}</li>)}
+        </ul>
+
+        <h2>相关主题</h2>
+        <ul>
+          {related.map((item) => (
+            <li><a href={`/articles/${item.slug}/`}>{item.keyword}</a></li>
+          ))}
+        </ul>
+      </aside>
+    </div>
+  </article>
+</BaseLayout>

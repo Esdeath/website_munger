@@ -1,0 +1,24 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import { loadArticles } from "../../lib/corpus";
+
+const articles = loadArticles().sort(
+  (a, b) => a.category.localeCompare(b.category, "zh-Hans-CN") || b.quoteCount - a.quoteCount
+);
+---
+
+<BaseLayout title="全部文章">
+  <section class="page">
+    <p class="eyebrow">解释层</p>
+    <h1 class="hero-title">全部专题文章。</h1>
+    <div class="grid">
+      {articles.map((article) => (
+        <article class="card">
+          <h2><a href={`/articles/${article.slug}/`}>{article.title}</a></h2>
+          <p>{article.excerpt}</p>
+          <p class="meta">{article.category} / {article.quoteCount} 处引用 / {article.sources.length} 个来源</p>
+        </article>
+      ))}
+    </div>
+  </section>
+</BaseLayout>
