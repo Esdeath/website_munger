@@ -1,6 +1,6 @@
-import type { TopicDefinition } from "../content/site";
+import { TOPICS, type TopicDefinition } from "../content/site";
 import type { KnowledgeArticle, OriginalSource } from "./corpus";
-import { articlesForTopic } from "./relations";
+import { articlesForTopic, topicForCategory } from "./relations";
 import { textToSlug } from "./slug";
 
 export interface SidebarLeaf {
@@ -67,22 +67,20 @@ export function buildSidebarSections(
         .map((source) => toLeaf(source.title, `/sources/${source.slug}/`, currentPath))
     );
 
-  const categories = Array.from(new Set(articles.map((article) => article.category))).sort((a, b) =>
-    a.localeCompare(b, "zh-Hans-CN")
-  );
-
-  const articleGroup = (category: string): SidebarGroup =>
+  const articleGroup = (topicTitle: string): SidebarGroup =>
     makeGroup(
-      category,
+      topicTitle,
       articles
-        .filter((article) => article.category === category)
+        .filter((article) => topicForCategory(article.category) === topicTitle)
         .sort((a, b) => b.quoteCount - a.quoteCount)
         .map((article) => toLeaf(article.title, `/articles/${article.slug}/`, currentPath))
     );
 
+  const articleGroups = TOPICS.map((topic) => articleGroup(topic.title)).filter((group) => group.count > 0);
+
   return [
     { title: "原文", groups: [sourceGroup("shareholder"), sourceGroup("speech")] },
-    { title: "解读", groups: categories.map(articleGroup) }
+    { title: "解读", groups: articleGroups }
   ];
 }
 

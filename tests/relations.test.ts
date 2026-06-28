@@ -71,10 +71,46 @@ const sources = [
 ] satisfies OriginalSource[];
 
 describe("articlesForTopic", () => {
-  it("matches topic keywords and categories", () => {
+  it("groups articles into a topic by folding their category", () => {
     const topic = TOPICS.find((item) => item.slug === "investment-principles");
     expect(topic).toBeDefined();
     expect(articlesForTopic(articles, topic!).map((article) => article.keyword)).toEqual(["护城河", "能力圈"]);
+  });
+
+  it("folds a sub-category (宏观警示) into its parent topic without any keyword match", () => {
+    const macro = {
+      slug: "利率-资产价格的重力",
+      filePath: "articles/利率-资产价格的重力.md",
+      title: "利率:资产价格的重力",
+      keyword: "利率",
+      category: "宏观警示",
+      quoteCount: 20,
+      sources: [],
+      excerpt: "",
+      body: "",
+      headings: []
+    } satisfies KnowledgeArticle;
+    const topic = TOPICS.find((item) => item.slug === "investment-principles")!;
+    expect(articlesForTopic([macro], topic).map((article) => article.keyword)).toEqual(["利率"]);
+  });
+
+  it("does not double-count an article in a topic it merely keyword-matches", () => {
+    const coke = {
+      slug: "可口可乐-定价权的复利机器",
+      filePath: "articles/可口可乐-定价权的复利机器.md",
+      title: "可口可乐:定价权的复利机器",
+      keyword: "可口可乐",
+      category: "公司案例",
+      quoteCount: 22,
+      sources: [],
+      excerpt: "",
+      body: "",
+      headings: []
+    } satisfies KnowledgeArticle;
+    const investment = TOPICS.find((item) => item.slug === "investment-principles")!;
+    const business = TOPICS.find((item) => item.slug === "business-cases")!;
+    expect(articlesForTopic([coke], investment)).toEqual([]);
+    expect(articlesForTopic([coke], business).map((article) => article.keyword)).toEqual(["可口可乐"]);
   });
 });
 
