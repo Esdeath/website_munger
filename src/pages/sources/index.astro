@@ -1,0 +1,24 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import { loadOriginalSources } from "../../lib/corpus";
+
+const sources = loadOriginalSources().sort(
+  (a, b) => a.year.localeCompare(b.year) || a.title.localeCompare(b.title, "zh-Hans-CN")
+);
+---
+
+<BaseLayout title="原文资料">
+  <section class="page">
+    <p class="eyebrow">原文语境层</p>
+    <h1 class="hero-title">股东会、演讲、访谈与声明。</h1>
+    <div class="grid">
+      {sources.map((source) => (
+        <article class="card">
+          <h2><a href={`/sources/${source.slug}/`}>{source.title}</a></h2>
+          <p>{source.excerpt}</p>
+          <p class="meta">{source.year} / {source.type === "shareholder" ? "股东会与股东信" : "演讲与访谈"}</p>
+        </article>
+      ))}
+    </div>
+  </section>
+</BaseLayout>

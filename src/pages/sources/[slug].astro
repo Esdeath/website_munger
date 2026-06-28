@@ -1,0 +1,48 @@
+---
+import { remark } from "remark";
+import remarkGfm from "remark-gfm";
+import remarkHtml from "remark-html";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import { loadArticles, loadOriginalSources } from "../../lib/corpus";
+import { buildSourceArticleMap } from "../../lib/relations";
+
+export function getStaticPaths() {
+  return loadOriginalSources().map((source) => ({ params: { slug: source.slug }, props: { source } }));
+}
+
+const { source } = Astro.props;
+const articles = loadArticles();
+const sourceArticleMap = buildSourceArticleMap(articles, loadOriginalSources());
+const citedBy = sourceArticleMap.get(source.slug) ?? [];
+const sameYear = loadOriginalSources()
+  .filter((item) => item.slug !== source.slug && item.year === source.year)
+  .slice(0, 8);
+const rendered = await remark().use(remarkGfm).use(remarkHtml).process(source.body);
+---
+
+<BaseLayout title={source.title} description={source.excerpt}>
+  <article class="page">
+    <p class="eyebrow">{source.type === "shareholder" ? "股东会与股东信" : "演讲与访谈"}</p>
+    <h1 class="hero-title">{source.title}</h1>
+    <p class="meta">{source.year}</p>
+
+    <div class="split">
+      <div class="article-body" set:html={rendered.toString()} />
+      <aside class="side-panel">
+        <h2>被这些文章引用</h2>
+        <ul>
+          {citedBy.map((article) => (
+            <li><a href={`/articles/${article.slug}/`}>{article.keyword}</a></li>
+          ))}
+        </ul>
+
+        <h2>同年份资料</h2>
+        <ul>
+          {sameYear.map((item) => (
+            <li><a href={`/sources/${item.slug}/`}>{item.title}</a></li>
+          ))}
+        </ul>
+      </aside>
+    </div>
+  </article>
+</BaseLayout>
