@@ -1,3 +1,9 @@
+---
+title: 查理芒格：2020年Dr Sabrina Kay对谈—人性与投资
+keyword: 查理芒格：2020年Dr Sabrina Kay对谈—人性与投资
+category: 访谈
+quote_count: 0
+---
 # 查理芒格：2020年Dr Sabrina Kay对谈—人性与投资
 
 ### 1.我年轻时曾试图缩短我的生命而不是延长我的生命

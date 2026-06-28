@@ -1,3 +1,9 @@
+---
+title: 查理芒格：2011年 谈对世界的看法-Morgan Housel采访1-2
+keyword: 查理芒格：2011年 谈对世界的看法-Morgan Housel采访1-2
+category: 访谈
+quote_count: 0
+---
 # 查理芒格：2011年 谈对世界的看法-Morgan Housel采访1-2
 
 ---

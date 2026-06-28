@@ -1,3 +1,9 @@
+---
+title: 查理芒格：2008年《与 Charlie Munger 的对话：杜桥杰出访客讲座》
+keyword: 查理芒格：2008年《与 Charlie Munger 的对话：杜桥杰出访客讲座》
+category: 演讲/访谈/资料
+quote_count: 0
+---
 # 查理芒格：2008年与 Charlie Munger 的对话：杜桥杰出访客讲座
 
 ![](images/image_-4797778777282916516.png)

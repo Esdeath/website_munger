@@ -1,3 +1,9 @@
+---
+title: 查理芒格：2023年《Acquired》首次长篇播客采访
+keyword: 查理芒格：2023年《Acquired》首次长篇播客采访
+category: 访谈
+quote_count: 0
+---
 # 查理芒格：2023年《Acquired》首次长篇播客采访
 
 
