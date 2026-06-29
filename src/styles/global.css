@@ -1024,9 +1024,30 @@ input:focus-visible {
     width: 100%;
   }
 
+  .author-card {
+    display: flex;
+    grid-template-columns: none;
+    white-space: nowrap;
+  }
+
+  .author-card span:first-child {
+    min-width: 0;
+  }
+
+  .author-card strong {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
   .card-arrow,
   .archive-count {
     grid-column: 2;
+  }
+
+  .author-card .card-arrow {
+    flex: 0 0 auto;
+    grid-column: auto;
   }
 
   .archive-card {

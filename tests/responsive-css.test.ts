@@ -91,4 +91,15 @@ describe("responsive layout CSS", () => {
     expect(phone).toContain(".reader-aside");
     expect(phone).toContain("transform: translateX(100%);");
   });
+
+  it("keeps the homepage author card on one line on phone widths", () => {
+    const phone = mediaBlock("(max-width: 640px)");
+
+    expect(phone).toContain(".author-card");
+    expect(phone).toContain("display: flex;");
+    expect(phone).toContain("white-space: nowrap;");
+    expect(phone).toContain(".author-card strong");
+    expect(phone).toContain("overflow: hidden;");
+    expect(phone).toContain("text-overflow: ellipsis;");
+  });
 });
