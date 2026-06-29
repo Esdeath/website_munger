@@ -82,18 +82,25 @@ input:focus-visible {
 }
 
 .archive-sidebar {
-  position: sticky;
-  top: 0;
-  z-index: 20;
-  width: auto;
+  position: fixed;
+  inset: 0 auto 0 0;
+  z-index: 35;
+  width: min(340px, 88vw);
+  height: 100dvh;
   margin: 0;
-  padding: 16px;
-  overflow: visible;
+  padding: 18px 18px calc(74px + env(safe-area-inset-bottom, 0px));
+  overflow: auto;
   background: rgb(255 253 248 / 0.98);
   border: 1px solid var(--line);
-  border-width: 0 0 1px;
+  border-width: 0 1px 0 0;
   border-radius: 0;
-  box-shadow: 0 10px 26px rgb(79 67 42 / 0.08);
+  box-shadow: 18px 0 42px rgb(79 67 42 / 0.16);
+  transform: translateX(-100%);
+  transition: transform 0.2s ease;
+}
+
+.nav-drawer-state:checked ~ .archive-sidebar {
+  transform: translateX(0);
 }
 
 .site-brand {
@@ -131,50 +138,57 @@ input:focus-visible {
   color: #8b8c86;
 }
 
-.mobile-nav-panel {
-  margin-top: 12px;
+.drawer-state {
+  position: fixed;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+  pointer-events: none;
 }
 
-.mobile-nav-panel:not([open]) .sidebar-nav {
-  display: none;
-}
-
-.mobile-nav-toggle {
+.drawer-toggle {
+  position: fixed;
+  bottom: calc(16px + env(safe-area-inset-bottom, 0px));
+  z-index: 40;
   display: flex;
   align-items: center;
   justify-content: center;
-  min-height: 42px;
+  min-width: 72px;
+  min-height: 44px;
+  padding: 0 16px;
   color: var(--green-dark);
-  background: var(--green-soft);
-  border: 1px solid var(--line);
-  border-radius: 6px;
+  background: rgb(255 253 248 / 0.96);
+  border: 1px solid var(--line-strong);
+  border-radius: 999px;
+  box-shadow: 0 12px 28px rgb(79 67 42 / 0.18);
   font: 900 var(--fs-nav) / 1.2 ui-sans-serif, system-ui, sans-serif;
   cursor: pointer;
-  list-style: none;
 }
 
-.mobile-nav-toggle::-webkit-details-marker {
+.nav-drawer-toggle {
+  left: 16px;
+}
+
+.reader-drawer-toggle {
+  right: 16px;
+}
+
+.drawer-scrim {
+  position: fixed;
+  inset: 0;
+  z-index: 30;
   display: none;
+  background: rgb(36 48 44 / 0.28);
+  backdrop-filter: blur(2px);
 }
 
-.mobile-nav-toggle::after {
-  content: "›";
-  margin-left: 8px;
-  color: var(--muted);
-  font-size: var(--fs-icon);
-  line-height: 1;
-  transform: rotate(90deg);
-  transition: transform 0.15s ease;
-}
-
-.mobile-nav-panel[open] .mobile-nav-toggle::after {
-  transform: rotate(-90deg);
+.drawer-state:checked + .drawer-toggle + .drawer-scrim {
+  display: block;
 }
 
 .sidebar-nav {
   display: block;
-  max-height: min(62dvh, 560px);
-  margin-top: 14px;
+  margin-top: 28px;
   overflow: auto;
   padding: 0 2px 4px 0;
 }
@@ -546,15 +560,24 @@ input:focus-visible {
 }
 
 .reader-aside {
-  position: static;
-  order: -1;
-  align-self: start;
+  position: fixed;
+  inset: 0 0 0 auto;
+  z-index: 35;
   display: flex;
   flex-direction: column;
   gap: 22px;
-  max-height: none;
-  overflow: visible;
-  padding-right: 0;
+  width: min(360px, 88vw);
+  height: 100dvh;
+  overflow: auto;
+  padding: 18px 16px calc(74px + env(safe-area-inset-bottom, 0px));
+  background: rgb(244 240 232 / 0.98);
+  box-shadow: -18px 0 42px rgb(79 67 42 / 0.16);
+  transform: translateX(100%);
+  transition: transform 0.2s ease;
+}
+
+.reader-drawer-state:checked ~ .reader-aside {
+  transform: translateX(0);
 }
 
 .info-panel {
@@ -766,30 +789,25 @@ input:focus-visible {
     padding-left: var(--sidebar);
   }
 
+  .drawer-toggle,
+  .drawer-scrim {
+    display: none;
+  }
+
   .archive-sidebar {
     position: fixed;
     inset: 26px auto 26px 16px;
     top: 26px;
     z-index: auto;
     width: calc(var(--sidebar) - 32px);
+    height: auto;
     max-height: none;
     padding: 28px 22px;
     overflow: auto;
     border-width: 1px;
     border-radius: 10px;
     box-shadow: 0 1px 0 rgb(255 255 255 / 0.65) inset;
-  }
-
-  .mobile-nav-panel {
-    display: contents;
-  }
-
-  .mobile-nav-toggle {
-    display: none;
-  }
-
-  .mobile-nav-panel:not([open]) .sidebar-nav {
-    display: block;
+    transform: none;
   }
 
   .site-brand {
@@ -883,10 +901,16 @@ input:focus-visible {
   .reader-aside {
     position: sticky;
     top: 26px;
-    order: 0;
+    z-index: auto;
+    align-self: start;
+    width: auto;
+    height: auto;
     max-height: calc(100vh - 52px);
     overflow: auto;
-    padding-right: 2px;
+    padding: 0 2px 0 0;
+    background: transparent;
+    box-shadow: none;
+    transform: none;
   }
 
   .page {
@@ -912,6 +936,15 @@ input:focus-visible {
 
   .archive-sidebar {
     padding: 14px;
+  }
+
+  .reader-aside {
+    width: min(340px, 90vw);
+    transform: translateX(100%);
+  }
+
+  .reader-drawer-state:checked ~ .reader-aside {
+    transform: translateX(0);
   }
 
   .sidebar-section {

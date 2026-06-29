@@ -49,6 +49,10 @@ const structuredData = [
       <div class="article-body" set:html={rendered} />
     </div>
 
+    <input id="reader-drawer-state" class="drawer-state reader-drawer-state" type="checkbox" />
+    <label class="drawer-toggle reader-drawer-toggle" for="reader-drawer-state">信息</label>
+    <label class="drawer-scrim reader-drawer-scrim" for="reader-drawer-state" aria-hidden="true"></label>
+
     <aside class="reader-aside">
       <section class="info-panel">
         <h2>原文信息</h2>

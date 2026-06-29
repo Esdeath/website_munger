@@ -68,6 +68,10 @@ const sidebarSections = buildSidebarSections(loadArticles(), loadOriginalSources
   </head>
   <body class:list={[`shell-${shell}`]}>
     <div class="app-shell">
+      <input id="nav-drawer-state" class="drawer-state nav-drawer-state" type="checkbox" />
+      <label class="drawer-toggle nav-drawer-toggle" for="nav-drawer-state">导航</label>
+      <label class="drawer-scrim nav-drawer-scrim" for="nav-drawer-state" aria-hidden="true"></label>
+
       <aside class="archive-sidebar" aria-label="知识库导航">
         <a class="site-brand" href="/">{SITE_TITLE}</a>
         <p class="sidebar-tagline">慢慢读，反复看，用原文校准判断。</p>
@@ -76,36 +80,33 @@ const sidebarSections = buildSidebarSections(loadArticles(), loadOriginalSources
           <input type="search" placeholder="搜索关键词、文章..." />
         </label>
 
-        <details class="mobile-nav-panel">
-          <summary class="mobile-nav-toggle">目录</summary>
-          <nav class="sidebar-nav">
-            {sidebarSections.map((section) => (
-              <section class="sidebar-section">
-                <h2>{section.title}</h2>
-                <ul class="sidebar-tree">
-                  {section.groups.map((group) => (
-                    <li>
-                      <details open={group.open}>
-                        <summary>
-                          <span class="chevron" aria-hidden="true">›</span>
-                          <span class="sidebar-group-label">{group.label}</span>
-                          <span class="sidebar-count">· {group.count}</span>
-                        </summary>
-                        <ul class="sidebar-leaves">
-                          {group.children.map((leaf) => (
-                            <li>
-                              <a class:list={[leaf.active && "is-active"]} href={leaf.href}>{leaf.label}</a>
-                            </li>
-                          ))}
-                        </ul>
-                      </details>
-                    </li>
-                  ))}
-                </ul>
-              </section>
-            ))}
-          </nav>
-        </details>
+        <nav class="sidebar-nav">
+          {sidebarSections.map((section) => (
+            <section class="sidebar-section">
+              <h2>{section.title}</h2>
+              <ul class="sidebar-tree">
+                {section.groups.map((group) => (
+                  <li>
+                    <details open={group.open}>
+                      <summary>
+                        <span class="chevron" aria-hidden="true">›</span>
+                        <span class="sidebar-group-label">{group.label}</span>
+                        <span class="sidebar-count">· {group.count}</span>
+                      </summary>
+                      <ul class="sidebar-leaves">
+                        {group.children.map((leaf) => (
+                          <li>
+                            <a class:list={[leaf.active && "is-active"]} href={leaf.href}>{leaf.label}</a>
+                          </li>
+                        ))}
+                      </ul>
+                    </details>
+                  </li>
+                ))}
+              </ul>
+            </section>
+          ))}
+        </nav>
       </aside>
 
       <main class="main-stage">
