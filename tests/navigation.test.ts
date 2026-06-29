@@ -90,7 +90,10 @@ describe("buildSidebarSections", () => {
 
 describe("buildArchiveCards", () => {
   it("turns topics into archive-style cards", () => {
-    const cards = buildArchiveCards(TOPICS.slice(0, 2), articles);
+    const topics = ["investment-principles", "thinking-methods"].map(
+      (slug) => TOPICS.find((topic) => topic.slug === slug)!
+    );
+    const cards = buildArchiveCards(topics, articles);
 
     expect(cards).toEqual([
       expect.objectContaining({ mark: "投", title: "投资原则", count: 1 }),

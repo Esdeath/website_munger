@@ -1,24 +1,8 @@
 import type { TopicDefinition } from "../content/site";
 import type { KnowledgeArticle, OriginalSource } from "./corpus";
 
-/**
- * Fold each article's frontmatter `category` onto exactly one of the 6 homepage topics.
- * Article membership in a topic is decided purely by category — so the homepage cards,
- * the topic pages, and the sidebar "解读" section all show the same one-to-one grouping.
- */
-const CATEGORY_TO_TOPIC: Record<string, string> = {
-  投资原则: "投资原则",
-  宏观警示: "投资原则",
-  思维方法: "思维方法",
-  人性偏误: "人性偏误",
-  品格处世: "品格处世",
-  公司案例: "商业案例",
-  常引用人物: "人物与学科",
-  学科体系: "人物与学科"
-};
-
 export function topicForCategory(category: string): string {
-  return CATEGORY_TO_TOPIC[category] ?? category;
+  return category;
 }
 
 function sourceLabelMatchesTitle(label: string, title: string): boolean {

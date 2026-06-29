@@ -5,16 +5,16 @@ import { buildCollectionPageSchema, canonicalUrl } from "../../lib/seo";
 
 const structuredData = buildCollectionPageSchema({
   title: "主题索引",
-  description: "查理·芒格思想的六个主题入口。",
+  description: "查理·芒格思想的八个主题入口。",
   pathname: "/topics/",
   itemUrls: TOPICS.map((topic) => canonicalUrl(`/topics/${topic.slug}/`))
 });
 ---
 
-<BaseLayout title="主题" description="查理·芒格思想的六个主题入口。" structuredData={structuredData}>
+<BaseLayout title="主题" description="查理·芒格思想的八个主题入口。" structuredData={structuredData}>
   <section class="page">
     <p class="eyebrow">主题索引</p>
-    <h1 class="hero-title">芒格思想的六个入口。</h1>
+    <h1 class="hero-title">芒格思想的八个入口。</h1>
     <div class="grid">
       {TOPICS.map((topic) => (
         <article class="card">

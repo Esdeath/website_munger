@@ -5,7 +5,8 @@ import {
   articlesForTopic,
   buildSourceArticleMap,
   relatedArticles,
-  sourcesForArticle
+  sourcesForArticle,
+  topicForCategory
 } from "../src/lib/relations";
 
 const articles = [
@@ -71,13 +72,26 @@ const sources = [
 ] satisfies OriginalSource[];
 
 describe("articlesForTopic", () => {
-  it("groups articles into a topic by folding their category", () => {
+  it("keeps the topic list aligned to the articles frontmatter categories", () => {
+    expect(TOPICS.map((topic) => topic.title)).toEqual([
+      "投资原则",
+      "思维方法",
+      "人性偏误",
+      "品格处世",
+      "常引用人物",
+      "公司案例",
+      "学科体系",
+      "宏观警示"
+    ]);
+  });
+
+  it("groups articles into a topic by their exact category", () => {
     const topic = TOPICS.find((item) => item.slug === "investment-principles");
     expect(topic).toBeDefined();
     expect(articlesForTopic(articles, topic!).map((article) => article.keyword)).toEqual(["护城河", "能力圈"]);
   });
 
-  it("folds a sub-category (宏观警示) into its parent topic without any keyword match", () => {
+  it("does not fold macro warning articles into investment principles", () => {
     const macro = {
       slug: "利率-资产价格的重力",
       filePath: "articles/利率-资产价格的重力.md",
@@ -90,8 +104,12 @@ describe("articlesForTopic", () => {
       body: "",
       headings: []
     } satisfies KnowledgeArticle;
-    const topic = TOPICS.find((item) => item.slug === "investment-principles")!;
-    expect(articlesForTopic([macro], topic).map((article) => article.keyword)).toEqual(["利率"]);
+    const investment = TOPICS.find((item) => item.slug === "investment-principles")!;
+    const macroWarning = TOPICS.find((item) => item.slug === "macro-warnings")!;
+
+    expect(topicForCategory(macro.category)).toBe("宏观警示");
+    expect(articlesForTopic([macro], investment)).toEqual([]);
+    expect(articlesForTopic([macro], macroWarning).map((article) => article.keyword)).toEqual(["利率"]);
   });
 
   it("does not double-count an article in a topic it merely keyword-matches", () => {
@@ -108,7 +126,7 @@ describe("articlesForTopic", () => {
       headings: []
     } satisfies KnowledgeArticle;
     const investment = TOPICS.find((item) => item.slug === "investment-principles")!;
-    const business = TOPICS.find((item) => item.slug === "business-cases")!;
+    const business = TOPICS.find((item) => item.slug === "company-cases")!;
     expect(articlesForTopic([coke], investment)).toEqual([]);
     expect(articlesForTopic([coke], business).map((article) => article.keyword)).toEqual(["可口可乐"]);
   });

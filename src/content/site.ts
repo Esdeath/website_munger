@@ -47,16 +47,28 @@ export const TOPICS: TopicDefinition[] = [
     keywords: ["诚信与声誉", "可靠", "勤奋", "好奇心", "延迟满足", "谦逊", "纪律", "自律", "避免愚蠢"]
   },
   {
-    slug: "business-cases",
-    title: "商业案例",
+    slug: "frequently-cited-people",
+    title: "常引用人物",
+    description: "芒格反复引用的人物和思想参照。",
+    keywords: ["富兰克林", "格雷厄姆", "李光耀", "达尔文", "凯恩斯", "亚当斯密"]
+  },
+  {
+    slug: "company-cases",
+    title: "公司案例",
     description: "把公司作为理解芒格思想的案例载体。",
     keywords: ["喜诗糖果", "可口可乐", "比亚迪", "GEICO", "蓝筹印花", "西科金融", "每日期刊", "好市多"]
   },
   {
-    slug: "people-disciplines",
-    title: "人物与学科",
-    description: "芒格反复引用的人物、学科和基础模型。",
-    keywords: ["富兰克林", "格雷厄姆", "李光耀", "达尔文", "凯恩斯", "心理学", "工程学", "会计学", "历史"]
+    slug: "disciplines",
+    title: "学科体系",
+    description: "心理学、工程学、会计学、历史和基础模型。",
+    keywords: ["心理学", "工程学", "会计学", "历史", "物理学", "生物学", "哲学", "数学"]
+  },
+  {
+    slug: "macro-warnings",
+    title: "宏观警示",
+    description: "通胀、利率、泡沫、杠杆和金融系统风险。",
+    keywords: ["通货膨胀", "利率", "泡沫", "金融危机", "衍生品", "杠杆", "监管", "投机", "赌博"]
   }
 ];
 
