@@ -28,18 +28,21 @@ describe("responsive layout CSS", () => {
     expect(base).toContain("transform: translateX(-100%);");
     expect(base).toContain(".nav-drawer-state:checked ~ .archive-sidebar");
     expect(base).toContain("transform: translateX(0);");
-    expect(base).toContain(".drawer-toggle");
+    expect(base).toContain(".mobile-topbar");
+    expect(base).toContain("position: fixed;");
     expect(base).toContain(".overview-page");
     expect(base).toContain("width: 100%;");
   });
 
-  it("keeps the left navigation behind a mobile drawer control", () => {
+  it("puts mobile drawer controls in the top bar", () => {
     const layoutSource = readFileSync("src/layouts/BaseLayout.astro", "utf8");
 
+    expect(layoutSource).toContain('<header class="mobile-topbar"');
     expect(layoutSource).toContain('id="nav-drawer-state"');
     expect(layoutSource).toContain('class="drawer-state nav-drawer-state"');
-    expect(layoutSource).toContain('class="drawer-toggle nav-drawer-toggle"');
+    expect(layoutSource).toContain('class="topbar-button nav-drawer-toggle"');
     expect(layoutSource).toContain('class="drawer-scrim nav-drawer-scrim"');
+    expect(layoutSource).toContain('class="topbar-button reader-drawer-toggle"');
     expect(layoutSource.indexOf('<aside class="archive-sidebar"')).toBeGreaterThan(
       layoutSource.indexOf('for="nav-drawer-state"')
     );
@@ -52,10 +55,9 @@ describe("responsive layout CSS", () => {
     for (const pageSource of [articlePage, sourcePage]) {
       expect(pageSource).toContain('id="reader-drawer-state"');
       expect(pageSource).toContain('class="drawer-state reader-drawer-state"');
-      expect(pageSource).toContain('class="drawer-toggle reader-drawer-toggle"');
       expect(pageSource).toContain('class="drawer-scrim reader-drawer-scrim"');
       expect(pageSource.indexOf('<aside class="reader-aside"')).toBeGreaterThan(
-        pageSource.indexOf('for="reader-drawer-state"')
+        pageSource.indexOf('id="reader-drawer-state"')
       );
     }
   });
@@ -69,7 +71,7 @@ describe("responsive layout CSS", () => {
     expect(desktop).toContain("position: fixed;");
     expect(desktop).toContain("width: calc(var(--sidebar) - 32px);");
     expect(desktop).toContain("transform: none;");
-    expect(desktop).toContain(".drawer-toggle");
+    expect(desktop).toContain(".mobile-topbar");
     expect(desktop).toContain("display: none;");
     expect(desktop).toContain(".sidebar-nav");
     expect(desktop).toContain("display: block;");

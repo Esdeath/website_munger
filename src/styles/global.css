@@ -28,6 +28,7 @@
   --fs-section: 1.4rem;
   --fs-hero-min: 2.1rem;
   --fs-hero-max: 3.2rem;
+  --mobile-topbar: 54px;
   font-family: "Noto Serif SC", "Songti SC", "STSong", "Times New Roman", serif;
 }
 
@@ -78,15 +79,16 @@ input:focus-visible {
 .app-shell {
   min-height: 100vh;
   min-width: 0;
+  padding-top: var(--mobile-topbar);
   padding-left: 0;
 }
 
 .archive-sidebar {
   position: fixed;
-  inset: 0 auto 0 0;
+  inset: var(--mobile-topbar) auto 0 0;
   z-index: 35;
   width: min(340px, 88vw);
-  height: 100dvh;
+  height: calc(100dvh - var(--mobile-topbar));
   margin: 0;
   padding: 18px 18px calc(74px + env(safe-area-inset-bottom, 0px));
   overflow: auto;
@@ -146,43 +148,70 @@ input:focus-visible {
   pointer-events: none;
 }
 
-.drawer-toggle {
+.mobile-topbar {
   position: fixed;
-  bottom: calc(16px + env(safe-area-inset-bottom, 0px));
-  z-index: 40;
-  display: flex;
+  inset: 0 0 auto;
+  z-index: 45;
+  display: grid;
+  grid-template-columns: 64px minmax(0, 1fr) 64px;
+  align-items: center;
+  gap: 8px;
+  height: var(--mobile-topbar);
+  padding: 0 10px;
+  background: rgb(255 253 248 / 0.97);
+  border-bottom: 1px solid var(--line);
+  box-shadow: 0 8px 24px rgb(79 67 42 / 0.1);
+  backdrop-filter: blur(12px);
+}
+
+.mobile-topbar-brand {
+  min-width: 0;
+  overflow: hidden;
+  color: var(--green-dark);
+  font-size: var(--fs-nav);
+  font-weight: 900;
+  text-align: center;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.topbar-button,
+.topbar-spacer {
+  min-height: 38px;
+}
+
+.topbar-button {
+  display: inline-flex;
   align-items: center;
   justify-content: center;
-  min-width: 72px;
-  min-height: 44px;
-  padding: 0 16px;
+  padding: 0 10px;
   color: var(--green-dark);
-  background: rgb(255 253 248 / 0.96);
-  border: 1px solid var(--line-strong);
-  border-radius: 999px;
-  box-shadow: 0 12px 28px rgb(79 67 42 / 0.18);
+  background: var(--green-soft);
+  border: 1px solid var(--line);
+  border-radius: 6px;
   font: 900 var(--fs-nav) / 1.2 ui-sans-serif, system-ui, sans-serif;
   cursor: pointer;
 }
 
 .nav-drawer-toggle {
-  left: 16px;
+  justify-self: start;
 }
 
 .reader-drawer-toggle {
-  right: 16px;
+  justify-self: end;
 }
 
 .drawer-scrim {
   position: fixed;
-  inset: 0;
+  inset: var(--mobile-topbar) 0 0;
   z-index: 30;
   display: none;
   background: rgb(36 48 44 / 0.28);
   backdrop-filter: blur(2px);
 }
 
-.drawer-state:checked + .drawer-toggle + .drawer-scrim {
+.nav-drawer-state:checked + .nav-drawer-scrim,
+.reader-drawer-state:checked + .reader-drawer-scrim {
   display: block;
 }
 
@@ -561,13 +590,13 @@ input:focus-visible {
 
 .reader-aside {
   position: fixed;
-  inset: 0 0 0 auto;
+  inset: var(--mobile-topbar) 0 0 auto;
   z-index: 35;
   display: flex;
   flex-direction: column;
   gap: 22px;
   width: min(360px, 88vw);
-  height: 100dvh;
+  height: calc(100dvh - var(--mobile-topbar));
   overflow: auto;
   padding: 18px 16px calc(74px + env(safe-area-inset-bottom, 0px));
   background: rgb(244 240 232 / 0.98);
@@ -786,10 +815,11 @@ input:focus-visible {
 
 @media (min-width: 1101px) {
   .app-shell {
+    padding-top: 0;
     padding-left: var(--sidebar);
   }
 
-  .drawer-toggle,
+  .mobile-topbar,
   .drawer-scrim {
     display: none;
   }

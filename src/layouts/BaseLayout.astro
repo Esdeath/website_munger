@@ -69,8 +69,17 @@ const sidebarSections = buildSidebarSections(loadArticles(), loadOriginalSources
   <body class:list={[`shell-${shell}`]}>
     <div class="app-shell">
       <input id="nav-drawer-state" class="drawer-state nav-drawer-state" type="checkbox" />
-      <label class="drawer-toggle nav-drawer-toggle" for="nav-drawer-state">导航</label>
       <label class="drawer-scrim nav-drawer-scrim" for="nav-drawer-state" aria-hidden="true"></label>
+
+      <header class="mobile-topbar" aria-label="移动端导航栏">
+        <label class="topbar-button nav-drawer-toggle" for="nav-drawer-state" aria-label="打开导航">导航</label>
+        <a class="mobile-topbar-brand" href="/">{SITE_TITLE}</a>
+        {shell === "reader" ? (
+          <label class="topbar-button reader-drawer-toggle" for="reader-drawer-state" aria-label="打开信息">信息</label>
+        ) : (
+          <span class="topbar-spacer" aria-hidden="true"></span>
+        )}
+      </header>
 
       <aside class="archive-sidebar" aria-label="知识库导航">
         <a class="site-brand" href="/">{SITE_TITLE}</a>
