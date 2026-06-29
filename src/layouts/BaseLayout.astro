@@ -76,33 +76,36 @@ const sidebarSections = buildSidebarSections(loadArticles(), loadOriginalSources
           <input type="search" placeholder="搜索关键词、文章..." />
         </label>
 
-        <nav class="sidebar-nav">
-          {sidebarSections.map((section) => (
-            <section class="sidebar-section">
-              <h2>{section.title}</h2>
-              <ul class="sidebar-tree">
-                {section.groups.map((group) => (
-                  <li>
-                    <details open={group.open}>
-                      <summary>
-                        <span class="chevron" aria-hidden="true">›</span>
-                        <span class="sidebar-group-label">{group.label}</span>
-                        <span class="sidebar-count">· {group.count}</span>
-                      </summary>
-                      <ul class="sidebar-leaves">
-                        {group.children.map((leaf) => (
-                          <li>
-                            <a class:list={[leaf.active && "is-active"]} href={leaf.href}>{leaf.label}</a>
-                          </li>
-                        ))}
-                      </ul>
-                    </details>
-                  </li>
-                ))}
-              </ul>
-            </section>
-          ))}
-        </nav>
+        <details class="mobile-nav-panel">
+          <summary class="mobile-nav-toggle">目录</summary>
+          <nav class="sidebar-nav">
+            {sidebarSections.map((section) => (
+              <section class="sidebar-section">
+                <h2>{section.title}</h2>
+                <ul class="sidebar-tree">
+                  {section.groups.map((group) => (
+                    <li>
+                      <details open={group.open}>
+                        <summary>
+                          <span class="chevron" aria-hidden="true">›</span>
+                          <span class="sidebar-group-label">{group.label}</span>
+                          <span class="sidebar-count">· {group.count}</span>
+                        </summary>
+                        <ul class="sidebar-leaves">
+                          {group.children.map((leaf) => (
+                            <li>
+                              <a class:list={[leaf.active && "is-active"]} href={leaf.href}>{leaf.label}</a>
+                            </li>
+                          ))}
+                        </ul>
+                      </details>
+                    </li>
+                  ))}
+                </ul>
+              </section>
+            ))}
+          </nav>
+        </details>
       </aside>
 
       <main class="main-stage">

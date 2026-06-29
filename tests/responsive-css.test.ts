@@ -26,10 +26,21 @@ describe("responsive layout CSS", () => {
     expect(base).toContain(".archive-sidebar");
     expect(base).toContain("position: sticky;");
     expect(base).not.toContain("position: fixed;");
-    expect(base).toContain(".sidebar-nav");
-    expect(base).toContain("overflow-x: auto;");
+    expect(base).toContain(".mobile-nav-panel:not([open]) .sidebar-nav");
+    expect(base).toContain("display: none;");
+    expect(base).toContain(".mobile-nav-toggle");
     expect(base).toContain(".overview-page");
     expect(base).toContain("width: 100%;");
+  });
+
+  it("keeps the full sidebar tree behind a mobile disclosure", () => {
+    const layoutSource = readFileSync("src/layouts/BaseLayout.astro", "utf8");
+
+    expect(layoutSource).toContain('<details class="mobile-nav-panel">');
+    expect(layoutSource).toContain('<summary class="mobile-nav-toggle">目录</summary>');
+    expect(layoutSource.indexOf('<nav class="sidebar-nav">')).toBeGreaterThan(
+      layoutSource.indexOf('<summary class="mobile-nav-toggle">目录</summary>')
+    );
   });
 
   it("enhances the navigation into a fixed sidebar only on wide desktop widths", () => {
@@ -40,6 +51,8 @@ describe("responsive layout CSS", () => {
     expect(desktop).toContain(".archive-sidebar");
     expect(desktop).toContain("position: fixed;");
     expect(desktop).toContain("width: calc(var(--sidebar) - 32px);");
+    expect(desktop).toContain(".mobile-nav-panel");
+    expect(desktop).toContain("display: contents;");
     expect(desktop).toContain(".sidebar-nav");
     expect(desktop).toContain("display: block;");
     expect(desktop).toContain(".overview-page");
@@ -56,6 +69,6 @@ describe("responsive layout CSS", () => {
     expect(phone).toContain(".article-body blockquote");
     expect(phone).toContain("padding: 18px;");
     expect(phone).toContain(".sidebar-section");
-    expect(phone).toContain("min-width: 260px;");
+    expect(phone).toContain("margin-top: 18px;");
   });
 });
