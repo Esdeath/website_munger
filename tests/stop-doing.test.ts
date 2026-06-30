@@ -58,4 +58,56 @@ describe("parseStopDoingList", () => {
     const md = ["### 不要乱来", "> 「随便。」", "> ——《某篇》2000"].join("\n");
     expect(() => parseStopDoingList(md, [])).toThrow(/主题分组/);
   });
+
+  const sources = [
+    { slug: "2014年-每日期刊股东会讲话", title: "2014年 每日期刊股东会讲话" },
+    { slug: "查理芒格-1995年哈佛法学院演讲", title: "查理芒格：1995年哈佛法学院演讲" }
+  ];
+
+  it("resolves sourceSlug by matching the citation title against sources", () => {
+    const md = [
+      "## 投资原则",
+      "### 不要因为喜欢活动就去活动",
+      "> 「我们不是因为喜欢活动而活动，我们喜欢的是赚钱。」",
+      "> ——《2014年 每日期刊股东会讲话》2014"
+    ].join("\n");
+    const [group] = parseStopDoingList(md, sources);
+    expect(group.entries[0].sourceSlug).toBe("2014年-每日期刊股东会讲话");
+  });
+
+  it("leaves sourceSlug null when no source matches", () => {
+    const md = [
+      "## 投资原则",
+      "### 不要乱来",
+      "> 「这是一句不存在出处的话。」",
+      "> ——《某篇并不存在的演讲》1999"
+    ].join("\n");
+    const [group] = parseStopDoingList(md, sources);
+    expect(group.entries[0].sourceSlug).toBeNull();
+  });
+
+  it("parses multiple topics and entries, ordering groups by TOPICS order", () => {
+    // 文件内「人性偏误」在前、「投资原则」在后；
+    // 但 TOPICS 中「投资原则」先于「人性偏误」，故输出按 TOPICS 顺序。
+    const md = [
+      "## 人性偏误",
+      "### 不要低估激励机制",
+      "> 「永远别低估激励机制的力量。」",
+      "> ——《查理芒格：1995年哈佛法学院演讲》1995",
+      "",
+      "## 投资原则",
+      "### 不要因为喜欢活动就去活动",
+      "> 「我们不是因为喜欢活动而活动，我们喜欢的是赚钱。」",
+      "> ——《2014年 每日期刊股东会讲话》2014",
+      "### 不要追逐自己看不懂的机会",
+      "> 「我们喜欢的是赚钱。」",
+      "> ——《2014年 每日期刊股东会讲话》2014"
+    ].join("\n");
+    const groups = parseStopDoingList(md, sources);
+    expect(groups.map((g) => g.topic.title)).toEqual(["投资原则", "人性偏误"]);
+    expect(groups[0].entries.map((e) => e.headline)).toEqual([
+      "不要因为喜欢活动就去活动",
+      "不要追逐自己看不懂的机会"
+    ]);
+  });
 });

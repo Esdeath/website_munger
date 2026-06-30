@@ -22,6 +22,21 @@ const CONTENT_PATH = "stop-doing/不可为清单.md";
 // 各类引号:CJK 括号 + 中英弯/直引号(与 check_stop_doing.py 对齐)
 const QUOTE_CHARS = /[「」『』""''"']/g;
 
+function sourceLabelMatchesTitle(label: string, title: string): boolean {
+  const normalizedLabel = label.replace(/\s+/g, "");
+  const normalizedTitle = title.replace(/\s+/g, "");
+  const labelWithoutYear = normalizedLabel.replace(/[（(](19|20)\d{2}[）)]/g, "");
+  return normalizedTitle.includes(labelWithoutYear) || labelWithoutYear.includes(normalizedTitle);
+}
+
+function resolveSourceSlug(
+  sourceTitle: string,
+  sources: Pick<OriginalSource, "slug" | "title">[]
+): string | null {
+  const match = sources.find((s) => sourceLabelMatchesTitle(sourceTitle, s.title));
+  return match ? match.slug : null;
+}
+
 function stripQuoteMarks(value: string): string {
   return value.replace(QUOTE_CHARS, "").trim();
 }
@@ -68,7 +83,7 @@ export function parseStopDoingList(
         quote,
         sourceTitle,
         sourceYear,
-        sourceSlug: null
+        sourceSlug: resolveSourceSlug(sourceTitle, sources)
       });
     }
     pendingHeadline = null;
@@ -105,7 +120,8 @@ export function parseStopDoingList(
   }
   flushGroup();
 
-  return groups;
+  const orderIndex = (g: StopDoingGroup) => TOPICS.findIndex((t) => t.slug === g.topic.slug);
+  return groups.sort((a, b) => orderIndex(a) - orderIndex(b));
 }
 
 export function loadStopDoingList(): StopDoingGroup[] {
