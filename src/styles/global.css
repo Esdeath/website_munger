@@ -1,6 +1,6 @@
 :root {
   color-scheme: light;
-  --bg: #fff2e3;
+  --bg: #f4f0e8;
   --paper: #fffaf4;
   --paper-soft: #fff5eb;
   --ink: #2f2a24;
@@ -47,7 +47,7 @@ html {
 body {
   margin: 0;
   background:
-    radial-gradient(circle at 54% 0%, rgb(255 248 238 / 0.78), transparent 34rem),
+    radial-gradient(circle at 54% 0%, rgb(255 252 244 / 0.75), transparent 34rem),
     var(--bg);
   color: var(--ink);
   font-size: 16px;
