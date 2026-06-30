@@ -70,7 +70,7 @@ def parse_quote_blocks(text):
         if not joined.strip():
             continue
         if '——' in joined:
-            i = joined.index('——')
+            i = joined.rfind('——')   # 用最后一个 —— 切分:引语正文可能含中文破折号——,出处在末尾
             out.append((joined[:i], joined[i:]))
         else:
             out.append((joined, ""))
