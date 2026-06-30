@@ -93,3 +93,5 @@ export function buildArchiveCards(topics: TopicDefinition[], articles: Knowledge
     count: articlesForTopic(articles, topic).length
   }));
 }
+
+export const STOP_DOING_NAV = { label: "不可为清单", href: "/stop-doing/" } as const;
