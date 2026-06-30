@@ -8,7 +8,7 @@ describe("site favicon", () => {
     const favicon = readFileSync("public/favicon.svg", "utf8");
     expect(favicon).toContain("<svg");
     expect(favicon).toContain("芒");
-    expect(favicon).toContain("#38654e");
+    expect(favicon).toContain("#a85f18");
   });
 
   it("links the favicon from the shared layout", () => {
