@@ -95,7 +95,7 @@ input:focus-visible {
   margin: 0;
   padding: 18px 18px calc(74px + env(safe-area-inset-bottom, 0px));
   overflow: auto;
-  background: rgb(255 250 244 / 0.98);
+  background: rgb(255 253 248 / 0.98);
   border: 1px solid var(--line);
   border-width: 0 1px 0 0;
   border-radius: 0;
@@ -602,7 +602,7 @@ input:focus-visible {
   height: calc(100dvh - var(--mobile-topbar));
   overflow: auto;
   padding: 18px 16px calc(74px + env(safe-area-inset-bottom, 0px));
-  background: rgb(255 242 227 / 0.98);
+  background: rgb(244 240 232 / 0.98);
   box-shadow: -18px 0 42px rgb(119 75 32 / 0.15);
   transform: translateX(100%);
   transition: transform 0.2s ease;
@@ -614,7 +614,7 @@ input:focus-visible {
 
 .info-panel {
   padding: 22px 18px;
-  background: rgb(255 250 244 / 0.88);
+  background: rgb(255 253 248 / 0.88);
   border: 1px solid var(--line);
   border-radius: 10px;
   box-shadow: 0 1px 0 rgb(255 255 255 / 0.72) inset;
