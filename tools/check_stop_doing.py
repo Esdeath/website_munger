@@ -47,9 +47,12 @@ def load_corpus_titles():
 
 
 def load_topic_titles():
-    """从 site.ts 提取 TOPICS 的 title 字段。"""
+    """从 site.ts 的 TOPICS 数组中提取主题 title(只在 TOPICS 块内匹配,避免误收其他 title 字段)。"""
     with open(SITE_TS, encoding="utf-8") as f:
-        return set(re.findall(r'title:\s*"([^"]+)"', f.read()))
+        src = f.read()
+    m = re.search(r'TOPICS[^=]*=\s*\[(.*?)\n\]', src, re.S)
+    block = m.group(1) if m else ""
+    return set(re.findall(r'title:\s*"([^"]+)"', block))
 
 
 def parse_quote_blocks(text):
@@ -93,19 +96,20 @@ def main():
 
     # 2) 逐字核验 + 出处存在性
     blocks = parse_quote_blocks(text)
-    quote_blocks = [(q, c) for q, c in blocks if q.strip() and not q.strip().startswith("以下皆为")]
+    # 只对带《篇名》出处的 blockquote 做逐字核验;无出处的视为前言/说明,跳过
+    quote_blocks = [(q, c) for q, c in blocks if q.strip() and "《" in c]
     for qtext, cite in quote_blocks:
         for frag in re.split(r'……|\.\.\\.|…', qtext):
             nf = normalize(frag)
             if len(nf) >= QUOTE_MINLEN and nf not in corpus:
-                errors.append(f"引用未在语料中找到(疑似杜撞/错字/ASCII标点): 「{qtext[:40]}…」 片段「{frag[:40]}…」")
+                errors.append(f"引用未在语料中找到(疑似杜撰/错字/ASCII标点): 「{qtext[:40]}…」 片段「{frag[:40]}…」")
         # 出处:——《篇名》年份
         m = re.search(r'《(.+?)》', cite)
         if not m:
             errors.append(f"引用缺少《篇名》出处: 「{qtext[:40]}…」")
         else:
             nt = normalize(m.group(1))
-            if not any(nt in ct or ct in nt for ct in corpus_titles):
+            if len(nt) < 4 or not any(nt in ct or ct in nt for ct in corpus_titles):
                 errors.append(f"出处篇名未匹配到任何语料文件: 《{m.group(1)}》")
 
     print("--- 不可为清单.md ---")
