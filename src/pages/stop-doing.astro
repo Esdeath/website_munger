@@ -1,0 +1,59 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import { loadStopDoingList } from "../lib/stop-doing";
+import { buildCollectionPageSchema, canonicalUrl } from "../lib/seo";
+
+const groups = loadStopDoingList();
+
+const structuredData = buildCollectionPageSchema({
+  title: "不可为清单",
+  description: "查理·芒格逐字原话中的「不要、避免、要警惕」告诫，按主题归类。",
+  pathname: "/stop-doing/",
+  itemUrls: groups.map((group) => canonicalUrl(`/stop-doing/#${group.topic.slug}`))
+});
+---
+
+<BaseLayout
+  title="不可为清单"
+  description="查理·芒格逐字原话中的「不要、避免、要警惕」告诫，按主题归类。"
+  structuredData={structuredData}
+>
+  <section class="page">
+    <p class="eyebrow">不可为清单</p>
+    <h1 class="hero-title">芒格说，别做这些事。</h1>
+    <p class="page-lead">以下皆为芒格逐字原话，编者只做提炼归类。每条都可回到原文出处核验。</p>
+
+    <nav class="anchor-toc" aria-label="主题目录">
+      <ul>
+        {groups.map((group) => (
+          <li><a href={`#${group.topic.slug}`}>{group.topic.title}</a></li>
+        ))}
+      </ul>
+    </nav>
+
+    {groups.map((group) => (
+      <section class="stop-doing-group" id={group.topic.slug}>
+        <h2>{group.topic.title}</h2>
+        <ul class="stop-doing-entries">
+          {group.entries.map((entry) => (
+            <li class="stop-doing-entry">
+              <p class="stop-doing-headline">{entry.headline}</p>
+              <blockquote>
+                <p>「{entry.quote}」</p>
+                <footer>
+                  {entry.sourceSlug ? (
+                    <a href={`/sources/${entry.sourceSlug}/`}>
+                      ——《{entry.sourceTitle}》{entry.sourceYear}
+                    </a>
+                  ) : (
+                    <span>——《{entry.sourceTitle}》{entry.sourceYear}</span>
+                  )}
+                </footer>
+              </blockquote>
+            </li>
+          ))}
+        </ul>
+      </section>
+    ))}
+  </section>
+</BaseLayout>

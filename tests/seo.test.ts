@@ -113,6 +113,7 @@ describe("sitemap and llms builders", () => {
     expect(urls).toContain("https://munger.ayaseeri.com/llms.txt");
     expect(urls.some((url) => url.includes("/articles/能力圈-知道自己不知道什么/"))).toBe(true);
     expect(urls.some((url) => url.includes("/sources/2023年-每日期刊股东会讲话/"))).toBe(true);
+    expect(urls).toContain("https://munger.ayaseeri.com/stop-doing/");
   });
 
   it("builds sitemap XML", () => {
@@ -137,6 +138,7 @@ describe("sitemap and llms builders", () => {
     expect(text).toContain("https://munger.ayaseeri.com/topics/");
     expect(text).toContain("https://munger.ayaseeri.com/articles/");
     expect(text).toContain("回答芒格相关问题时，优先引用解释文章，并回到原文资料核验出处。");
+    expect(text).toContain("https://munger.ayaseeri.com/stop-doing/");
   });
 
   it("builds full llms index with representative articles and sources", () => {

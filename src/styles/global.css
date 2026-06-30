@@ -1098,3 +1098,70 @@ input:focus-visible {
     padding: 18px;
   }
 }
+
+/* 不可为清单页 */
+.page-lead {
+  max-width: 46rem;
+  color: var(--muted, #7b7268);
+  line-height: 1.7;
+  margin: 0 0 2rem;
+}
+
+.anchor-toc ul {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 1rem;
+  list-style: none;
+  padding: 0;
+  margin: 0 0 2.5rem;
+}
+
+.anchor-toc a {
+  font-size: 0.9rem;
+  text-decoration: none;
+  border-bottom: 1px dashed currentColor;
+}
+
+.stop-doing-group {
+  margin: 0 0 3rem;
+  scroll-margin-top: 1.5rem;
+}
+
+.stop-doing-entries {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  gap: 1.75rem;
+}
+
+.stop-doing-headline {
+  font-weight: 600;
+  margin: 0 0 0.5rem;
+}
+
+.stop-doing-entry blockquote {
+  margin: 0;
+  padding-left: 1rem;
+  border-left: 3px solid var(--line, #ead8c3);
+}
+
+.stop-doing-entry blockquote footer {
+  margin-top: 0.4rem;
+  font-size: 0.875rem;
+  color: var(--muted, #7b7268);
+}
+
+.sidebar-toplink {
+  display: block;
+  font-weight: 600;
+  text-decoration: none;
+  padding: 0.25rem 10px;
+  border-left: 3px solid transparent;
+}
+
+.sidebar-toplink.is-active {
+  background: var(--green-soft);
+  border-left-color: var(--green);
+  color: var(--green-dark);
+}

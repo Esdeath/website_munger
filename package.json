@@ -8,7 +8,7 @@
     "preview": "astro preview",
     "test": "vitest run",
     "test:watch": "vitest",
-    "validate:content": "node scripts/validate-site-content.mjs",
+    "validate:content": "node scripts/validate-site-content.mjs && python3 tools/check_stop_doing.py",
     "check": "npm run validate:content && astro check && vitest run && astro build"
   },
   "dependencies": {

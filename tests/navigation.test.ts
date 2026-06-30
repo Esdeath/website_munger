@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { TOPICS } from "../src/content/site";
 import type { KnowledgeArticle, OriginalSource } from "../src/lib/corpus";
-import { buildArchiveCards, buildSidebarSections } from "../src/lib/navigation";
+import { buildArchiveCards, buildSidebarSections, STOP_DOING_NAV } from "../src/lib/navigation";
 
 const articles = [
   {
@@ -85,6 +85,12 @@ describe("buildSidebarSections", () => {
 
     expect(open("/articles/能力圈-知道自己不知道什么/")).toBe(true);
     expect(open("/articles/能力圈-知道自己不知道什么")).toBe(true);
+  });
+});
+
+describe("STOP_DOING_NAV", () => {
+  it("is a top-level entry pointing at /stop-doing/", () => {
+    expect(STOP_DOING_NAV).toEqual({ label: "不可为清单", href: "/stop-doing/" });
   });
 });
 
