@@ -33,8 +33,8 @@ function splitQuoteAndCitation(lines: string[]): {
   sourceTitle: string;
   sourceYear: string;
 } {
-  const joined = lines.join(" ");
-  const dashIndex = joined.indexOf("——");
+  const joined = lines.join("");
+  const dashIndex = joined.lastIndexOf("——");
   const quotePart = dashIndex >= 0 ? joined.slice(0, dashIndex) : joined;
   const citePart = dashIndex >= 0 ? joined.slice(dashIndex + "——".length) : "";
 
@@ -94,6 +94,9 @@ export function parseStopDoingList(
       }
       currentTopic = topic;
     } else if (line.startsWith("### ")) {
+      if (currentTopic === null) {
+        throw new Error("不可为清单:条目出现在任何主题分组(##)之前");
+      }
       flushEntry();
       pendingHeadline = line.slice(4).trim();
     } else if (line.startsWith(">")) {
