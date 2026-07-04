@@ -5,6 +5,7 @@ export interface ArticleFrontMatter {
   title?: string;
   keyword?: string;
   category?: string;
+  order?: number;
   quote_count?: number;
   sources?: string[];
   date?: string;

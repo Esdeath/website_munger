@@ -15,7 +15,17 @@ function sourceLabelMatchesTitle(label: string, title: string): boolean {
 export function articlesForTopic(articles: KnowledgeArticle[], topic: TopicDefinition): KnowledgeArticle[] {
   return articles
     .filter((article) => topicForCategory(article.category) === topic.title)
-    .sort((a, b) => b.quoteCount - a.quoteCount || a.title.localeCompare(b.title, "zh-Hans-CN"));
+    .sort(compareArticlesForDisplay);
+}
+
+export function compareArticlesForDisplay(a: KnowledgeArticle, b: KnowledgeArticle): number {
+  if (a.order !== undefined || b.order !== undefined) {
+    return (
+      (a.order ?? Number.MAX_SAFE_INTEGER) - (b.order ?? Number.MAX_SAFE_INTEGER) ||
+      a.title.localeCompare(b.title, "zh-Hans-CN")
+    );
+  }
+  return b.quoteCount - a.quoteCount || a.title.localeCompare(b.title, "zh-Hans-CN");
 }
 
 export function sourcesForArticle(article: KnowledgeArticle, sources: OriginalSource[]): OriginalSource[] {
@@ -41,6 +51,6 @@ export function buildSourceArticleMap(
 export function relatedArticles(article: KnowledgeArticle, articles: KnowledgeArticle[], limit = 4): KnowledgeArticle[] {
   return articles
     .filter((candidate) => candidate.slug !== article.slug && candidate.category === article.category)
-    .sort((a, b) => b.quoteCount - a.quoteCount || a.title.localeCompare(b.title, "zh-Hans-CN"))
+    .sort(compareArticlesForDisplay)
     .slice(0, limit);
 }

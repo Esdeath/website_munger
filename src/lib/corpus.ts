@@ -11,6 +11,7 @@ export interface KnowledgeArticle {
   title: string;
   keyword: string;
   category: string;
+  order?: number;
   quoteCount: number;
   sources: string[];
   date?: string;
@@ -126,6 +127,7 @@ export function loadArticles(): KnowledgeArticle[] {
       title: parsed.data.title ?? path.parse(filePath).name,
       keyword: parsed.data.keyword ?? path.parse(filePath).name.split("-")[0],
       category: parsed.data.category ?? "未分类",
+      order: typeof parsed.data.order === "number" ? parsed.data.order : undefined,
       quoteCount: parsed.data.quote_count ?? 0,
       sources: parsed.data.sources ?? [],
       date: normalizeDate(parsed.data.date),

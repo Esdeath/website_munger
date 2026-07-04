@@ -4,6 +4,7 @@ import type { KnowledgeArticle, OriginalSource } from "../src/lib/corpus";
 import {
   articlesForTopic,
   buildSourceArticleMap,
+  compareArticlesForDisplay,
   relatedArticles,
   sourcesForArticle,
   topicForCategory
@@ -90,6 +91,18 @@ describe("articlesForTopic", () => {
     const topic = TOPICS.find((item) => item.slug === "investment-principles");
     expect(topic).toBeDefined();
     expect(articlesForTopic(articles, topic!).map((article) => article.keyword)).toEqual(["护城河", "能力圈"]);
+  });
+
+  it("uses frontmatter order before quote count when order is present", () => {
+    const ordered = [
+      { ...articles[0], title: "思维模型讲义02:数学不是公式而是判断力", keyword: "数学", category: "思维模型讲义", quoteCount: 20, order: 2 },
+      { ...articles[1], title: "思维模型讲义01:为什么不能只拿一把锤子", keyword: "铁锤", category: "思维模型讲义", quoteCount: 16, order: 1 }
+    ];
+
+    expect([...ordered].sort(compareArticlesForDisplay).map((article) => article.title)).toEqual([
+      "思维模型讲义01:为什么不能只拿一把锤子",
+      "思维模型讲义02:数学不是公式而是判断力"
+    ]);
   });
 
   it("does not fold macro warning articles into investment principles", () => {

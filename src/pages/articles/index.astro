@@ -2,11 +2,12 @@
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import { loadArticles } from "../../lib/corpus";
 import { categoryHref } from "../../lib/navigation";
+import { compareArticlesForDisplay } from "../../lib/relations";
 import { buildCollectionPageSchema, canonicalUrl } from "../../lib/seo";
 import { textToSlug } from "../../lib/slug";
 
 const articles = loadArticles().sort(
-  (a, b) => a.category.localeCompare(b.category, "zh-Hans-CN") || b.quoteCount - a.quoteCount
+  (a, b) => a.category.localeCompare(b.category, "zh-Hans-CN") || compareArticlesForDisplay(a, b)
 );
 const categoryGroups = Array.from(new Map(articles.map((article) => [article.category, article.category])).keys()).map(
   (category) => ({

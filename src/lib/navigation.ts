@@ -1,6 +1,6 @@
 import { TOPICS, type TopicDefinition } from "../content/site";
 import type { KnowledgeArticle, OriginalSource } from "./corpus";
-import { articlesForTopic, topicForCategory } from "./relations";
+import { articlesForTopic, compareArticlesForDisplay, topicForCategory } from "./relations";
 import { textToSlug } from "./slug";
 
 export interface SidebarLeaf {
@@ -72,7 +72,7 @@ export function buildSidebarSections(
       topicTitle,
       articles
         .filter((article) => topicForCategory(article.category) === topicTitle)
-        .sort((a, b) => b.quoteCount - a.quoteCount)
+        .sort(compareArticlesForDisplay)
         .map((article) => toLeaf(article.title, `/articles/${article.slug}/`, currentPath))
     );
 
