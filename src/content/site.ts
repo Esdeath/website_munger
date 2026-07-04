@@ -35,6 +35,12 @@ export const TOPICS: TopicDefinition[] = [
     keywords: ["多元思维模型", "跨学科", "普世智慧", "逆向思维", "检查清单", "概率", "赔率", "期望值", "客观与理性"]
   },
   {
+    slug: "mental-model-lectures",
+    title: "思维模型讲义",
+    description: "按芒格式讲法系统拆解多元思维模型的基础课。",
+    keywords: ["铁锤", "数学", "概率", "赔率", "会计", "商业语言", "费马", "帕斯卡", "模型"]
+  },
+  {
     slug: "human-misjudgment",
     title: "人性偏误",
     description: "心理倾向、误判机制、群体行为和 lollapalooza 叠加效应。",

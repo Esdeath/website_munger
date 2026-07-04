@@ -76,6 +76,7 @@ describe("articlesForTopic", () => {
     expect(TOPICS.map((topic) => topic.title)).toEqual([
       "投资原则",
       "思维方法",
+      "思维模型讲义",
       "人性偏误",
       "品格处世",
       "常引用人物",
