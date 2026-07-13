@@ -1,17 +1,9 @@
 ---
 import BaseLayout from "../../layouts/BaseLayout.astro";
-import { renderMarkdownToHtml } from "../../lib/render";
-import {
-  loadThinkingGridSnapshot,
-  resolveThinkingGridMarkdownLink,
-  thinkingGridHref
-} from "../../lib/thinking-grid";
+import { loadThinkingGridSnapshot, thinkingGridHref } from "../../lib/thinking-grid";
 import { buildBreadcrumbSchema, buildCollectionPageSchema, canonicalUrl } from "../../lib/seo";
 
 const snapshot = loadThinkingGridSnapshot();
-const rendered = await renderMarkdownToHtml(snapshot.index.body, {
-  relativeLinkResolver: (url) => resolveThinkingGridMarkdownLink(url, snapshot)
-});
 const structuredData = [
   buildCollectionPageSchema({
     title: snapshot.index.title,
@@ -27,7 +19,35 @@ const structuredData = [
 ---
 
 <BaseLayout title={snapshot.index.title} description={snapshot.index.excerpt} structuredData={structuredData}>
-  <section class="page">
-    <div class="article-body" set:html={rendered} />
+  <section class="page thinking-grid-page">
+    <header class="thinking-grid-heading">
+      <p class="eyebrow">12 层思维模型</p>
+      <h1>{snapshot.index.title}</h1>
+    </header>
+
+    <div class="thinking-grid-layers" aria-label="思维格栅十二层导航">
+      {
+        snapshot.layers.map((layer) => (
+          <section class="thinking-grid-layer" aria-labelledby={`thinking-grid-layer-${layer.number}`}>
+            <header class="thinking-grid-layer-heading">
+              <p class="thinking-grid-layer-number">{String(layer.number).padStart(2, "0")}</p>
+              <div>
+                <p class="thinking-grid-layer-count">{layer.models.length} 个模型</p>
+                <h2 id={`thinking-grid-layer-${layer.number}`}>{layer.title}</h2>
+              </div>
+            </header>
+            <p class="thinking-grid-question">{layer.question}</p>
+            <p class="thinking-grid-purpose">{layer.purpose}</p>
+            <ul class="thinking-grid-models">
+              {
+                layer.models.map((model) => (
+                  <li><a href={model.href}>{model.title}</a></li>
+                ))
+              }
+            </ul>
+          </section>
+        ))
+      }
+    </div>
   </section>
 </BaseLayout>

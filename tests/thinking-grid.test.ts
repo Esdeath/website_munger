@@ -51,6 +51,17 @@ describe("thinking grid snapshot", () => {
     expect(new Set(snapshot.layers.flatMap((layer) => layer.models.map((model) => model.slug))).size).toBe(178);
   });
 
+  it("renders the homepage from layers instead of the raw index markdown", () => {
+    const page = fs.readFileSync(
+      path.join(process.cwd(), "src/pages/thinking-grids/index.astro"),
+      "utf8"
+    );
+
+    expect(page).toContain('class="thinking-grid-layers"');
+    expect(page).toContain("snapshot.layers.map");
+    expect(page).not.toContain("renderMarkdownToHtml");
+  });
+
   it("creates local URLs only for copied model documents", () => {
     const snapshot = loadThinkingGridSnapshot();
 

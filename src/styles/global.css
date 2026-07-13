@@ -667,6 +667,103 @@ input:focus-visible {
   padding: 28px 16px 64px;
 }
 
+.thinking-grid-heading {
+  margin-bottom: 34px;
+}
+
+.thinking-grid-heading .eyebrow {
+  margin: 0 0 8px;
+}
+
+.thinking-grid-heading h1 {
+  margin: 0;
+  color: var(--ink-strong);
+  font-size: clamp(2rem, 4vw, 3.2rem);
+  line-height: 1.15;
+}
+
+.thinking-grid-layers {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 20px;
+}
+
+.thinking-grid-layer {
+  padding: 24px;
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  box-shadow: var(--shadow);
+}
+
+.thinking-grid-layer-heading {
+  display: flex;
+  gap: 14px;
+  align-items: flex-start;
+}
+
+.thinking-grid-layer-number {
+  margin: 2px 0 0;
+  color: var(--green);
+  font: 800 1rem/1 ui-sans-serif, system-ui, sans-serif;
+}
+
+.thinking-grid-layer-count,
+.thinking-grid-purpose {
+  color: var(--muted);
+  font-size: var(--fs-meta);
+}
+
+.thinking-grid-layer-count,
+.thinking-grid-layer h2,
+.thinking-grid-question,
+.thinking-grid-purpose {
+  margin: 0;
+}
+
+.thinking-grid-layer h2 {
+  color: var(--ink-strong);
+  font-size: var(--fs-section);
+  line-height: 1.3;
+}
+
+.thinking-grid-question {
+  margin-top: 16px;
+  color: var(--ink-strong);
+  font-weight: 800;
+}
+
+.thinking-grid-purpose {
+  margin-top: 6px;
+}
+
+.thinking-grid-models {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 0;
+  margin: 20px 0 0;
+  list-style: none;
+}
+
+.thinking-grid-models a {
+  display: block;
+  padding: 7px 10px;
+  color: var(--green-dark);
+  background: var(--green-soft);
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  font-size: var(--fs-small);
+  font-weight: 800;
+  line-height: 1.35;
+}
+
+.thinking-grid-models a:hover,
+.thinking-grid-models a:focus-visible {
+  background: var(--paper);
+  border-color: var(--green);
+}
+
 .eyebrow,
 .meta {
   color: var(--green-dark);
@@ -995,6 +1092,15 @@ input:focus-visible {
   .overview-page,
   .page {
     padding: 18px 14px 52px;
+  }
+
+  .thinking-grid-layers {
+    grid-template-columns: 1fr;
+    gap: 14px;
+  }
+
+  .thinking-grid-layer {
+    padding: 20px;
   }
 
   .overview-hero {
