@@ -1,6 +1,7 @@
 import fs from "node:fs";
 import path from "node:path";
 import { extractExcerpt, extractHeadings, parseMarkdownDocument } from "./markdown";
+import { SOURCE_DEFINITIONS, type SourceDirectory, type SourceType } from "./source-types";
 import { filePathToSlug } from "./slug";
 
 const ROOT = process.cwd();
@@ -24,7 +25,7 @@ export interface OriginalSource {
   slug: string;
   filePath: string;
   title: string;
-  type: "shareholder" | "speech";
+  type: SourceType;
   year: string;
   excerpt: string;
   body: string;
@@ -40,7 +41,7 @@ export interface CorpusManifestEntry {
   status: string;
 }
 
-function readMarkdownFiles(directory: "articles" | "shareholders" | "speech"): string[] {
+function readMarkdownFiles(directory: "articles" | SourceDirectory): string[] {
   return fs
     .readdirSync(path.join(ROOT, directory))
     .filter((fileName) => fileName.endsWith(".md"))
@@ -139,7 +140,7 @@ export function loadArticles(): KnowledgeArticle[] {
 }
 
 export function loadOriginalSources(): OriginalSource[] {
-  return (["shareholders", "speech"] as const).flatMap((directory) =>
+  return SOURCE_DEFINITIONS.flatMap(({ directory, type }) =>
     readMarkdownFiles(directory).map((filePath) => {
       const raw = readRepoFile(filePath);
       const parsed = parseMarkdownDocument(filePath, raw);
@@ -149,7 +150,7 @@ export function loadOriginalSources(): OriginalSource[] {
         slug: filePathToSlug(filePath),
         filePath,
         title,
-        type: directory === "shareholders" ? "shareholder" : "speech",
+        type,
         year: inferYear(filePath, parsed.body),
         excerpt: extractExcerpt(parsed.body),
         body,

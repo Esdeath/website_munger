@@ -77,11 +77,40 @@ describe("loaders against repository content", () => {
     expect(sources.find((source) => source.filePath.includes("2023年 每日期刊股东会讲话"))).toBeDefined();
   });
 
+  it("loads all Li Lu source files as a separate source type", () => {
+    const sources = loadOriginalSources().filter((source) => source.type === "li-lu");
+
+    expect(sources).toHaveLength(14);
+    expect(sources).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          filePath: "li-lu/李录：2006年哥伦比亚大学商学院演讲.md",
+          year: "2006",
+          title: "价值投资的常识与⽅法—2006在哥伦比亚大学商学院的讲座"
+        }),
+        expect.objectContaining({
+          filePath: "li-lu/李录：2023年怀念我的老师查理·芒格.md",
+          year: "2023",
+          title: "李录：2023年怀念我的老师查理·芒格"
+        })
+      ])
+    );
+  });
+
   it("rewrites original source relative image paths to source-directory absolute paths", () => {
     const source = loadOriginalSources().find((item) => item.filePath === "shareholders/1987年 西科金融股东会讲话.md");
 
     expect(source?.body).toContain("](/shareholders/images/image_-2856457156250514870.png)");
     expect(source?.body).not.toContain("](images/image_-2856457156250514870.png)");
+  });
+
+  it("rewrites Li Lu relative image paths to li-lu absolute paths", () => {
+    const source = loadOriginalSources().find(
+      (item) => item.filePath === "li-lu/李录：2006年哥伦比亚大学商学院演讲.md"
+    );
+
+    expect(source?.body).toContain("](/li-lu/images/2006-columbia-image.png)");
+    expect(source?.body).not.toContain("](images/2006-columbia-image.png)");
   });
 
   it("loads corpus manifest metadata", () => {

@@ -274,7 +274,7 @@ Run: `find li-lu/images -maxdepth 1 -type f -name '*.png' | wc -l`
 
 Expected: `8`
 
-Run: `rg -n "!\\[[^]]*\\]\\(images/(?:image|1|2)" li-lu`
+Run: `rg -n "!\\[[^]]*\\]\\(images/(?:image(?:-1)?|[12](?:-[12])?)\\.png\\)" li-lu`
 
 Expected: 无输出；不存在旧的冲突图片名引用。
 
