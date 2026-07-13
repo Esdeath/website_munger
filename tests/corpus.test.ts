@@ -44,6 +44,27 @@ describe("loaders against repository content", () => {
     expect(articles.find((article) => article.keyword === "能力圈")).toBeDefined();
   });
 
+  it("absorbs the three duplicate thought-method articles into their lecture counterparts", () => {
+    const articles = loadArticles();
+    const lecture01 = articles.find((article) => article.title.startsWith("思维模型讲义01"));
+    const lecture02 = articles.find((article) => article.title.startsWith("思维模型讲义02"));
+    const lecture15 = articles.find((article) => article.title.startsWith("思维模型讲义15"));
+
+    expect(lecture01?.body).toContain("可口可乐案例");
+    expect(lecture01?.body).toContain("《西科金融股东会讲话》2002");
+    expect(lecture02?.body).toContain("1962 年油田开采权");
+    expect(lecture02?.body).toContain("风险不是报价波动");
+    expect(lecture15?.body).toContain("储贷行业危机");
+    expect(lecture15?.body).toContain("2021 年谈巴菲特成功");
+    expect(articles.map((article) => article.filePath)).not.toEqual(
+      expect.arrayContaining([
+        "articles/多元思维模型-把知识挂上格栅.md",
+        "articles/概率赔率期望值-把赌注押在错价上.md",
+        "articles/Lollapalooza叠加效应-二加二不止等于四.md"
+      ])
+    );
+  });
+
   it("normalizes article dates to YYYY-MM-DD strings", () => {
     const datedArticle = loadArticles().find((article) => article.date !== undefined);
 
