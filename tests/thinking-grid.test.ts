@@ -30,6 +30,27 @@ describe("thinking grid snapshot", () => {
     );
   });
 
+  it("derives twelve ordered layers with every copied model linked once", () => {
+    const snapshot = loadThinkingGridSnapshot();
+
+    expect(snapshot.layers).toHaveLength(12);
+    expect(snapshot.layers[0]).toMatchObject({
+      number: 1,
+      title: "思维操作系统",
+      question: "我该如何思考？",
+      purpose: "判断、学习、解释与纠错。",
+      models: expect.arrayContaining([
+        expect.objectContaining({ title: "二阶效应", href: "/thinking-grids/二阶效应/" })
+      ])
+    });
+    expect(snapshot.layers[11]).toMatchObject({
+      number: 12,
+      title: "制度、历史与价值判断"
+    });
+    expect(snapshot.layers.flatMap((layer) => layer.models)).toHaveLength(178);
+    expect(new Set(snapshot.layers.flatMap((layer) => layer.models.map((model) => model.slug))).size).toBe(178);
+  });
+
   it("creates local URLs only for copied model documents", () => {
     const snapshot = loadThinkingGridSnapshot();
 

@@ -17,9 +17,24 @@ export interface ThinkingGridDocument {
   headings: MarkdownHeading[];
 }
 
+export interface ThinkingGridLayerModel {
+  slug: string;
+  title: string;
+  href: string;
+}
+
+export interface ThinkingGridLayer {
+  number: number;
+  title: string;
+  question: string;
+  purpose: string;
+  models: ThinkingGridLayerModel[];
+}
+
 export interface ThinkingGridSnapshot {
   index: ThinkingGridDocument;
   models: ThinkingGridDocument[];
+  layers: ThinkingGridLayer[];
 }
 
 function isExternalOrAbsoluteUrl(url: string): boolean {
@@ -28,6 +43,13 @@ function isExternalOrAbsoluteUrl(url: string): boolean {
 
 function markdownLinks(body: string): string[] {
   return Array.from(body.matchAll(/\[[^\]]+\]\(([^)\s]+)(?:\s+[^)]*)?\)/g), (match) => match[1]);
+}
+
+function markdownLinkEntries(body: string): Array<{ title: string; url: string }> {
+  return Array.from(
+    body.matchAll(/\[([^\]]+)\]\(([^)\s]+)(?:\s+[^)]*)?\)/g),
+    (match) => ({ title: match[1], url: match[2] })
+  );
 }
 
 function isModelLink(url: string): boolean {
@@ -55,7 +77,7 @@ export function thinkingGridHref(slug: string): string {
 
 export function resolveThinkingGridMarkdownLink(
   url: string,
-  snapshot: ThinkingGridSnapshot
+  snapshot: Pick<ThinkingGridSnapshot, "models">
 ): string | null | undefined {
   if (isExternalOrAbsoluteUrl(url) || !url.endsWith(".md")) {
     return undefined;
@@ -63,6 +85,54 @@ export function resolveThinkingGridMarkdownLink(
 
   const slug = filePathToSlug(path.posix.basename(url));
   return snapshot.models.some((model) => model.slug === slug) ? thinkingGridHref(slug) : null;
+}
+
+function parseThinkingGridLayers(body: string, models: ThinkingGridDocument[]): ThinkingGridLayer[] {
+  const modelBySlug = new Map(models.map((model) => [model.slug, model]));
+  const sections = Array.from(body.matchAll(/^##[ \t]+(.+)\n([\s\S]*?)(?=^##[ \t]+|$(?![\s\S]))/gm))
+    .filter((match) => !["12 层导航", "使用顺序"].includes(match[1]))
+    .map((match) => ({ title: match[1], body: match[2] }));
+
+  if (sections.length !== 12) {
+    throw new Error(`思维格栅索引应包含 12 层，实际解析到 ${sections.length} 层`);
+  }
+
+  const layers = sections.map((section, index) => {
+    const question = section.body.match(/^先问：\s*(.+)$/m)?.[1]?.trim();
+    const purpose = section.body.match(/^用途：\s*(.+)$/m)?.[1]?.trim();
+    const layerModels = markdownLinkEntries(section.body)
+      .filter((link) => isModelLink(link.url))
+      .map((link) => {
+        const slug = filePathToSlug(path.posix.basename(link.url));
+        if (!modelBySlug.has(slug)) {
+          throw new Error(`思维格栅层“${section.title}”包含不存在的模型链接: ${link.url}`);
+        }
+
+        return { slug, title: link.title, href: thinkingGridHref(slug) };
+      });
+
+    if (!question || !purpose || layerModels.length === 0) {
+      throw new Error(`思维格栅层“${section.title}”缺少先问、用途或模型链接`);
+    }
+
+    return {
+      number: index + 1,
+      title: section.title,
+      question,
+      purpose,
+      models: layerModels
+    };
+  });
+
+  const modelSlugs = layers.flatMap((layer) => layer.models.map((model) => model.slug));
+  if (new Set(modelSlugs).size !== modelSlugs.length) {
+    throw new Error("思维格栅索引包含重复的模型链接");
+  }
+  if (modelSlugs.length !== models.length) {
+    throw new Error(`思维格栅索引包含 ${modelSlugs.length} 个模型链接，应为 ${models.length} 个`);
+  }
+
+  return layers;
 }
 
 export function loadThinkingGridSnapshot(directory = DEFAULT_DIRECTORY): ThinkingGridSnapshot {
@@ -93,5 +163,5 @@ export function loadThinkingGridSnapshot(directory = DEFAULT_DIRECTORY): Thinkin
     throw new Error(`思维格栅索引包含不存在的模型链接: ${missingModels.join(", ")}`);
   }
 
-  return snapshot;
+  return { ...snapshot, layers: parseThinkingGridLayers(index.body, models) };
 }
