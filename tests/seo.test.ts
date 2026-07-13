@@ -11,7 +11,8 @@ import {
   buildSitemapEntries,
   buildSitemapXml,
   buildWebsiteSchema,
-  canonicalUrl
+  canonicalUrl,
+  sourceTypeLabel
 } from "../src/lib/seo";
 
 describe("SEO URL helpers", () => {
@@ -31,6 +32,10 @@ describe("SEO URL helpers", () => {
 });
 
 describe("JSON-LD builders", () => {
+  it("labels Li Lu sources separately", () => {
+    expect(sourceTypeLabel({ type: "li-lu" })).toBe("李录演讲和访谈");
+  });
+
   it("builds a website schema for the knowledge base", () => {
     expect(buildWebsiteSchema()).toEqual(
       expect.objectContaining({
@@ -113,6 +118,9 @@ describe("sitemap and llms builders", () => {
     expect(urls).toContain("https://munger.ayaseeri.com/llms.txt");
     expect(urls.some((url) => url.includes("/articles/能力圈-知道自己不知道什么/"))).toBe(true);
     expect(urls.some((url) => url.includes("/sources/2023年-每日期刊股东会讲话/"))).toBe(true);
+    expect(
+      urls.some((url) => url.includes("/sources/李录-2024年北大光华管理学院-价值投资-十周年演讲/"))
+    ).toBe(true);
     expect(urls).toContain("https://munger.ayaseeri.com/stop-doing/");
   });
 
@@ -153,5 +161,7 @@ describe("sitemap and llms builders", () => {
     expect(text).toContain("## 原文资料索引");
     expect(text).toContain("能力圈");
     expect(text).toContain("2023年 每日期刊股东会讲话");
+    expect(text).toContain("李录演讲和访谈");
+    expect(text).toContain("著名投资人李录北大演讲全文");
   });
 });

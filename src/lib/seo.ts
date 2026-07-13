@@ -7,6 +7,9 @@ import {
   type TopicDefinition
 } from "../content/site";
 import type { KnowledgeArticle, OriginalSource } from "./corpus";
+import { sourceTypeLabel } from "./source-types";
+
+export { sourceTypeLabel };
 
 export interface BreadcrumbItem {
   name: string;
@@ -62,10 +65,6 @@ export function absoluteUrl(pathname: string): string {
 
 export function canonicalUrl(pathname: string): string {
   return `${SITE_URL.replace(/\/$/, "")}${normalizePath(pathname, true)}`;
-}
-
-export function sourceTypeLabel(source: Pick<OriginalSource, "type">): string {
-  return source.type === "shareholder" ? "股东会与股东信" : "演讲与访谈";
 }
 
 export function buildWebsiteSchema(): Record<string, unknown> {

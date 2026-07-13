@@ -1,6 +1,7 @@
 import { TOPICS, type TopicDefinition } from "../content/site";
 import type { KnowledgeArticle, OriginalSource } from "./corpus";
 import { articlesForTopic, compareArticlesForDisplay, topicForCategory } from "./relations";
+import { SOURCE_DEFINITIONS, type SourceType } from "./source-types";
 import { textToSlug } from "./slug";
 
 export interface SidebarLeaf {
@@ -29,11 +30,6 @@ export interface ArchiveCard {
   count: number;
 }
 
-const sourceLabels = {
-  shareholder: "股东会与股东信",
-  speech: "演讲与访谈"
-} as const;
-
 function normalizePath(path: string): string {
   if (!path) {
     return "/";
@@ -58,14 +54,16 @@ export function buildSidebarSections(
   sources: OriginalSource[],
   currentPath = ""
 ): SidebarSection[] {
-  const sourceGroup = (type: OriginalSource["type"]): SidebarGroup =>
-    makeGroup(
-      sourceLabels[type],
+  const sourceGroup = (type: SourceType): SidebarGroup => {
+    const definition = SOURCE_DEFINITIONS.find((source) => source.type === type)!;
+    return makeGroup(
+      definition.label,
       sources
         .filter((source) => source.type === type)
         .sort((a, b) => a.year.localeCompare(b.year) || a.title.localeCompare(b.title, "zh-Hans-CN"))
         .map((source) => toLeaf(source.title, `/sources/${source.slug}/`, currentPath))
     );
+  };
 
   const articleGroup = (topicTitle: string): SidebarGroup =>
     makeGroup(
@@ -79,7 +77,7 @@ export function buildSidebarSections(
   const articleGroups = TOPICS.map((topic) => articleGroup(topic.title)).filter((group) => group.count > 0);
 
   return [
-    { title: "原文", groups: [sourceGroup("shareholder"), sourceGroup("speech")] },
+    { title: "原文", groups: SOURCE_DEFINITIONS.map((source) => sourceGroup(source.type)) },
     { title: "解读", groups: articleGroups }
   ];
 }

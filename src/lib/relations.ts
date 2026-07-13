@@ -48,6 +48,20 @@ export function buildSourceArticleMap(
   );
 }
 
+export function sameYearSources(
+  source: OriginalSource,
+  sources: OriginalSource[],
+  limit = 8
+): OriginalSource[] {
+  return sources
+    .filter(
+      (candidate) =>
+        candidate.slug !== source.slug && candidate.type === source.type && candidate.year === source.year
+    )
+    .sort((a, b) => a.title.localeCompare(b.title, "zh-Hans-CN"))
+    .slice(0, limit);
+}
+
 export function relatedArticles(article: KnowledgeArticle, articles: KnowledgeArticle[], limit = 4): KnowledgeArticle[] {
   return articles
     .filter((candidate) => candidate.slug !== article.slug && candidate.category === article.category)

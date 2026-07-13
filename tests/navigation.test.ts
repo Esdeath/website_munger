@@ -50,6 +50,16 @@ const sources = [
     excerpt: "",
     body: "",
     headings: []
+  },
+  {
+    slug: "李录-2024年北大光华管理学院-价值投资-十周年演讲",
+    filePath: "li-lu/李录：2024年北大光华管理学院《价值投资》十周年演讲.md",
+    title: "2024年12月7日，著名投资人李录北大演讲全文",
+    type: "li-lu",
+    year: "2024",
+    excerpt: "",
+    body: "",
+    headings: []
   }
 ] satisfies OriginalSource[];
 
@@ -60,7 +70,8 @@ describe("buildSidebarSections", () => {
     expect(sections.map((section) => section.title)).toEqual(["原文", "解读"]);
     expect(sections[0].groups.map((group) => [group.label, group.count])).toEqual([
       ["股东会与股东信", 1],
-      ["演讲与访谈", 1]
+      ["演讲与访谈", 1],
+      ["李录演讲和访谈", 1]
     ]);
     expect(sections[0].groups[0].children.map((leaf) => leaf.label)).toEqual([
       "2017年 每日期刊股东会讲话"
@@ -91,6 +102,18 @@ describe("buildSidebarSections", () => {
 
     expect(open("/articles/能力圈-知道自己不知道什么/")).toBe(true);
     expect(open("/articles/能力圈-知道自己不知道什么")).toBe(true);
+  });
+
+  it("opens the Li Lu group for an active Li Lu source", () => {
+    const sections = buildSidebarSections(
+      articles,
+      sources,
+      "/sources/李录-2024年北大光华管理学院-价值投资-十周年演讲/"
+    );
+
+    const liLu = sections[0].groups.find((group) => group.label === "李录演讲和访谈")!;
+    expect(liLu.open).toBe(true);
+    expect(liLu.children[0].active).toBe(true);
   });
 });
 

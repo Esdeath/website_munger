@@ -6,6 +6,7 @@ import {
   buildSourceArticleMap,
   compareArticlesForDisplay,
   relatedArticles,
+  sameYearSources,
   sourcesForArticle,
   topicForCategory
 } from "../src/lib/relations";
@@ -178,6 +179,23 @@ describe("buildSourceArticleMap", () => {
       "能力圈",
       "多元思维模型"
     ]);
+  });
+});
+
+describe("sameYearSources", () => {
+  it("keeps same-year source recommendations within the same source type", () => {
+    const liLu = {
+      slug: "李录-2017",
+      filePath: "li-lu/李录：2017年访谈.md",
+      title: "李录：2017年访谈",
+      type: "li-lu",
+      year: "2017",
+      excerpt: "",
+      body: "",
+      headings: []
+    } satisfies OriginalSource;
+
+    expect(sameYearSources(liLu, [...sources, liLu])).toEqual([]);
   });
 });
 
