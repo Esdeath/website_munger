@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { TOPICS } from "../src/content/site";
 import type { KnowledgeArticle, OriginalSource } from "../src/lib/corpus";
-import { buildArchiveCards, buildSidebarSections, STOP_DOING_NAV } from "../src/lib/navigation";
+import { buildArchiveCards, buildSidebarSections, STOP_DOING_NAV, THINKING_GRID_NAV } from "../src/lib/navigation";
 
 const articles = [
   {
@@ -91,6 +91,12 @@ describe("buildSidebarSections", () => {
 describe("STOP_DOING_NAV", () => {
   it("is a top-level entry pointing at /stop-doing/", () => {
     expect(STOP_DOING_NAV).toEqual({ label: "不可为清单", href: "/stop-doing/" });
+  });
+});
+
+describe("THINKING_GRID_NAV", () => {
+  it("is a top-level entry pointing at the thinking grid index", () => {
+    expect(THINKING_GRID_NAV).toEqual({ label: "思维格栅", href: "/thinking-grids/" });
   });
 });
 

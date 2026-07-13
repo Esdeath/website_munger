@@ -1,0 +1,69 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import { renderMarkdownToHtml } from "../../lib/render";
+import {
+  loadThinkingGridSnapshot,
+  resolveThinkingGridMarkdownLink,
+  thinkingGridHref,
+  type ThinkingGridDocument
+} from "../../lib/thinking-grid";
+import { buildBreadcrumbSchema, buildCreativeWorkSchema } from "../../lib/seo";
+
+export function getStaticPaths() {
+  return loadThinkingGridSnapshot().models.map((model) => ({ params: { slug: model.slug }, props: { model } }));
+}
+
+const { model } = Astro.props as { model: ThinkingGridDocument };
+const snapshot = loadThinkingGridSnapshot();
+const bodyWithoutTitle = model.body.replace(/^#\s+.+\n+/, "");
+const rendered = await renderMarkdownToHtml(bodyWithoutTitle, {
+  relativeLinkResolver: (url) => resolveThinkingGridMarkdownLink(url, snapshot)
+});
+const pathname = thinkingGridHref(model.slug);
+const structuredData = [
+  buildCreativeWorkSchema({
+    title: model.title,
+    description: model.excerpt,
+    pathname,
+    sourceTypeLabel: "思维格栅",
+    year: ""
+  }),
+  buildBreadcrumbSchema([
+    { name: "首页", pathname: "/" },
+    { name: "思维格栅", pathname: "/thinking-grids/" },
+    { name: model.title, pathname }
+  ])
+];
+---
+
+<BaseLayout title={model.title} description={model.excerpt} shell="reader" type="article" structuredData={structuredData}>
+  <article class="reader-layout">
+    <div class="reader-content">
+      <header class="reader-header">
+        <p>思维格栅</p>
+        <h1>{model.title}</h1>
+        <p class="reader-intro">{model.excerpt}</p>
+      </header>
+      <div class="article-body" set:html={rendered} />
+    </div>
+
+    <input id="reader-drawer-state" class="drawer-state reader-drawer-state" type="checkbox" />
+    <label class="drawer-scrim reader-drawer-scrim" for="reader-drawer-state" aria-hidden="true"></label>
+
+    <aside class="reader-aside">
+      <section class="info-panel">
+        <h2>模型信息</h2>
+        <p>思维格栅 · 模型文章</p>
+      </section>
+
+      <section class="info-panel">
+        <h2>本篇目录（{model.headings.length}）</h2>
+        <ul class="link-list">
+          {model.headings.map((heading) => (
+            <li><a href={`#${heading.slug}`}>{heading.text}</a></li>
+          ))}
+        </ul>
+      </section>
+    </aside>
+  </article>
+</BaseLayout>

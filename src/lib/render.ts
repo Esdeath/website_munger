@@ -14,6 +14,7 @@ export interface KeywordLink {
 export interface RenderMarkdownOptions {
   keywordLinks?: KeywordLink[];
   currentHref?: string;
+  relativeLinkResolver?: (url: string) => string | null | undefined;
 }
 
 interface MarkdownNode {
@@ -134,10 +135,34 @@ function remarkKeywordLinks(options: RenderMarkdownOptions) {
   };
 }
 
+function remarkRelativeLinks(resolve: NonNullable<RenderMarkdownOptions["relativeLinkResolver"]>) {
+  return (tree: Node) => {
+    visit(tree, "link", (node) => {
+      const link = node as MarkdownNode;
+      const resolved = resolve(link.url ?? "");
+      if (resolved === undefined) {
+        return;
+      }
+      if (resolved === null) {
+        link.type = "text";
+        link.value = nodeText(link);
+        delete link.url;
+        delete link.children;
+        return;
+      }
+      link.url = resolved;
+    });
+  };
+}
+
 export async function renderMarkdownToHtml(body: string, options: RenderMarkdownOptions = {}): Promise<string> {
   const processor = remark()
     .use(remarkGfm)
     .use(remarkHeadingIds);
+
+  if (options.relativeLinkResolver) {
+    processor.use(remarkRelativeLinks, options.relativeLinkResolver);
+  }
 
   if (options.keywordLinks?.length) {
     processor.use(remarkKeywordLinks, options);

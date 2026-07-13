@@ -95,3 +95,4 @@ export function buildArchiveCards(topics: TopicDefinition[], articles: Knowledge
 }
 
 export const STOP_DOING_NAV = { label: "不可为清单", href: "/stop-doing/" } as const;
+export const THINKING_GRID_NAV = { label: "思维格栅", href: "/thinking-grids/" } as const;

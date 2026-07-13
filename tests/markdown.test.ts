@@ -101,4 +101,18 @@ describe("renderMarkdownToHtml", () => {
       })
     ).resolves.toContain(`能力圈和<a href="${encodeURI(moatHref)}">护城河</a>`);
   });
+
+  it("rewrites copied Markdown links and unlinks unavailable local documents", async () => {
+    const resolve = (url: string) => {
+      if (url === "模型.md") return "/thinking-grids/模型/";
+      if (url === "README.md") return null;
+      return undefined;
+    };
+
+    await expect(
+      renderMarkdownToHtml("[模型](模型.md) [说明](README.md) [锚点](#层级)", { relativeLinkResolver: resolve })
+    ).resolves.toContain(
+      '<a href="/thinking-grids/%E6%A8%A1%E5%9E%8B/">模型</a> 说明 <a href="#%E5%B1%82%E7%BA%A7">锚点</a>'
+    );
+  });
 });

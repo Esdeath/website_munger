@@ -2,7 +2,7 @@
 import "../styles/global.css";
 import { SITE_AUTHOR, SITE_DESCRIPTION, SITE_KEYWORDS, SITE_TITLE } from "../content/site";
 import { loadArticles, loadOriginalSources } from "../lib/corpus";
-import { buildSidebarSections, STOP_DOING_NAV } from "../lib/navigation";
+import { buildSidebarSections, STOP_DOING_NAV, THINKING_GRID_NAV } from "../lib/navigation";
 import { absoluteUrl, canonicalUrl } from "../lib/seo";
 
 interface Props {
@@ -30,6 +30,9 @@ const structuredData = Astro.props.structuredData
 const structuredDataJson = structuredData.length === 1 ? JSON.stringify(structuredData[0]) : JSON.stringify(structuredData);
 const sidebarSections = buildSidebarSections(loadArticles(), loadOriginalSources(), decodeURIComponent(Astro.url.pathname));
 const stopDoingActive = decodeURIComponent(Astro.url.pathname).replace(/\/$/, "") === STOP_DOING_NAV.href.replace(/\/$/, "");
+const thinkingGridActive = decodeURIComponent(Astro.url.pathname).replace(/\/$/, "").startsWith(
+  THINKING_GRID_NAV.href.replace(/\/$/, "")
+);
 ---
 
 <!doctype html>
@@ -93,6 +96,11 @@ const stopDoingActive = decodeURIComponent(Astro.url.pathname).replace(/\/$/, ""
         <nav class="sidebar-nav">
           <section class="sidebar-section">
             <ul class="sidebar-tree">
+              <li>
+                <a class:list={["sidebar-toplink", thinkingGridActive && "is-active"]} href={THINKING_GRID_NAV.href}>
+                  {THINKING_GRID_NAV.label}
+                </a>
+              </li>
               <li>
                 <a class:list={["sidebar-toplink", stopDoingActive && "is-active"]} href={STOP_DOING_NAV.href}>
                   {STOP_DOING_NAV.label}

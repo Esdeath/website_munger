@@ -1,0 +1,33 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import { renderMarkdownToHtml } from "../../lib/render";
+import {
+  loadThinkingGridSnapshot,
+  resolveThinkingGridMarkdownLink,
+  thinkingGridHref
+} from "../../lib/thinking-grid";
+import { buildBreadcrumbSchema, buildCollectionPageSchema, canonicalUrl } from "../../lib/seo";
+
+const snapshot = loadThinkingGridSnapshot();
+const rendered = await renderMarkdownToHtml(snapshot.index.body, {
+  relativeLinkResolver: (url) => resolveThinkingGridMarkdownLink(url, snapshot)
+});
+const structuredData = [
+  buildCollectionPageSchema({
+    title: snapshot.index.title,
+    description: snapshot.index.excerpt,
+    pathname: "/thinking-grids/",
+    itemUrls: snapshot.models.map((model) => canonicalUrl(thinkingGridHref(model.slug)))
+  }),
+  buildBreadcrumbSchema([
+    { name: "首页", pathname: "/" },
+    { name: snapshot.index.title, pathname: "/thinking-grids/" }
+  ])
+];
+---
+
+<BaseLayout title={snapshot.index.title} description={snapshot.index.excerpt} structuredData={structuredData}>
+  <section class="page">
+    <div class="article-body" set:html={rendered} />
+  </section>
+</BaseLayout>
