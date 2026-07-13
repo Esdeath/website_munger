@@ -1,8 +1,9 @@
 import fs from "node:fs";
 import path from "node:path";
 import type { APIRoute, GetStaticPaths } from "astro";
+import { SOURCE_DIRECTORIES, type SourceDirectory } from "../../../lib/source-types";
 
-const IMAGE_DIRECTORIES = ["shareholders", "speech"] as const;
+const IMAGE_DIRECTORIES = SOURCE_DIRECTORIES;
 
 export const getStaticPaths: GetStaticPaths = () =>
   IMAGE_DIRECTORIES.flatMap((sourceDirectory) =>
@@ -24,7 +25,7 @@ export const GET: APIRoute = ({ params }) => {
   if (
     !sourceDirectory ||
     !image ||
-    !IMAGE_DIRECTORIES.includes(sourceDirectory as (typeof IMAGE_DIRECTORIES)[number]) ||
+    !IMAGE_DIRECTORIES.includes(sourceDirectory as SourceDirectory) ||
     image.includes("/") ||
     image.includes("..")
   ) {

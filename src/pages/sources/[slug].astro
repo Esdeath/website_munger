@@ -2,7 +2,7 @@
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import { loadArticles, loadOriginalSources } from "../../lib/corpus";
 import { renderMarkdownToHtml } from "../../lib/render";
-import { buildSourceArticleMap } from "../../lib/relations";
+import { buildSourceArticleMap, sameYearSources } from "../../lib/relations";
 import { buildBreadcrumbSchema, buildCreativeWorkSchema, sourceTypeLabel } from "../../lib/seo";
 
 export function getStaticPaths() {
@@ -11,11 +11,10 @@ export function getStaticPaths() {
 
 const { source } = Astro.props;
 const articles = loadArticles();
-const sourceArticleMap = buildSourceArticleMap(articles, loadOriginalSources());
+const allSources = loadOriginalSources();
+const sourceArticleMap = buildSourceArticleMap(articles, allSources);
 const citedBy = sourceArticleMap.get(source.slug) ?? [];
-const sameYear = loadOriginalSources()
-  .filter((item) => item.slug !== source.slug && item.year === source.year)
-  .slice(0, 8);
+const sameYear = sameYearSources(source, allSources);
 const bodyWithoutDuplicateTitle = source.body.replace(new RegExp(`^#\\s+${source.title.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}\\s*\\n+`), "");
 const keywordLinks = articles.map((article) => ({
   keyword: article.keyword,
@@ -44,7 +43,7 @@ const structuredData = [
     <div class="reader-content">
       <header class="reader-header">
         <h1>{source.title}</h1>
-        <p>{source.type === "shareholder" ? "股东会与股东信" : "演讲与访谈"}</p>
+        <p>{sourceLabel}</p>
       </header>
       <div class="article-body" set:html={rendered} />
     </div>

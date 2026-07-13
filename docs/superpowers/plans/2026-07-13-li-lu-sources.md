@@ -493,9 +493,13 @@ Run: `npm run build`
 
 Expected: exit 0；`loadOriginalSources()` 已能生成 14 个李录阅读页。
 
-Run: `rg -n "李录演讲和访谈" dist/index.html dist/sources/index.html`
+Run: `rg -n 'href="/sources/#li-lu"' dist/index.html`
 
-Expected: FAIL，无匹配；首页和原文索引尚未接入第三组。
+Expected: FAIL，无匹配；首页尚未接入第三张原文卡。
+
+Run: `rg -n 'id="li-lu"' dist/sources/index.html`
+
+Expected: FAIL，无匹配；原文索引尚未接入第三个内容分区。
 
 Run: `test "$(find dist/li-lu/images -maxdepth 1 -type f -name '*.png' 2>/dev/null | wc -l | tr -d ' ')" = "8"`
 
@@ -613,9 +617,13 @@ Run: `find dist/li-lu/images -maxdepth 1 -type f -name '*.png' | wc -l`
 
 Expected: `8`
 
-Run: `rg -n "李录演讲和访谈|14 篇" dist/index.html dist/sources/index.html`
+Run: `rg -n 'href="/sources/#li-lu"' dist/index.html`
 
-Expected: 两个 HTML 文件均包含“李录演讲和访谈”，原文索引包含“14 篇”。
+Expected: 首页存在李录原文入口。
+
+Run: `rg -n 'id="li-lu"' dist/sources/index.html`
+
+Expected: 原文索引存在李录内容分区，且同一行包含“李录演讲和访谈”和“14 篇”。
 
 Run: `rg -n "/li-lu/images/2006-columbia-image.png" dist/sources/李录-2006年哥伦比亚大学商学院演讲/index.html`
 

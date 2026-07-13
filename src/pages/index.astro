@@ -4,26 +4,18 @@ import { TOPICS } from "../content/site";
 import { loadArticles, loadOriginalSources } from "../lib/corpus";
 import { buildArchiveCards } from "../lib/navigation";
 import { buildCollectionPageSchema, buildWebsiteSchema, canonicalUrl } from "../lib/seo";
+import { SOURCE_DEFINITIONS } from "../lib/source-types";
 
 const articles = loadArticles();
 const sources = loadOriginalSources();
 const archiveCards = buildArchiveCards(TOPICS, articles);
-const originalCards = [
-  {
-    mark: "会",
-    title: "股东会与股东信",
-    description: "历年股东会、股东信与问答记录",
-    href: "/sources/#shareholder",
-    count: sources.filter((source) => source.type === "shareholder").length
-  },
-  {
-    mark: "访",
-    title: "演讲与访谈",
-    description: "公开演讲、访谈、文章与声明",
-    href: "/sources/#speech",
-    count: sources.filter((source) => source.type === "speech").length
-  }
-];
+const originalCards = SOURCE_DEFINITIONS.map((definition) => ({
+  mark: definition.mark,
+  title: definition.label,
+  description: definition.description,
+  href: `/sources/#${definition.type}`,
+  count: sources.filter((source) => source.type === definition.type).length
+}));
 const structuredData = [
   buildWebsiteSchema(),
   buildCollectionPageSchema({
@@ -56,7 +48,7 @@ const structuredData = [
 
     <section class="archive-section">
       <p class="section-kicker">原文 · {sources.length} 篇</p>
-      <p class="section-copy">先原文，后观点；先证据，后文章。一切回到芒格自己的话。</p>
+      <p class="section-copy">先原文，后观点；先证据，后文章。阅读芒格与李录的公开表达。</p>
       <div class="archive-grid">
         {originalCards.map((card) => (
           <a class="archive-card" href={card.href}>
