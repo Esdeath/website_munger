@@ -29,16 +29,10 @@ export const TOPICS: TopicDefinition[] = [
     keywords: ["能力圈", "护城河", "长期持有", "复利", "内在价值", "机会成本", "资本配置", "定价权"]
   },
   {
-    slug: "thinking-methods",
-    title: "思维方法",
-    description: "多元思维模型、逆向思维、检查清单和跨学科判断。",
-    keywords: ["多元思维模型", "跨学科", "普世智慧", "逆向思维", "检查清单", "概率", "赔率", "期望值", "客观与理性"]
-  },
-  {
     slug: "mental-model-lectures",
     title: "思维模型讲义",
-    description: "按芒格式讲法系统拆解多元思维模型的基础课。",
-    keywords: ["铁锤", "数学", "概率", "赔率", "会计", "商业语言", "费马", "帕斯卡", "模型"]
+    description: "从多元模型到判断纪律的二十一课：十五篇主线讲义与六篇补充课。",
+    keywords: ["铁锤", "数学", "概率", "会计", "工程", "心理学", "竞争", "投资", "跨学科", "逆向思维", "检查清单"]
   },
   {
     slug: "human-misjudgment",

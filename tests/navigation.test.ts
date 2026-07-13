@@ -68,6 +68,12 @@ describe("buildSidebarSections", () => {
     expect(sections[1].groups.map((group) => group.label)).toContain("投资原则");
   });
 
+  it("does not expose a thought-method group after the lecture merge", () => {
+    const sections = buildSidebarSections(articles, sources);
+
+    expect(sections[1].groups.map((group) => group.label)).not.toContain("思维方法");
+  });
+
   it("marks the active leaf and opens its parent group", () => {
     const sections = buildSidebarSections(articles, sources, "/sources/查理芒格-1995年哈佛法学院演讲/");
 
@@ -102,14 +108,14 @@ describe("THINKING_GRID_NAV", () => {
 
 describe("buildArchiveCards", () => {
   it("turns topics into archive-style cards", () => {
-    const topics = ["investment-principles", "thinking-methods"].map(
+    const topics = ["investment-principles", "mental-model-lectures"].map(
       (slug) => TOPICS.find((topic) => topic.slug === slug)!
     );
     const cards = buildArchiveCards(topics, articles);
 
     expect(cards).toEqual([
       expect.objectContaining({ mark: "投", title: "投资原则", count: 1 }),
-      expect.objectContaining({ mark: "思", title: "思维方法", count: 1 })
+      expect.objectContaining({ mark: "思", title: "思维模型讲义", count: 0 })
     ]);
   });
 });

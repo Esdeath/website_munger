@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { TOPICS } from "../src/content/site";
-import type { KnowledgeArticle, OriginalSource } from "../src/lib/corpus";
+import { loadArticles, type KnowledgeArticle, type OriginalSource } from "../src/lib/corpus";
 import {
   articlesForTopic,
   buildSourceArticleMap,
@@ -76,7 +76,6 @@ describe("articlesForTopic", () => {
   it("keeps the topic list aligned to the articles frontmatter categories", () => {
     expect(TOPICS.map((topic) => topic.title)).toEqual([
       "投资原则",
-      "思维方法",
       "思维模型讲义",
       "人性偏误",
       "品格处世",
@@ -84,6 +83,24 @@ describe("articlesForTopic", () => {
       "公司案例",
       "学科体系",
       "宏观警示"
+    ]);
+  });
+
+  it("keeps only the 21-part thinking-model lecture curriculum", () => {
+    const lectures = loadArticles()
+      .filter((article) => article.category === "思维模型讲义")
+      .sort(compareArticlesForDisplay);
+
+    expect(TOPICS.some((topic) => topic.title === "思维方法")).toBe(false);
+    expect(lectures).toHaveLength(21);
+    expect(lectures.map((article) => article.order)).toEqual(Array.from({ length: 21 }, (_, index) => index + 1));
+    expect(lectures.slice(15).map((article) => article.keyword)).toEqual([
+      "跨学科 / 普世智慧",
+      "逆向思维 / 反过来想",
+      "检查清单",
+      "客观与理性",
+      "常识",
+      "终身学习"
     ]);
   });
 
