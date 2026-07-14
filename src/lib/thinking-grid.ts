@@ -8,6 +8,13 @@ const DEFAULT_DIRECTORY = path.join(ROOT, "thinking-grids");
 const INDEX_FILE_NAME = "思维格栅.md";
 const SUPPORTING_FILE_NAMES = new Set([INDEX_FILE_NAME, "README.md"]);
 
+export function bodyWithoutExcerpt(body: string): string {
+  const withoutTitle = body.replace(/^#\s+.+(?:\r?\n|$)/, "").trimStart();
+  const firstParagraphEnd = withoutTitle.search(/\r?\n\s*\r?\n/);
+
+  return firstParagraphEnd === -1 ? "" : withoutTitle.slice(firstParagraphEnd).trim();
+}
+
 export interface ThinkingGridDocument {
   slug: string;
   filePath: string;

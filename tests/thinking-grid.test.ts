@@ -2,6 +2,7 @@ import fs from "node:fs";
 import path from "node:path";
 import { describe, expect, it } from "vitest";
 import {
+  bodyWithoutExcerpt,
   loadThinkingGridSnapshot,
   resolveThinkingGridMarkdownLink,
   thinkingGridHref
@@ -10,6 +11,14 @@ import {
 const snapshotDirectory = path.join(process.cwd(), "thinking-grids");
 
 describe("thinking grid snapshot", () => {
+  it("removes the title and first paragraph before rendering a model body", () => {
+    expect(
+      bodyWithoutExcerpt(
+        "# 模型标题\n\n这是摘要。\n\n这是正文第二段。\n\n## 下一节\n\n后续内容。"
+      )
+    ).toBe("这是正文第二段。\n\n## 下一节\n\n后续内容。");
+  });
+
   it("contains the index, README, and 178 model documents", () => {
     expect(fs.existsSync(snapshotDirectory)).toBe(true);
 

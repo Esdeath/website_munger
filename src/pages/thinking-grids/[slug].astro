@@ -2,6 +2,7 @@
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import { renderMarkdownToHtml } from "../../lib/render";
 import {
+  bodyWithoutExcerpt,
   loadThinkingGridSnapshot,
   resolveThinkingGridMarkdownLink,
   thinkingGridHref,
@@ -15,8 +16,7 @@ export function getStaticPaths() {
 
 const { model } = Astro.props as { model: ThinkingGridDocument };
 const snapshot = loadThinkingGridSnapshot();
-const bodyWithoutTitle = model.body.replace(/^#\s+.+\n+/, "");
-const rendered = await renderMarkdownToHtml(bodyWithoutTitle, {
+const rendered = await renderMarkdownToHtml(bodyWithoutExcerpt(model.body), {
   relativeLinkResolver: (url) => resolveThinkingGridMarkdownLink(url, snapshot)
 });
 const pathname = thinkingGridHref(model.slug);
