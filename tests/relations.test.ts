@@ -5,6 +5,7 @@ import {
   articlesForTopic,
   buildSourceArticleMap,
   compareArticlesForDisplay,
+  mentionedArticlesForSource,
   relatedArticles,
   sameYearSources,
   sourcesForArticle,
@@ -178,6 +179,49 @@ describe("buildSourceArticleMap", () => {
     expect(map.get("2017年-每日期刊股东会讲话")?.map((article) => article.keyword)).toEqual([
       "能力圈",
       "多元思维模型"
+    ]);
+  });
+});
+
+describe("mentionedArticlesForSource", () => {
+  it("matches body keywords and keeps one stable article per keyword", () => {
+    const source = {
+      ...sources[0],
+      body: "这篇原文讨论能力圈、护城河，也提到未登记概念。"
+    } satisfies OriginalSource;
+    const duplicateAbilityCircle = {
+      ...articles[0],
+      slug: "思维模型讲义-能力圈",
+      filePath: "articles/思维模型讲义-能力圈.md",
+      title: "思维模型讲义:能力圈",
+      category: "思维模型讲义",
+      quoteCount: 20,
+      order: 1
+    } satisfies KnowledgeArticle;
+
+    expect(
+      mentionedArticlesForSource(source, [
+        articles[0],
+        articles[1],
+        articles[2],
+        duplicateAbilityCircle
+      ]).map((article) => [article.keyword, article.slug])
+    ).toEqual([
+      ["能力圈", "思维模型讲义-能力圈"],
+      ["护城河", "护城河-宽且不断变宽的护城河"]
+    ]);
+  });
+
+  it("keeps body mentions separate from frontmatter source citations", () => {
+    const source = {
+      ...sources[0],
+      title: "没有被引用的李录演讲",
+      body: "能力圈"
+    } satisfies OriginalSource;
+
+    expect(buildSourceArticleMap([articles[0]], [source]).get(source.slug)).toEqual([]);
+    expect(mentionedArticlesForSource(source, [articles[0]]).map((article) => article.keyword)).toEqual([
+      "能力圈"
     ]);
   });
 });

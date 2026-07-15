@@ -48,6 +48,24 @@ export function buildSourceArticleMap(
   );
 }
 
+export function mentionedArticlesForSource(
+  source: OriginalSource,
+  articles: KnowledgeArticle[]
+): KnowledgeArticle[] {
+  const seenKeywords = new Set<string>();
+
+  return [...articles]
+    .sort(compareArticlesForDisplay)
+    .filter((article) => {
+      const keyword = article.keyword.trim();
+      if (!keyword || seenKeywords.has(keyword) || !source.body.includes(keyword)) {
+        return false;
+      }
+      seenKeywords.add(keyword);
+      return true;
+    });
+}
+
 export function sameYearSources(
   source: OriginalSource,
   sources: OriginalSource[],
