@@ -59,6 +59,15 @@ const structuredData = [
       </section>
 
       <section class="info-panel">
+        <h2>本篇目录（{source.headings.length}）</h2>
+        <ul class="link-list">
+          {source.headings.map((heading) => (
+            <li><a href={`#${heading.slug}`}>{heading.text}</a></li>
+          ))}
+        </ul>
+      </section>
+
+      <section class="info-panel">
         <h2>本篇涉及的关键词（{citedBy.length}）</h2>
         <ul class="keyword-list">
           {citedBy.map((article) => (
