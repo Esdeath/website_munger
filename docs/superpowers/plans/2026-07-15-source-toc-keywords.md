@@ -244,7 +244,7 @@ Run:
 node --input-type=module <<'NODE'
 import fs from "node:fs";
 
-const file = "dist/sources/李录-2013年于旧金山大学的精彩演讲及学生问答实录/index.html";
+const file = "dist/sources/李录-2019年专业投资人交流/index.html";
 const html = fs.readFileSync(file, "utf8");
 const tocCount = Number(html.match(/本篇目录（(\d+)）/)?.[1] ?? 0);
 const keywordCount = Number(html.match(/本篇涉及的关键词（(\d+)）/)?.[1] ?? 0);
