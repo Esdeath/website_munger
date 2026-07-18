@@ -4,6 +4,7 @@ import remarkHtml from "remark-html";
 import { defaultSchema } from "hast-util-sanitize";
 import type { Node } from "unist";
 import { visit } from "unist-util-visit";
+import { markdownNodeText } from "./markdown";
 import { textToSlug } from "./slug";
 
 export interface KeywordLink {
@@ -24,20 +25,10 @@ interface MarkdownNode {
   children?: MarkdownNode[];
 }
 
-function nodeText(node: { value?: unknown; children?: unknown[] }): string {
-  if (typeof node.value === "string") {
-    return node.value;
-  }
-  if (Array.isArray(node.children)) {
-    return node.children.map((child) => nodeText(child as { value?: unknown; children?: unknown[] })).join("");
-  }
-  return "";
-}
-
 function remarkHeadingIds() {
   return (tree: Node) => {
     visit(tree, "heading", (node) => {
-      const text = nodeText(node as { value?: unknown; children?: unknown[] }).trim();
+      const text = markdownNodeText(node as { value?: unknown; children?: unknown[] }).trim();
       if (!text) {
         return;
       }
@@ -145,7 +136,7 @@ function remarkRelativeLinks(resolve: NonNullable<RenderMarkdownOptions["relativ
       }
       if (resolved === null) {
         link.type = "text";
-        link.value = nodeText(link);
+        link.value = markdownNodeText(link);
         delete link.url;
         delete link.children;
         return;

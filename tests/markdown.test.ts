@@ -49,6 +49,18 @@ describe("extractHeadings", () => {
       { depth: 2, text: "二、他怎么定义", slug: "二-他怎么定义" }
     ]);
   });
+
+  it("uses visible text for formatted headings so directory links match rendered ids", async () => {
+    const body = "### **TRADING STAMP AND MOTIVATION BUSINESSES（交易印花与激励业务）**";
+    const [heading] = extractHeadings(body);
+
+    expect(heading).toEqual({
+      depth: 3,
+      text: "TRADING STAMP AND MOTIVATION BUSINESSES（交易印花与激励业务）",
+      slug: "trading-stamp-and-motivation-businesses（交易印花与激励业务）"
+    });
+    await expect(renderMarkdownToHtml(body)).resolves.toContain(`id="${heading.slug}"`);
+  });
 });
 
 describe("extractExcerpt", () => {
