@@ -327,6 +327,20 @@ input:focus-visible {
   min-width: 0;
 }
 
+.standalone-reader-page {
+  width: 100%;
+  height: calc(100dvh - var(--mobile-topbar));
+  overflow: hidden;
+}
+
+.standalone-reader-frame {
+  display: block;
+  width: 100%;
+  height: 100%;
+  background: #1a1a1f;
+  border: 0;
+}
+
 .overview-page {
   width: 100%;
   max-width: 740px;
@@ -982,6 +996,10 @@ input:focus-visible {
 
   .main-stage {
     min-height: 100vh;
+  }
+
+  .standalone-reader-page {
+    height: 100dvh;
   }
 
   .overview-page {

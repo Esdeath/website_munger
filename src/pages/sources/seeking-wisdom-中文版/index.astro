@@ -1,0 +1,18 @@
+---
+import BaseLayout from "../../../layouts/BaseLayout.astro";
+import { STANDALONE_SOURCES } from "../../../content/standalone-sources";
+
+const source = STANDALONE_SOURCES[0];
+---
+
+<BaseLayout title={source.title} description={source.excerpt}>
+  <section class="standalone-reader-page" aria-labelledby="standalone-reader-title">
+    <h1 id="standalone-reader-title" class="sr-only">{source.title}</h1>
+    <iframe
+      class="standalone-reader-frame"
+      src="/sources/seeking-wisdom-中文版/reader.html"
+      title={source.title}
+      loading="eager"
+    ></iframe>
+  </section>
+</BaseLayout>

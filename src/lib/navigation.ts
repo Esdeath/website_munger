@@ -59,7 +59,7 @@ export function buildSidebarSections(
     return makeGroup(
       definition.label,
       sources
-        .filter((source) => source.type === type)
+        .filter((source) => source.type === type && !source.standalone)
         .sort((a, b) => a.year.localeCompare(b.year) || a.title.localeCompare(b.title, "zh-Hans-CN"))
         .map((source) => toLeaf(source.title, `/sources/${source.slug}/`, currentPath))
     );
@@ -94,3 +94,4 @@ export function buildArchiveCards(topics: TopicDefinition[], articles: Knowledge
 
 export const STOP_DOING_NAV = { label: "不可为清单", href: "/stop-doing/" } as const;
 export const THINKING_GRID_NAV = { label: "思维格栅", href: "/thinking-grids/" } as const;
+export const SEEKING_WISDOM_NAV = { label: "探索智慧", href: "/sources/seeking-wisdom-中文版/" } as const;

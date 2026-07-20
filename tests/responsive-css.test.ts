@@ -102,4 +102,16 @@ describe("responsive layout CSS", () => {
     expect(phone).toContain("overflow: hidden;");
     expect(phone).toContain("text-overflow: ellipsis;");
   });
+
+  it("keeps the embedded book reader full-width and viewport-height", () => {
+    const base = baseBlock();
+    const desktop = mediaBlock("(min-width: 1101px)");
+
+    expect(base).toContain(".standalone-reader-page");
+    expect(base).toContain("height: calc(100dvh - var(--mobile-topbar));");
+    expect(base).toContain(".standalone-reader-frame");
+    expect(base).toContain("border: 0;");
+    expect(desktop).toContain(".standalone-reader-page");
+    expect(desktop).toContain("height: 100dvh;");
+  });
 });

@@ -82,7 +82,7 @@ describe("loaders against repository content", () => {
 
     expect(source).toEqual(
       expect.objectContaining({
-        filePath: "public/sources/seeking-wisdom-中文版/index.html",
+        filePath: "public/sources/seeking-wisdom-中文版/reader.html",
         title: "探索智慧：从达尔文到芒格",
         type: "speech",
         year: "2003",

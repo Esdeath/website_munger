@@ -1,7 +1,13 @@
 import { describe, expect, it } from "vitest";
 import { TOPICS } from "../src/content/site";
 import type { KnowledgeArticle, OriginalSource } from "../src/lib/corpus";
-import { buildArchiveCards, buildSidebarSections, STOP_DOING_NAV, THINKING_GRID_NAV } from "../src/lib/navigation";
+import {
+  buildArchiveCards,
+  buildSidebarSections,
+  SEEKING_WISDOM_NAV,
+  STOP_DOING_NAV,
+  THINKING_GRID_NAV
+} from "../src/lib/navigation";
 
 const articles = [
   {
@@ -52,6 +58,17 @@ const sources = [
     headings: []
   },
   {
+    slug: "seeking-wisdom-中文版",
+    filePath: "public/sources/seeking-wisdom-中文版/reader.html",
+    title: "探索智慧：从达尔文到芒格",
+    type: "speech",
+    year: "2003",
+    excerpt: "",
+    body: "",
+    headings: [],
+    standalone: true
+  },
+  {
     slug: "李录-2024年北大光华管理学院-价值投资-十周年演讲",
     filePath: "li-lu/李录：2024年北大光华管理学院《价值投资》十周年演讲.md",
     title: "2024年12月7日，著名投资人李录北大演讲全文",
@@ -76,6 +93,7 @@ describe("buildSidebarSections", () => {
     expect(sections[0].groups[0].children.map((leaf) => leaf.label)).toEqual([
       "2017年 每日期刊股东会讲话"
     ]);
+    expect(sections[0].groups[1].children.map((leaf) => leaf.label)).not.toContain("探索智慧：从达尔文到芒格");
     expect(sections[1].groups.map((group) => group.label)).toContain("投资原则");
   });
 
@@ -126,6 +144,12 @@ describe("STOP_DOING_NAV", () => {
 describe("THINKING_GRID_NAV", () => {
   it("is a top-level entry pointing at the thinking grid index", () => {
     expect(THINKING_GRID_NAV).toEqual({ label: "思维格栅", href: "/thinking-grids/" });
+  });
+});
+
+describe("SEEKING_WISDOM_NAV", () => {
+  it("is a top-level entry pointing at the embedded reader", () => {
+    expect(SEEKING_WISDOM_NAV).toEqual({ label: "探索智慧", href: "/sources/seeking-wisdom-中文版/" });
   });
 });
 

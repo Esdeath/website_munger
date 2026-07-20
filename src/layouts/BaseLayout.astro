@@ -2,7 +2,12 @@
 import "../styles/global.css";
 import { SITE_AUTHOR, SITE_DESCRIPTION, SITE_KEYWORDS, SITE_TITLE } from "../content/site";
 import { loadArticles, loadOriginalSources } from "../lib/corpus";
-import { buildSidebarSections, STOP_DOING_NAV, THINKING_GRID_NAV } from "../lib/navigation";
+import {
+  buildSidebarSections,
+  SEEKING_WISDOM_NAV,
+  STOP_DOING_NAV,
+  THINKING_GRID_NAV
+} from "../lib/navigation";
 import { absoluteUrl, canonicalUrl } from "../lib/seo";
 
 interface Props {
@@ -33,6 +38,8 @@ const stopDoingActive = decodeURIComponent(Astro.url.pathname).replace(/\/$/, ""
 const thinkingGridActive = decodeURIComponent(Astro.url.pathname).replace(/\/$/, "").startsWith(
   THINKING_GRID_NAV.href.replace(/\/$/, "")
 );
+const seekingWisdomActive =
+  decodeURIComponent(Astro.url.pathname).replace(/\/$/, "") === SEEKING_WISDOM_NAV.href.replace(/\/$/, "");
 ---
 
 <!doctype html>
@@ -104,6 +111,14 @@ const thinkingGridActive = decodeURIComponent(Astro.url.pathname).replace(/\/$/,
               <li>
                 <a class:list={["sidebar-toplink", stopDoingActive && "is-active"]} href={STOP_DOING_NAV.href}>
                   {STOP_DOING_NAV.label}
+                </a>
+              </li>
+              <li>
+                <a
+                  class:list={["sidebar-toplink", seekingWisdomActive && "is-active"]}
+                  href={SEEKING_WISDOM_NAV.href}
+                >
+                  {SEEKING_WISDOM_NAV.label}
                 </a>
               </li>
             </ul>
