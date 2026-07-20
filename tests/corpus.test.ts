@@ -77,6 +77,20 @@ describe("loaders against repository content", () => {
     expect(sources.find((source) => source.filePath.includes("2023年 每日期刊股东会讲话"))).toBeDefined();
   });
 
+  it("loads the standalone Seeking Wisdom HTML at its established source slug", () => {
+    const source = loadOriginalSources().find((item) => item.slug === "seeking-wisdom-中文版");
+
+    expect(source).toEqual(
+      expect.objectContaining({
+        filePath: "public/sources/seeking-wisdom-中文版/index.html",
+        title: "探索智慧：从达尔文到芒格",
+        type: "speech",
+        year: "2003",
+        standalone: true
+      })
+    );
+  });
+
   it("loads all Li Lu source files as a separate source type", () => {
     const sources = loadOriginalSources().filter((source) => source.type === "li-lu");
 

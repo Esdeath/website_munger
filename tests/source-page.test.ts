@@ -4,6 +4,10 @@ import { describe, expect, it } from "vitest";
 const sourcePage = readFileSync("src/pages/sources/[slug].astro", "utf8");
 
 describe("source detail page", () => {
+  it("leaves standalone HTML sources to their public static route", () => {
+    expect(sourcePage).toContain(".filter((source) => !source.standalone)");
+  });
+
   it("shows source information, heading directory, body keywords, and related sources in order", () => {
     const sourceInfo = sourcePage.indexOf("<h2>原文信息</h2>");
     const directory = sourcePage.indexOf("<h2>本篇目录（{source.headings.length}）</h2>");

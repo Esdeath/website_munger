@@ -1,5 +1,6 @@
 import fs from "node:fs";
 import path from "node:path";
+import { STANDALONE_SOURCES } from "../content/standalone-sources";
 import { extractExcerpt, extractHeadings, parseMarkdownDocument } from "./markdown";
 import { SOURCE_DEFINITIONS, type SourceDirectory, type SourceType } from "./source-types";
 import { filePathToSlug } from "./slug";
@@ -30,6 +31,7 @@ export interface OriginalSource {
   excerpt: string;
   body: string;
   headings: ReturnType<typeof extractHeadings>;
+  standalone?: boolean;
 }
 
 export interface CorpusManifestEntry {
@@ -140,7 +142,7 @@ export function loadArticles(): KnowledgeArticle[] {
 }
 
 export function loadOriginalSources(): OriginalSource[] {
-  return SOURCE_DEFINITIONS.flatMap(({ directory, type }) =>
+  const markdownSources = SOURCE_DEFINITIONS.flatMap(({ directory, type }) =>
     readMarkdownFiles(directory).map((filePath) => {
       const raw = readRepoFile(filePath);
       const parsed = parseMarkdownDocument(filePath, raw);
@@ -158,4 +160,13 @@ export function loadOriginalSources(): OriginalSource[] {
       };
     })
   );
+
+  const standaloneSources = STANDALONE_SOURCES.map((source) => ({
+    ...source,
+    body: readRepoFile(source.filePath),
+    headings: [],
+    standalone: true as const
+  }));
+
+  return [...markdownSources, ...standaloneSources];
 }
