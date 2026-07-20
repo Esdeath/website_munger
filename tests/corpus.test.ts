@@ -111,6 +111,15 @@ describe("loaders against repository content", () => {
     );
   });
 
+  it("loads Li Lu source titles without Markdown formatting markers", () => {
+    const titles = loadOriginalSources()
+      .filter((source) => source.type === "li-lu")
+      .map((source) => source.title);
+
+    expect(titles).not.toEqual(expect.arrayContaining([expect.stringMatching(/\*\*|__/)]));
+    expect(titles).toContain("2018年《红周刊》独家对话美国喜马拉雅资本创始人及董事长李录");
+  });
+
   it("rewrites original source relative image paths to source-directory absolute paths", () => {
     const source = loadOriginalSources().find((item) => item.filePath === "shareholders/1987年 西科金融股东会讲话.md");
 
