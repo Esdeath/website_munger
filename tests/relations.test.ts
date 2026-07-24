@@ -91,22 +91,27 @@ describe("articlesForTopic", () => {
     ]);
   });
 
-  it("keeps only the 21-part thinking-model lecture curriculum", () => {
+  it("keeps the final 12-part thinking-model lecture curriculum", () => {
     const lectures = loadArticles()
       .filter((article) => article.category === "思维模型讲义")
       .sort(compareArticlesForDisplay);
 
     expect(TOPICS.some((topic) => topic.title === "思维方法")).toBe(false);
-    expect(lectures).toHaveLength(21);
-    expect(lectures.map((article) => article.order)).toEqual(Array.from({ length: 21 }, (_, index) => index + 1));
-    expect(lectures.slice(15).map((article) => article.keyword)).toEqual([
-      "跨学科 / 普世智慧",
-      "逆向思维",
-      "检查清单",
-      "客观与理性",
-      "常识",
-      "终身学习"
+    expect(lectures.map(({ order, title }) => [order, title])).toEqual([
+      [1, "思维模型讲义01：多元思维模型与跨学科智慧"],
+      [2, "思维模型讲义02：概率、赔率与投资判断"],
+      [3, "思维模型讲义03：会计是商业语言，不是商业真相"],
+      [4, "思维模型讲义04：硬科学思维，安全边际、后备系统与临界点"],
+      [5, "思维模型讲义05：生物学思维，把经济看成生态系统"],
+      [6, "思维模型讲义06：误判心理学，激励、社会认同与条件反射"],
+      [7, "思维模型讲义07：规模效应，优势如何增强，组织如何变蠢"],
+      [8, "思维模型讲义08：竞争与技术，行业利润最终归谁"],
+      [9, "思维模型讲义09：合奏效应，多个模型如何共同作用"],
+      [10, "思维模型讲义10：逆向思维与检查清单"],
+      [11, "思维模型讲义11：客观、理性与常识"],
+      [12, "思维模型讲义12：终身学习，让模型持续更新"]
     ]);
+    expect(lectures.every((article) => /^思维模型讲义\d{2}：[^：]+$/.test(article.title))).toBe(true);
   });
 
   it("groups articles into a topic by their exact category", () => {

@@ -31,8 +31,8 @@ export const TOPICS: TopicDefinition[] = [
   {
     slug: "mental-model-lectures",
     title: "思维模型讲义",
-    description: "从多元模型到判断纪律的二十一课：十五篇主线讲义与六篇补充课。",
-    keywords: ["铁锤", "数学", "概率", "会计", "工程", "心理学", "竞争", "投资", "跨学科", "逆向思维", "检查清单"]
+    description: "从多元思维模型到终身学习的十二课，覆盖硬科学、误判心理学、商业判断与行动纪律。",
+    keywords: ["多元思维模型", "概率", "会计", "硬科学", "生物学", "误判心理学", "规模效应", "竞争", "技术", "逆向思维", "检查清单", "理性", "终身学习"]
   },
   {
     slug: "human-misjudgment",

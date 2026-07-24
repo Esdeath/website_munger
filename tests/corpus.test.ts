@@ -54,7 +54,7 @@ describe("loaders against repository content", () => {
     const articles = loadArticles();
     const lecture01 = articles.find((article) => article.title.startsWith("思维模型讲义01"));
     const lecture02 = articles.find((article) => article.title.startsWith("思维模型讲义02"));
-    const lecture15 = articles.find((article) => article.title.startsWith("思维模型讲义15"));
+    const lecture09 = articles.find((article) => article.title.startsWith("思维模型讲义09"));
 
     expect(lecture01?.body).toContain("专业化思维");
     expect(lecture01?.body).toContain("可口可乐案例");
@@ -63,8 +63,8 @@ describe("loaders against repository content", () => {
     expect(lecture02?.body).toContain("1962 年油田开采权");
     expect(lecture02?.body).toContain("永久性损失");
     expect(lecture02?.body).toContain("风险不是报价波动");
-    expect(lecture15?.body).toContain("储贷行业危机");
-    expect(lecture15?.body).toContain("2021 年谈巴菲特成功");
+    expect(lecture09?.body).toContain("储贷行业危机");
+    expect(lecture09?.body).toContain("2021 年谈巴菲特成功");
     expect(articles.map((article) => article.filePath)).not.toEqual(
       expect.arrayContaining([
         "articles/多元思维模型-把知识挂上格栅.md",
@@ -77,7 +77,7 @@ describe("loaders against repository content", () => {
   it("absorbs hard-science and misjudgment-psychology topics into their lecture counterparts", () => {
     const articles = loadArticles();
     const hardScience = articles.find((article) => article.title.startsWith("思维模型讲义04"));
-    const psychology = articles.find((article) => article.title.startsWith("思维模型讲义07"));
+    const psychology = articles.find((article) => article.title.startsWith("思维模型讲义06"));
 
     expect(hardScience?.body).toContain("后备系统");
     expect(hardScience?.body).toContain("临界点");
@@ -93,8 +93,8 @@ describe("loaders against repository content", () => {
 
   it("absorbs scale disadvantages and technology topics into their lecture counterparts", () => {
     const articles = loadArticles();
-    const scale = articles.find((article) => article.title.startsWith("思维模型讲义10"));
-    const competition = articles.find((article) => article.title.startsWith("思维模型讲义12"));
+    const scale = articles.find((article) => article.title.startsWith("思维模型讲义07"));
+    const competition = articles.find((article) => article.title.startsWith("思维模型讲义08"));
 
     expect(scale?.body).toContain("规模优势");
     expect(scale?.body).toContain("规模劣势");
@@ -106,8 +106,8 @@ describe("loaders against repository content", () => {
 
   it("absorbs checklist and common-sense methods into their judgment-discipline articles", () => {
     const articles = loadArticles();
-    const inversion = articles.find((article) => article.keyword === "逆向思维");
-    const rationality = articles.find((article) => article.keyword === "客观与理性");
+    const inversion = articles.find((article) => article.title.startsWith("思维模型讲义10"));
+    const rationality = articles.find((article) => article.title.startsWith("思维模型讲义11"));
 
     expect(inversion?.body).toContain("检查清单");
     expect(inversion?.body).toContain("飞行员");
@@ -121,6 +121,24 @@ describe("loaders against repository content", () => {
     expect(rationality?.body).toContain("芒格描述投资经理买入高收益的 AAA 级抵押证券");
     expect(rationality?.body).not.toContain("汤姆·汤布雷洛描述投资经理");
     expect(rationality?.aliases).toEqual(expect.arrayContaining(["常识"]));
+  });
+
+  it("removes all nine absorbed source files from the final corpus", () => {
+    const filePaths = loadArticles().map((article) => article.filePath);
+
+    expect(filePaths).not.toEqual(
+      expect.arrayContaining([
+        "articles/跨学科普世智慧-把各学科的大思想综合起来.md",
+        "articles/思维模型讲义14-投资模型股市像彩池投注.md",
+        "articles/思维模型讲义05-物理学临界点和非线性世界.md",
+        "articles/思维模型讲义08-激励机制告诉我激励我告诉你结果.md",
+        "articles/思维模型讲义09-社会认同与巴甫洛夫联想.md",
+        "articles/思维模型讲义11-规模劣势大为什么会变蠢.md",
+        "articles/思维模型讲义13-技术模型新技术帮你还是毁掉你.md",
+        "articles/检查清单-像飞行员一样起飞前逐项核对.md",
+        "articles/常识-并不常见的判断力.md"
+      ])
+    );
   });
 
   it("normalizes article dates to YYYY-MM-DD strings", () => {

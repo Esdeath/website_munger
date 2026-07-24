@@ -1,12 +1,43 @@
 import { describe, expect, it } from "vitest";
 import { LEGACY_ARTICLE_REDIRECTS } from "../src/content/legacy-article-redirects";
+import { loadArticles } from "../src/lib/corpus";
 
 describe("legacy article redirects", () => {
-  it("redirects each removed thought-method article to its merged lecture", () => {
+  it("redirects every retired route directly to its final lecture", () => {
     expect(LEGACY_ARTICLE_REDIRECTS).toEqual({
-      "/articles/多元思维模型-把知识挂上格栅/": "/articles/思维模型讲义01-为什么不能只拿一把锤子/",
-      "/articles/概率赔率期望值-把赌注押在错价上/": "/articles/思维模型讲义02-数学不是公式而是判断力/",
-      "/articles/lollapalooza叠加效应-二加二不止等于四/": "/articles/思维模型讲义15-合奏效应多个模型同时指向同一个结论/"
+      "/articles/多元思维模型-把知识挂上格栅/": "/articles/思维模型讲义01-多元思维模型与跨学科智慧/",
+      "/articles/概率赔率期望值-把赌注押在错价上/": "/articles/思维模型讲义02-概率赔率与投资判断/",
+      "/articles/lollapalooza叠加效应-二加二不止等于四/": "/articles/思维模型讲义09-合奏效应多个模型如何共同作用/",
+      "/articles/思维模型讲义01-为什么不能只拿一把锤子/": "/articles/思维模型讲义01-多元思维模型与跨学科智慧/",
+      "/articles/跨学科普世智慧-把各学科的大思想综合起来/": "/articles/思维模型讲义01-多元思维模型与跨学科智慧/",
+      "/articles/思维模型讲义02-数学不是公式而是判断力/": "/articles/思维模型讲义02-概率赔率与投资判断/",
+      "/articles/思维模型讲义14-投资模型股市像彩池投注/": "/articles/思维模型讲义02-概率赔率与投资判断/",
+      "/articles/思维模型讲义04-工程学安全边际与后备系统/": "/articles/思维模型讲义04-硬科学思维安全边际后备系统与临界点/",
+      "/articles/思维模型讲义05-物理学临界点和非线性世界/": "/articles/思维模型讲义04-硬科学思维安全边际后备系统与临界点/",
+      "/articles/思维模型讲义06-生物学把经济看成生态系统/": "/articles/思维模型讲义05-生物学思维把经济看成生态系统/",
+      "/articles/思维模型讲义07-心理学人脑不是理性机器/": "/articles/思维模型讲义06-误判心理学激励社会认同与条件反射/",
+      "/articles/思维模型讲义08-激励机制告诉我激励我告诉你结果/": "/articles/思维模型讲义06-误判心理学激励社会认同与条件反射/",
+      "/articles/思维模型讲义09-社会认同与巴甫洛夫联想/": "/articles/思维模型讲义06-误判心理学激励社会认同与条件反射/",
+      "/articles/思维模型讲义10-规模优势大为什么会变强/": "/articles/思维模型讲义07-规模效应优势如何增强组织如何变蠢/",
+      "/articles/思维模型讲义11-规模劣势大为什么会变蠢/": "/articles/思维模型讲义07-规模效应优势如何增强组织如何变蠢/",
+      "/articles/思维模型讲义12-竞争模型为什么有些行业赚钱/": "/articles/思维模型讲义08-竞争与技术行业利润最终归谁/",
+      "/articles/思维模型讲义13-技术模型新技术帮你还是毁掉你/": "/articles/思维模型讲义08-竞争与技术行业利润最终归谁/",
+      "/articles/思维模型讲义15-合奏效应多个模型同时指向同一个结论/": "/articles/思维模型讲义09-合奏效应多个模型如何共同作用/",
+      "/articles/逆向思维-反过来想总是反过来想/": "/articles/思维模型讲义10-逆向思维与检查清单/",
+      "/articles/检查清单-像飞行员一样起飞前逐项核对/": "/articles/思维模型讲义10-逆向思维与检查清单/",
+      "/articles/客观与理性-把追求理性当作一种道德义务/": "/articles/思维模型讲义11-客观理性与常识/",
+      "/articles/常识-并不常见的判断力/": "/articles/思维模型讲义11-客观理性与常识/",
+      "/articles/终身学习-每天醒来都比昨天聪明一点/": "/articles/思维模型讲义12-终身学习让模型持续更新/"
     });
+  });
+
+  it("uses 23 direct redirects whose targets are final article routes", () => {
+    const sources = Object.keys(LEGACY_ARTICLE_REDIRECTS);
+    const targets = Object.values(LEGACY_ARTICLE_REDIRECTS);
+    const articleRoutes = new Set(loadArticles().map((article) => `/articles/${article.slug}/`));
+
+    expect(sources).toHaveLength(23);
+    expect(targets.every((target) => !sources.includes(target))).toBe(true);
+    expect(targets.every((target) => articleRoutes.has(target))).toBe(true);
   });
 });
