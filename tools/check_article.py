@@ -70,7 +70,7 @@ def parse_quote_blocks(text):
         if not joined.strip():
             continue
         if '——' in joined:
-            i = joined.index('——')
+            i = joined.rindex('——')
             out.append((joined[:i], joined[i:]))
         else:
             out.append((joined, ""))

@@ -117,6 +117,9 @@ describe("loaders against repository content", () => {
     expect(rationality?.body).toContain("道德追求");
     expect(rationality?.body).toContain("有组织的常识");
     expect(rationality?.body).toContain("反面证据");
+    expect(rationality?.body).toContain("大学不受当地分区规划规则的限制");
+    expect(rationality?.body).toContain("芒格描述投资经理买入高收益的 AAA 级抵押证券");
+    expect(rationality?.body).not.toContain("汤姆·汤布雷洛描述投资经理");
     expect(rationality?.aliases).toEqual(expect.arrayContaining(["常识"]));
   });
 
