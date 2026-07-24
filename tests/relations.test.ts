@@ -101,7 +101,7 @@ describe("articlesForTopic", () => {
     expect(lectures.map((article) => article.order)).toEqual(Array.from({ length: 21 }, (_, index) => index + 1));
     expect(lectures.slice(15).map((article) => article.keyword)).toEqual([
       "跨学科 / 普世智慧",
-      "逆向思维 / 反过来想",
+      "逆向思维",
       "检查清单",
       "客观与理性",
       "常识",
