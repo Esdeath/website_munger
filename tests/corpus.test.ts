@@ -91,6 +91,19 @@ describe("loaders against repository content", () => {
     );
   });
 
+  it("absorbs scale disadvantages and technology topics into their lecture counterparts", () => {
+    const articles = loadArticles();
+    const scale = articles.find((article) => article.title.startsWith("思维模型讲义10"));
+    const competition = articles.find((article) => article.title.startsWith("思维模型讲义12"));
+
+    expect(scale?.body).toContain("规模优势");
+    expect(scale?.body).toContain("规模劣势");
+    expect(scale?.body).toContain("官僚");
+    expect(competition?.body).toContain("普通商品");
+    expect(competition?.body).toContain("纺织机");
+    expect(competition?.body).toContain("竞争性毁灭");
+  });
+
   it("normalizes article dates to YYYY-MM-DD strings", () => {
     const datedArticle = loadArticles().find((article) => article.date !== undefined);
 
