@@ -18,6 +18,7 @@ const articles = [
     filePath: "articles/能力圈-知道自己不知道什么.md",
     title: "能力圈:知道自己不知道什么",
     keyword: "能力圈",
+    aliases: [],
     category: "投资原则",
     quoteCount: 16,
     sources: ["每日期刊股东会讲话(2017)"],
@@ -30,6 +31,7 @@ const articles = [
     filePath: "articles/护城河-宽且不断变宽的护城河.md",
     title: "护城河:宽且不断变宽的护城河",
     keyword: "护城河",
+    aliases: [],
     category: "投资原则",
     quoteCount: 18,
     sources: ["西科金融股东会讲话(2002)"],
@@ -42,6 +44,7 @@ const articles = [
     filePath: "articles/多元思维模型-把知识挂上格栅.md",
     title: "多元思维模型:把知识挂上格栅",
     keyword: "多元思维模型",
+    aliases: [],
     category: "思维方法",
     quoteCount: 17,
     sources: ["每日期刊股东会讲话(2017)"],
@@ -130,6 +133,7 @@ describe("articlesForTopic", () => {
       filePath: "articles/利率-资产价格的重力.md",
       title: "利率:资产价格的重力",
       keyword: "利率",
+      aliases: [],
       category: "宏观警示",
       quoteCount: 20,
       sources: [],
@@ -151,6 +155,7 @@ describe("articlesForTopic", () => {
       filePath: "articles/可口可乐-定价权的复利机器.md",
       title: "可口可乐:定价权的复利机器",
       keyword: "可口可乐",
+      aliases: [],
       category: "公司案例",
       quoteCount: 22,
       sources: [],
@@ -184,6 +189,18 @@ describe("buildSourceArticleMap", () => {
 });
 
 describe("mentionedArticlesForSource", () => {
+  it("matches aliases while returning one article", () => {
+    const lecture = {
+      ...articles[2],
+      keyword: "多元思维模型",
+      aliases: ["铁锤人综合症", "跨学科智慧"],
+      category: "思维模型讲义"
+    } satisfies KnowledgeArticle;
+    const source = { ...sources[0], body: "铁锤人综合症与跨学科智慧" } satisfies OriginalSource;
+
+    expect(mentionedArticlesForSource(source, [lecture])).toEqual([lecture]);
+  });
+
   it("matches body keywords and keeps one stable article per keyword", () => {
     const source = {
       ...sources[0],

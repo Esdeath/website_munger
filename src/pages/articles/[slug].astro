@@ -2,7 +2,7 @@
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import { loadArticles, loadOriginalSources } from "../../lib/corpus";
 import { renderMarkdownToHtml } from "../../lib/render";
-import { relatedArticles, sourcesForArticle } from "../../lib/relations";
+import { articleKeywords, relatedArticles, sourcesForArticle } from "../../lib/relations";
 import { buildArticleSchema, buildBreadcrumbSchema, canonicalUrl } from "../../lib/seo";
 
 export function getStaticPaths() {
@@ -14,10 +14,12 @@ const allArticles = loadArticles();
 const sources = loadOriginalSources();
 const matchedSources = sourcesForArticle(article, sources);
 const related = relatedArticles(article, allArticles);
-const keywordLinks = allArticles.map((item) => ({
-  keyword: item.keyword,
-  href: `/articles/${item.slug}/`
-}));
+const keywordLinks = allArticles.flatMap((item) =>
+  articleKeywords(item).map((keyword) => ({
+    keyword,
+    href: `/articles/${item.slug}/`
+  }))
+);
 const rendered = await renderMarkdownToHtml(article.body, {
   currentHref: `/articles/${article.slug}/`,
   keywordLinks

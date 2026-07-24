@@ -19,6 +19,7 @@ describe("source detail page", () => {
     expect(keywords).toBeGreaterThan(directory);
     expect(related).toBeGreaterThan(keywords);
     expect(sourcePage).toContain("const mentionedArticles = mentionedArticlesForSource(source, articles);");
+    expect(sourcePage).toContain("articleKeywords(article).map((keyword) => ({");
     expect(sourcePage).toContain("source.headings.map((heading) => (");
     expect(sourcePage).toContain('<li><a href={`#${heading.slug}`}>{heading.text}</a></li>');
     expect(sourcePage).toContain("mentionedArticles.map((article) => (");

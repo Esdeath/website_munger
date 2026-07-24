@@ -5,6 +5,10 @@ export function topicForCategory(category: string): string {
   return category;
 }
 
+export function articleKeywords(article: KnowledgeArticle): string[] {
+  return [...new Set([article.keyword, ...article.aliases].map((keyword) => keyword.trim()).filter(Boolean))];
+}
+
 function sourceLabelMatchesTitle(label: string, title: string): boolean {
   const normalizedLabel = label.replace(/\s+/g, "");
   const normalizedTitle = title.replace(/\s+/g, "");
@@ -52,16 +56,17 @@ export function mentionedArticlesForSource(
   source: OriginalSource,
   articles: KnowledgeArticle[]
 ): KnowledgeArticle[] {
-  const seenKeywords = new Set<string>();
+  const claimedKeywords = new Set<string>();
 
   return [...articles]
     .sort(compareArticlesForDisplay)
     .filter((article) => {
-      const keyword = article.keyword.trim();
-      if (!keyword || seenKeywords.has(keyword) || !source.body.includes(keyword)) {
+      const keywords = articleKeywords(article);
+      const match = keywords.find((keyword) => source.body.includes(keyword) && !claimedKeywords.has(keyword));
+      if (!match) {
         return false;
       }
-      seenKeywords.add(keyword);
+      keywords.forEach((keyword) => claimedKeywords.add(keyword));
       return true;
     });
 }

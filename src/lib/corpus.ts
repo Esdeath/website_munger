@@ -12,6 +12,7 @@ export interface KnowledgeArticle {
   filePath: string;
   title: string;
   keyword: string;
+  aliases: string[];
   category: string;
   order?: number;
   quoteCount: number;
@@ -129,6 +130,7 @@ export function loadArticles(): KnowledgeArticle[] {
       filePath,
       title: parsed.data.title ?? path.parse(filePath).name,
       keyword: parsed.data.keyword ?? path.parse(filePath).name.split("-")[0],
+      aliases: Array.isArray(parsed.data.aliases) ? parsed.data.aliases : [],
       category: parsed.data.category ?? "未分类",
       order: typeof parsed.data.order === "number" ? parsed.data.order : undefined,
       quoteCount: parsed.data.quote_count ?? 0,

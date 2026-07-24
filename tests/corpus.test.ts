@@ -44,6 +44,12 @@ describe("loaders against repository content", () => {
     expect(articles.find((article) => article.keyword === "能力圈")).toBeDefined();
   });
 
+  it("loads article keyword aliases", () => {
+    const lecture = loadArticles().find((article) => article.title.startsWith("思维模型讲义01"));
+
+    expect(lecture?.aliases).toEqual(expect.arrayContaining(["铁锤人综合症"]));
+  });
+
   it("absorbs the three duplicate thought-method articles into their lecture counterparts", () => {
     const articles = loadArticles();
     const lecture01 = articles.find((article) => article.title.startsWith("思维模型讲义01"));

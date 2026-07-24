@@ -3,6 +3,7 @@ import BaseLayout from "../../layouts/BaseLayout.astro";
 import { loadArticles, loadOriginalSources } from "../../lib/corpus";
 import { renderMarkdownToHtml } from "../../lib/render";
 import {
+  articleKeywords,
   buildSourceArticleMap,
   mentionedArticlesForSource,
   sameYearSources
@@ -23,10 +24,12 @@ const citedBy = sourceArticleMap.get(source.slug) ?? [];
 const mentionedArticles = mentionedArticlesForSource(source, articles);
 const sameYear = sameYearSources(source, allSources);
 const bodyWithoutDuplicateTitle = source.body.replace(new RegExp(`^#\\s+${source.title.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}\\s*\\n+`), "");
-const keywordLinks = articles.map((article) => ({
-  keyword: article.keyword,
-  href: `/articles/${article.slug}/`
-}));
+const keywordLinks = articles.flatMap((article) =>
+  articleKeywords(article).map((keyword) => ({
+    keyword,
+    href: `/articles/${article.slug}/`
+  }))
+);
 const rendered = await renderMarkdownToHtml(bodyWithoutDuplicateTitle, { keywordLinks });
 const sourceLabel = sourceTypeLabel(source);
 const structuredData = [

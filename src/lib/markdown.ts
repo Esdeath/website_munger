@@ -8,6 +8,7 @@ import { textToSlug } from "./slug";
 export interface ArticleFrontMatter {
   title?: string;
   keyword?: string;
+  aliases?: string[];
   category?: string;
   order?: number;
   quote_count?: number;
