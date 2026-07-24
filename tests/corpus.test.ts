@@ -74,6 +74,23 @@ describe("loaders against repository content", () => {
     );
   });
 
+  it("absorbs hard-science and misjudgment-psychology topics into their lecture counterparts", () => {
+    const articles = loadArticles();
+    const hardScience = articles.find((article) => article.title.startsWith("思维模型讲义04"));
+    const psychology = articles.find((article) => article.title.startsWith("思维模型讲义07"));
+
+    expect(hardScience?.body).toContain("后备系统");
+    expect(hardScience?.body).toContain("临界点");
+    expect(hardScience?.body).toContain("非线性");
+    expect(hardScience?.aliases).toEqual(expect.arrayContaining(["物理学模型"]));
+    expect(psychology?.body).toContain("激励机制");
+    expect(psychology?.body).toContain("社会认同");
+    expect(psychology?.body).toContain("巴甫洛夫联想");
+    expect(psychology?.aliases).toEqual(
+      expect.arrayContaining(["激励机制", "社会认同与巴甫洛夫联想", "社会认同", "巴甫洛夫联想"])
+    );
+  });
+
   it("normalizes article dates to YYYY-MM-DD strings", () => {
     const datedArticle = loadArticles().find((article) => article.date !== undefined);
 
