@@ -66,12 +66,17 @@ def parse_quote_blocks(text):
         blocks.append(cur)
     out = []
     for grp in blocks:
-        joined = " ".join(x for x in grp if x)
-        if not joined.strip():
+        nonblank = [x for x in grp if x]
+        if not nonblank:
             continue
-        if '——' in joined:
-            i = joined.rindex('——')
-            out.append((joined[:i], joined[i:]))
+        if nonblank[-1].startswith('——'):
+            out.append((" ".join(nonblank[:-1]), nonblank[-1]))
+            continue
+        joined = " ".join(nonblank)
+        citation_marker = '——《'
+        if citation_marker in joined:
+            i = joined.rindex(citation_marker)
+            out.append((joined[:i].rstrip(), joined[i:]))
         else:
             out.append((joined, ""))
     return out
