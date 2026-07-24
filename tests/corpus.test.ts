@@ -104,6 +104,22 @@ describe("loaders against repository content", () => {
     expect(competition?.body).toContain("竞争性毁灭");
   });
 
+  it("absorbs checklist and common-sense methods into their judgment-discipline articles", () => {
+    const articles = loadArticles();
+    const inversion = articles.find((article) => article.keyword === "逆向思维");
+    const rationality = articles.find((article) => article.keyword === "客观与理性");
+
+    expect(inversion?.body).toContain("检查清单");
+    expect(inversion?.body).toContain("飞行员");
+    expect(inversion?.aliases).toEqual(
+      expect.arrayContaining(["逆向思维 / 反过来想", "反过来想", "检查清单"])
+    );
+    expect(rationality?.body).toContain("道德追求");
+    expect(rationality?.body).toContain("有组织的常识");
+    expect(rationality?.body).toContain("反面证据");
+    expect(rationality?.aliases).toEqual(expect.arrayContaining(["常识"]));
+  });
+
   it("normalizes article dates to YYYY-MM-DD strings", () => {
     const datedArticle = loadArticles().find((article) => article.date !== undefined);
 
