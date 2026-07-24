@@ -56,9 +56,12 @@ describe("loaders against repository content", () => {
     const lecture02 = articles.find((article) => article.title.startsWith("思维模型讲义02"));
     const lecture15 = articles.find((article) => article.title.startsWith("思维模型讲义15"));
 
+    expect(lecture01?.body).toContain("专业化思维");
     expect(lecture01?.body).toContain("可口可乐案例");
     expect(lecture01?.body).toContain("《西科金融股东会讲话》2002");
+    expect(lecture02?.body).toContain("彩池投注");
     expect(lecture02?.body).toContain("1962 年油田开采权");
+    expect(lecture02?.body).toContain("永久性损失");
     expect(lecture02?.body).toContain("风险不是报价波动");
     expect(lecture15?.body).toContain("储贷行业危机");
     expect(lecture15?.body).toContain("2021 年谈巴菲特成功");
