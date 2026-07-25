@@ -19,6 +19,12 @@ QUOTE_MINLEN = 6         # 短于此长度的引用片段不参与逐字核验(�
 
 # 各类引号:CJK 括号 + 中英文弯/直引号(用 \u 转义,避免源码里出现真实引号字符)
 _QUOTE_RE = re.compile('[「」『』《》“”‘’"\']')  # 各类引号:CJK括号+中英弯/直引号
+_CITATION_RE = re.compile(r'^——《([^》]+)》.*$')
+
+
+def is_valid_citation(text):
+    match = _CITATION_RE.fullmatch(text)
+    return bool(match and match.group(1).strip())
 
 def normalize(s):
     s = s.replace('**', '')
@@ -69,16 +75,18 @@ def parse_quote_blocks(text):
         nonblank = [x for x in grp if x]
         if not nonblank:
             continue
-        if nonblank[-1].startswith('——'):
+        if is_valid_citation(nonblank[-1]):
             out.append((" ".join(nonblank[:-1]), nonblank[-1]))
             continue
         joined = " ".join(nonblank)
         citation_marker = '——《'
         if citation_marker in joined:
             i = joined.rindex(citation_marker)
-            out.append((joined[:i].rstrip(), joined[i:]))
-        else:
-            out.append((joined, ""))
+            citation = joined[i:]
+            if is_valid_citation(citation):
+                out.append((joined[:i].rstrip(), citation))
+                continue
+        out.append((joined, ""))
     return out
 
 def main(path, check_dup=False):
