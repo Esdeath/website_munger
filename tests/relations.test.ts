@@ -5,6 +5,7 @@ import {
   articlesForTopic,
   buildSourceArticleMap,
   compareArticlesForDisplay,
+  keywordLinksForArticles,
   mentionedArticlesForSource,
   relatedArticles,
   sameYearSources,
@@ -245,6 +246,108 @@ describe("mentionedArticlesForSource", () => {
     expect(mentionedArticlesForSource(source, [articles[0]]).map((article) => article.keyword)).toEqual([
       "能力圈"
     ]);
+  });
+
+  it("returns the umbrella article and live specialists for their own primary terms", () => {
+    const lecture = {
+      ...articles[2],
+      slug: "思维模型讲义06-误判心理学",
+      title: "思维模型讲义06：误判心理学",
+      keyword: "误判心理学",
+      aliases: ["激励机制", "社会认同", "巴甫洛夫联想"],
+      category: "思维模型讲义",
+      order: 6
+    } satisfies KnowledgeArticle;
+    const specialists = [
+      {
+        ...articles[0],
+        slug: "激励机制-永远别低估它的力量",
+        title: "激励机制：永远别低估它的力量",
+        keyword: "激励机制"
+      },
+      {
+        ...articles[0],
+        slug: "社会认同-别人都这么做的危险",
+        title: "社会认同：别人都这么做的危险",
+        keyword: "社会认同"
+      },
+      {
+        ...articles[0],
+        slug: "巴甫洛夫联想-被铃声驯服的心智",
+        title: "巴甫洛夫联想：被铃声驯服的心智",
+        keyword: "巴甫洛夫联想"
+      }
+    ] satisfies KnowledgeArticle[];
+    const source = {
+      ...sources[0],
+      body: "误判心理学会同时检查激励机制、社会认同和巴甫洛夫联想。"
+    } satisfies OriginalSource;
+
+    const matches = mentionedArticlesForSource(source, [lecture, ...specialists]);
+
+    expect(matches).toHaveLength(4);
+    expect(matches.map((article) => article.keyword)).toEqual(
+      expect.arrayContaining(["误判心理学", "激励机制", "社会认同", "巴甫洛夫联想"])
+    );
+  });
+});
+
+describe("keywordLinksForArticles", () => {
+  it("gives an exact primary keyword precedence over another article alias", () => {
+    const lecture = {
+      ...articles[2],
+      slug: "思维模型讲义06-误判心理学",
+      keyword: "误判心理学",
+      aliases: ["激励机制"],
+      order: 6
+    } satisfies KnowledgeArticle;
+    const specialist = {
+      ...articles[0],
+      slug: "激励机制-永远别低估它的力量",
+      keyword: "激励机制"
+    } satisfies KnowledgeArticle;
+
+    expect(
+      keywordLinksForArticles([lecture, specialist]).find((link) => link.keyword === "激励机制")
+    ).toEqual({
+      keyword: "激励机制",
+      href: "/articles/激励机制-永远别低估它的力量/"
+    });
+  });
+
+  it("uses the stable display-order winner for duplicate primary keywords", () => {
+    const later = {
+      ...articles[0],
+      slug: "能力圈-后显示",
+      title: "思维模型讲义02：能力圈",
+      order: 2
+    } satisfies KnowledgeArticle;
+    const earlier = {
+      ...articles[0],
+      slug: "能力圈-先显示",
+      title: "思维模型讲义01：能力圈",
+      order: 1
+    } satisfies KnowledgeArticle;
+
+    expect(keywordLinksForArticles([later, earlier])).toContainEqual({
+      keyword: "能力圈",
+      href: "/articles/能力圈-先显示/"
+    });
+  });
+
+  it("uses an alias when no live primary article owns the term", () => {
+    const lecture = {
+      ...articles[2],
+      slug: "思维模型讲义06-误判心理学",
+      keyword: "误判心理学",
+      aliases: ["激励机制"],
+      order: 6
+    } satisfies KnowledgeArticle;
+
+    expect(keywordLinksForArticles([lecture])).toContainEqual({
+      keyword: "激励机制",
+      href: "/articles/思维模型讲义06-误判心理学/"
+    });
   });
 });
 

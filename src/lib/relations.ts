@@ -1,5 +1,6 @@
 import type { TopicDefinition } from "../content/site";
 import type { KnowledgeArticle, OriginalSource } from "./corpus";
+import type { KeywordLink } from "./render";
 
 export function topicForCategory(category: string): string {
   return category;
@@ -32,6 +33,31 @@ export function compareArticlesForDisplay(a: KnowledgeArticle, b: KnowledgeArtic
   return b.quoteCount - a.quoteCount || a.title.localeCompare(b.title, "zh-Hans-CN");
 }
 
+export function keywordLinksForArticles(articles: KnowledgeArticle[]): KeywordLink[] {
+  const orderedArticles = [...articles].sort(compareArticlesForDisplay);
+  const primaryOwners = new Map<string, string>();
+
+  for (const article of orderedArticles) {
+    const keyword = article.keyword.trim();
+    if (keyword && !primaryOwners.has(keyword)) {
+      primaryOwners.set(keyword, `/articles/${article.slug}/`);
+    }
+  }
+
+  const owners = new Map(primaryOwners);
+  for (const article of orderedArticles) {
+    const href = `/articles/${article.slug}/`;
+    for (const alias of article.aliases) {
+      const keyword = alias.trim();
+      if (keyword && !primaryOwners.has(keyword) && !owners.has(keyword)) {
+        owners.set(keyword, href);
+      }
+    }
+  }
+
+  return [...owners].map(([keyword, href]) => ({ keyword, href }));
+}
+
 export function sourcesForArticle(article: KnowledgeArticle, sources: OriginalSource[]): OriginalSource[] {
   return sources
     .filter((source) => article.sources.some((sourceLabel) => sourceLabelMatchesTitle(sourceLabel, source.title)))
@@ -56,19 +82,25 @@ export function mentionedArticlesForSource(
   source: OriginalSource,
   articles: KnowledgeArticle[]
 ): KnowledgeArticle[] {
-  const claimedKeywords = new Set<string>();
+  const keywordsByHref = new Map<string, string[]>();
+  for (const { keyword, href } of keywordLinksForArticles(articles)) {
+    const keywords = keywordsByHref.get(href) ?? [];
+    keywords.push(keyword);
+    keywordsByHref.set(href, keywords);
+  }
 
-  return [...articles]
-    .sort(compareArticlesForDisplay)
-    .filter((article) => {
-      const keywords = articleKeywords(article);
-      const match = keywords.find((keyword) => source.body.includes(keyword) && !claimedKeywords.has(keyword));
-      if (!match) {
-        return false;
-      }
-      keywords.forEach((keyword) => claimedKeywords.add(keyword));
-      return true;
-    });
+  const matchedHrefs = new Set<string>();
+  return [...articles].sort(compareArticlesForDisplay).filter((article) => {
+    const href = `/articles/${article.slug}/`;
+    if (matchedHrefs.has(href)) {
+      return false;
+    }
+    const matched = keywordsByHref.get(href)?.some((keyword) => source.body.includes(keyword)) ?? false;
+    if (matched) {
+      matchedHrefs.add(href);
+    }
+    return matched;
+  });
 }
 
 export function sameYearSources(

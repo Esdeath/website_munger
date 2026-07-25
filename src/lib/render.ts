@@ -45,12 +45,27 @@ function escapeRegExp(value: string): string {
   return value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 }
 
-function buildKeywordPattern(keywordLinks: KeywordLink[], currentHref?: string): RegExp | null {
-  const keywords = keywordLinks
-    .filter((link) => link.href !== currentHref)
-    .map((link) => link.keyword.trim())
-    .filter(Boolean)
-    .sort((a, b) => b.length - a.length);
+function resolveKeywordLinks(keywordLinks: KeywordLink[], currentHref?: string): Map<string, string> {
+  const resolved = new Map<string, string>();
+
+  for (const link of keywordLinks) {
+    const keyword = link.keyword.trim();
+    if (keyword && !resolved.has(keyword)) {
+      resolved.set(keyword, link.href);
+    }
+  }
+
+  for (const [keyword, href] of resolved) {
+    if (href === currentHref) {
+      resolved.delete(keyword);
+    }
+  }
+
+  return resolved;
+}
+
+function buildKeywordPattern(keywordLinks: Map<string, string>): RegExp | null {
+  const keywords = [...keywordLinks.keys()].sort((a, b) => b.length - a.length);
 
   if (keywords.length === 0) {
     return null;
@@ -112,16 +127,11 @@ function applyKeywordLinks(node: MarkdownNode, keywordLinks: Map<string, string>
 
 function remarkKeywordLinks(options: RenderMarkdownOptions) {
   return (tree: Node) => {
-    const pattern = buildKeywordPattern(options.keywordLinks ?? [], options.currentHref);
+    const keywordLinks = resolveKeywordLinks(options.keywordLinks ?? [], options.currentHref);
+    const pattern = buildKeywordPattern(keywordLinks);
     if (!pattern) {
       return;
     }
-
-    const keywordLinks = new Map(
-      (options.keywordLinks ?? [])
-        .filter((link) => link.href !== options.currentHref)
-        .map((link) => [link.keyword.trim(), link.href] as const)
-    );
     applyKeywordLinks(tree as MarkdownNode, keywordLinks, pattern);
   };
 }

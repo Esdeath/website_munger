@@ -2,6 +2,7 @@ import { readFileSync } from "node:fs";
 import { describe, expect, it } from "vitest";
 
 const sourcePage = readFileSync("src/pages/sources/[slug].astro", "utf8");
+const articlePage = readFileSync("src/pages/articles/[slug].astro", "utf8");
 
 describe("source detail page", () => {
   it("leaves standalone HTML sources to their public static route", () => {
@@ -19,7 +20,8 @@ describe("source detail page", () => {
     expect(keywords).toBeGreaterThan(directory);
     expect(related).toBeGreaterThan(keywords);
     expect(sourcePage).toContain("const mentionedArticles = mentionedArticlesForSource(source, articles);");
-    expect(sourcePage).toContain("articleKeywords(article).map((keyword) => ({");
+    expect(sourcePage).toContain("const keywordLinks = keywordLinksForArticles(articles);");
+    expect(articlePage).toContain("const keywordLinks = keywordLinksForArticles(allArticles);");
     expect(sourcePage).toContain("source.headings.map((heading) => (");
     expect(sourcePage).toContain('<li><a href={`#${heading.slug}`}>{heading.text}</a></li>');
     expect(sourcePage).toContain("mentionedArticles.map((article) => (");

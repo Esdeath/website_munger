@@ -114,6 +114,34 @@ describe("renderMarkdownToHtml", () => {
     ).resolves.toContain(`能力圈和<a href="${encodeURI(moatHref)}">护城河</a>`);
   });
 
+  it("keeps the first owner when duplicate keyword links are supplied", async () => {
+    const specialistHref = "/articles/激励机制-永远别低估它的力量/";
+    const lectureHref = "/articles/思维模型讲义06-误判心理学/";
+
+    const html = await renderMarkdownToHtml("激励机制", {
+      keywordLinks: [
+        { keyword: "激励机制", href: specialistHref },
+        { keyword: "激励机制", href: lectureHref }
+      ]
+    });
+
+    expect(html).toContain(`<a href="${encodeURI(specialistHref)}">激励机制</a>`);
+    expect(html).not.toContain(encodeURI(lectureHref));
+  });
+
+  it("suppresses every term owned by the current article", async () => {
+    await expect(
+      renderMarkdownToHtml("能力圈和投资边界都要与护城河一起看。", {
+        currentHref: abilityCircleHref,
+        keywordLinks: [
+          { keyword: "能力圈", href: abilityCircleHref },
+          { keyword: "投资边界", href: abilityCircleHref },
+          { keyword: "护城河", href: moatHref }
+        ]
+      })
+    ).resolves.toContain(`能力圈和投资边界都要与<a href="${encodeURI(moatHref)}">护城河</a>一起看。`);
+  });
+
   it("rewrites copied Markdown links and unlinks unavailable local documents", async () => {
     const resolve = (url: string) => {
       if (url === "模型.md") return "/thinking-grids/模型/";
