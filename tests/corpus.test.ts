@@ -61,6 +61,20 @@ describe("loaders against repository content", () => {
     expect(lecture01?.body).toContain("《西科金融股东会讲话》2002");
     expect(lecture02?.body).toContain("彩池投注");
     expect(lecture02?.body).toContain("1962 年油田开采权");
+    expect(lecture02?.body).toContain("拍卖制度只允许中间商参加");
+    expect(lecture02?.body).toContain("判断他们不会报出合理价格");
+    expect(lecture02?.body).toContain("两人各付了 1000 美元首付款");
+    expect(lecture02?.body).toContain("其余款项用贷款支付");
+    expect(lecture02?.body).not.toContain("公开报价");
+    expect(lecture02?.body).not.toContain("报价冲突");
+    expect(lecture02?.body).not.toContain("地下储量估计成功概率");
+    expect(lecture02?.sources).toContain("2014年 每日期刊股东会讲话");
+    expect(lecture02?.body).toContain(
+      "股票史上的某位传奇人物有句名言：\u201c 钱是坐着等来的。\u201d坐着等，不是等下一次大跌，靠猜涨跌是做不成投资的。这句话的意思是说，要取得良好的投资业绩，必须要有足够的耐心。有足够的耐心等待，等到机会来临时，果断出手，大量买入。\u300d\n> ——《2016年 每日期刊股东会讲话》"
+    );
+    expect(lecture02?.body).toContain(
+      "做投资，一定要非常耐心，一定要等到好机会出现。价格特别便宜，一眼就能看出来很值，才买入。整天待在那，什么也不做，这是反人性的。\u300d\n> ——《2014年 每日期刊股东会讲话》"
+    );
     expect(lecture02?.body).toContain("永久性损失");
     expect(lecture02?.body).toContain("风险不是报价波动");
     expect(lecture09?.body).toContain("储贷行业危机");
@@ -111,6 +125,12 @@ describe("loaders against repository content", () => {
 
     expect(inversion?.body).toContain("检查清单");
     expect(inversion?.body).toContain("飞行员");
+    expect(inversion?.body).toContain("心理学家解读米尔格拉姆电击实验");
+    expect(inversion?.body).toContain("涉及六种强大的心理倾向");
+    expect(inversion?.body).toContain("房地产评估师先用每英亩价值乘以面积");
+    expect(inversion?.body).toContain("丘陵和输电塔位置");
+    expect(inversion?.body).toContain("「最后我们拿到了60万美元」");
+    expect(inversion?.quoteCount).toBe(20);
     expect(inversion?.aliases).toEqual(
       expect.arrayContaining(["逆向思维 / 反过来想", "反过来想", "检查清单"])
     );
