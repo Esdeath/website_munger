@@ -1,0 +1,33 @@
+import { describe, expect, it } from "vitest";
+import { buildArticleSharePayload } from "../src/lib/article-share";
+
+describe("article share payload", () => {
+  const input = {
+    siteTitle: "查理·芒格知识库",
+    title: "能力圈 <边界>",
+    url: "https://munger.ayaseeri.com/articles/能力圈/?from=a&b=c",
+    markdown: "\n## 第一节\n\n> 保留引用。\n",
+    html: '<h2 id="first">第一节</h2><blockquote><p>保留引用。</p></blockquote>'
+  };
+
+  it("wraps Markdown with linked site and article attribution at both ends", () => {
+    const payload = buildArticleSharePayload(input);
+    const attribution = `[查理·芒格知识库](${input.url}) · [能力圈 <边界>](${input.url})`;
+
+    expect(payload.markdown).toBe(
+      `${attribution}\n\n# 能力圈 <边界>\n\n## 第一节\n\n> 保留引用。\n\n---\n\n${attribution}`
+    );
+    expect(payload.markdown.match(/查理·芒格知识库/g)).toHaveLength(2);
+    expect(payload.markdown.match(/能力圈 <边界>/g)).toHaveLength(3);
+  });
+
+  it("wraps rendered HTML without changing article structure", () => {
+    const payload = buildArticleSharePayload(input);
+
+    expect(payload.html).toContain("<h1>能力圈 &lt;边界&gt;</h1>");
+    expect(payload.html).toContain(input.html);
+    expect(payload.html.match(/查理·芒格知识库/g)).toHaveLength(2);
+    expect(payload.html.match(/能力圈 &lt;边界&gt;/g)).toHaveLength(3);
+    expect(payload.html).toContain("?from=a&amp;b=c");
+  });
+});
