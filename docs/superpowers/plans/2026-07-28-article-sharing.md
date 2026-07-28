@@ -6,7 +6,7 @@
 
 **Architecture:** A pure TypeScript formatter builds equivalent Markdown and HTML payloads with the required attribution at both ends. A shared Astro component embeds the page-specific payload and handles Clipboard API feature detection, fallback, and accessible feedback; both detail routes render that component below their header metadata.
 
-**Tech Stack:** Astro 4, TypeScript, browser Clipboard API, `lucide-astro`, Vitest, CSS.
+**Tech Stack:** Astro 4, TypeScript, browser Clipboard API, `@lucide/astro`, Vitest, CSS.
 
 ## Global Constraints
 
@@ -26,7 +26,7 @@
 - Modify `src/pages/articles/[slug].astro`: pass explanatory article content and canonical URL to the component.
 - Modify `src/pages/sources/[slug].astro`: pass title-deduplicated original Markdown and canonical URL to the component.
 - Modify `src/styles/global.css`: stable share-action sizing, states, focus behavior, and mobile fit.
-- Modify `package.json` and `package-lock.json`: add `lucide-astro` for the Share2 icon.
+- Modify `package.json` and `package-lock.json`: add `@lucide/astro` for the Share2 icon.
 
 ---
 
@@ -168,7 +168,7 @@ describe("article sharing integration", () => {
   const sourcePage = readFileSync("src/pages/sources/[slug].astro", "utf8");
 
   it("writes rich and Markdown clipboard formats with a plain-text fallback", () => {
-    expect(component).toContain('import { Share2 } from "lucide-astro"');
+    expect(component).toContain('import { Share2 } from "@lucide/astro"');
     expect(component).toContain('data-share-button');
     expect(component).toContain('role="status"');
     expect(component).toContain('"text/html"');
@@ -197,9 +197,9 @@ Expected: formatter tests PASS and integration setup FAIL because `src/component
 
 - [ ] **Step 3: Install the icon dependency**
 
-Run: `npm install lucide-astro`
+Run: `npm install @lucide/astro`
 
-Expected: `package.json` and `package-lock.json` record a compatible `lucide-astro` release.
+Expected: `package.json` and `package-lock.json` record a compatible `@lucide/astro` release.
 
 - [ ] **Step 4: Build the shared Astro component**
 

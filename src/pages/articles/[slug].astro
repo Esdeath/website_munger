@@ -1,4 +1,5 @@
 ---
+import ArticleShare from "../../components/ArticleShare.astro";
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import { loadArticles, loadOriginalSources } from "../../lib/corpus";
 import { renderMarkdownToHtml } from "../../lib/render";
@@ -48,6 +49,12 @@ const structuredData = [
         <p>{article.category}</p>
         <p class="reader-intro">{article.excerpt}</p>
       </header>
+      <ArticleShare
+        title={article.title}
+        url={canonicalUrl(`/articles/${article.slug}/`)}
+        markdown={article.body}
+        html={rendered}
+      />
       <div class="article-body" set:html={rendered} />
     </div>
 

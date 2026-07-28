@@ -1,4 +1,5 @@
 ---
+import ArticleShare from "../../components/ArticleShare.astro";
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import { loadArticles, loadOriginalSources } from "../../lib/corpus";
 import { renderMarkdownToHtml } from "../../lib/render";
@@ -8,7 +9,7 @@ import {
   mentionedArticlesForSource,
   sameYearSources
 } from "../../lib/relations";
-import { buildBreadcrumbSchema, buildCreativeWorkSchema, sourceTypeLabel } from "../../lib/seo";
+import { buildBreadcrumbSchema, buildCreativeWorkSchema, canonicalUrl, sourceTypeLabel } from "../../lib/seo";
 
 export function getStaticPaths() {
   return loadOriginalSources()
@@ -50,6 +51,12 @@ const structuredData = [
         <h1>{source.title}</h1>
         <p>{sourceLabel}</p>
       </header>
+      <ArticleShare
+        title={source.title}
+        url={canonicalUrl(`/sources/${source.slug}/`)}
+        markdown={bodyWithoutDuplicateTitle}
+        html={rendered}
+      />
       <div class="article-body" set:html={rendered} />
     </div>
 

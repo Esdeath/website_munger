@@ -1,0 +1,99 @@
+---
+import { Share2 } from "@lucide/astro";
+import { SITE_TITLE } from "../content/site";
+import { buildArticleSharePayload } from "../lib/article-share";
+
+interface Props {
+  title: string;
+  url: string;
+  markdown: string;
+  html: string;
+}
+
+const { title, url, markdown, html } = Astro.props;
+const payload = buildArticleSharePayload({ siteTitle: SITE_TITLE, title, url, markdown, html });
+const serializedPayload = JSON.stringify(payload).replaceAll("<", "\\u003c");
+const statusId = "article-share-status";
+---
+
+<div class="article-share" data-article-share>
+  <button class="article-share-button" type="button" data-share-button aria-describedby={statusId}>
+    <Share2 size={16} stroke-width={2} aria-hidden="true" />
+    <span data-share-label>分享</span>
+  </button>
+  <span class="article-share-status" id={statusId} role="status" aria-live="polite"></span>
+  <script is:inline type="application/json" data-share-payload set:html={serializedPayload}></script>
+</div>
+
+<script>
+  interface SharePayload {
+    markdown: string;
+    html: string;
+  }
+
+  async function writeSharePayload(payload: SharePayload): Promise<void> {
+    if (!navigator.clipboard) {
+      throw new Error("Clipboard API unavailable");
+    }
+
+    if (typeof ClipboardItem !== "undefined" && typeof navigator.clipboard.write === "function") {
+      try {
+        const item = new ClipboardItem({
+          "text/html": new Blob([payload.html], { type: "text/html" }),
+          "text/plain": new Blob([payload.markdown], { type: "text/plain" })
+        });
+        await navigator.clipboard.write([item]);
+        return;
+      } catch {
+        // Some browsers expose rich clipboard APIs but reject specific MIME types.
+      }
+    }
+
+    if (typeof navigator.clipboard.writeText === "function") {
+      await navigator.clipboard.writeText(payload.markdown);
+      return;
+    }
+
+    throw new Error("Clipboard write unavailable");
+  }
+
+  document.querySelectorAll<HTMLElement>("[data-article-share]").forEach((root) => {
+    if (root.dataset.shareInitialized === "true") {
+      return;
+    }
+
+    const button = root.querySelector<HTMLButtonElement>("[data-share-button]");
+    const label = root.querySelector<HTMLElement>("[data-share-label]");
+    const status = root.querySelector<HTMLElement>("[role='status']");
+    const payloadElement = root.querySelector<HTMLScriptElement>("[data-share-payload]");
+    if (!button || !label || !status || !payloadElement?.textContent) {
+      return;
+    }
+
+    const payload = JSON.parse(payloadElement.textContent) as SharePayload;
+    let resetTimer: number | undefined;
+    root.dataset.shareInitialized = "true";
+
+    button.addEventListener("click", async () => {
+      window.clearTimeout(resetTimer);
+      button.disabled = true;
+      label.textContent = "复制中";
+      status.textContent = "";
+
+      try {
+        await writeSharePayload(payload);
+        label.textContent = "已复制";
+        status.textContent = "文章和格式已复制";
+        resetTimer = window.setTimeout(() => {
+          label.textContent = "分享";
+          status.textContent = "";
+        }, 2000);
+      } catch {
+        label.textContent = "分享";
+        status.textContent = "复制失败，请重试";
+      } finally {
+        button.disabled = false;
+      }
+    });
+  });
+</script>
