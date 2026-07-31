@@ -1329,6 +1329,90 @@ input:focus-visible {
   color: var(--muted, #7b7268);
 }
 
+.book-list-group {
+  margin: 0 0 3rem;
+  scroll-margin-top: 1.5rem;
+}
+
+.book-group-description {
+  max-width: 46rem;
+  color: var(--muted, #7b7268);
+  line-height: 1.7;
+  margin: 0 0 1.5rem;
+}
+
+.book-entries {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  gap: 1.75rem;
+}
+
+.book-entry {
+  padding-left: 1rem;
+  border-left: 3px solid var(--line, #ead8c3);
+}
+
+.book-entry-title {
+  font-weight: 600;
+  margin: 0 0 0.35rem;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.5rem;
+}
+
+.book-entry-index {
+  color: var(--muted, #7b7268);
+  font-variant-numeric: tabular-nums;
+  font-weight: 400;
+}
+
+.book-status {
+  font-size: 0.75rem;
+  font-weight: 500;
+  padding: 0.1rem 0.5rem;
+  border-radius: 999px;
+  border: 1px solid var(--line, #ead8c3);
+  color: var(--muted, #7b7268);
+  white-space: nowrap;
+}
+
+.book-status-simplified {
+  background: var(--green-soft, #e8f0e4);
+  border-color: var(--green, #6b8f5e);
+  color: var(--green-dark, #47653d);
+}
+
+.book-entry-original {
+  margin: 0 0 0.25rem;
+  font-size: 0.9rem;
+  color: var(--muted, #7b7268);
+}
+
+.book-entry-meta {
+  margin: 0 0 0.25rem;
+  font-size: 0.875rem;
+  color: var(--muted, #7b7268);
+}
+
+.book-entry-note {
+  margin: 0;
+  font-size: 0.875rem;
+  line-height: 1.7;
+  color: var(--muted, #7b7268);
+}
+
+.book-pitfalls {
+  max-width: 46rem;
+  margin: 0;
+  padding-left: 1.25rem;
+  display: grid;
+  gap: 0.75rem;
+  line-height: 1.7;
+}
+
 .sidebar-toplink {
   display: block;
   font-weight: 600;

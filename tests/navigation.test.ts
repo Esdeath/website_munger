@@ -4,6 +4,7 @@ import type { KnowledgeArticle, OriginalSource } from "../src/lib/corpus";
 import {
   buildArchiveCards,
   buildSidebarSections,
+  BOOK_LIST_NAV,
   SEEKING_WISDOM_NAV,
   STOP_DOING_NAV,
   THINKING_GRID_NAV
@@ -146,6 +147,12 @@ describe("STOP_DOING_NAV", () => {
 describe("THINKING_GRID_NAV", () => {
   it("is a top-level entry pointing at the thinking grid index", () => {
     expect(THINKING_GRID_NAV).toEqual({ label: "思维格栅", href: "/thinking-grids/" });
+  });
+});
+
+describe("BOOK_LIST_NAV", () => {
+  it("is a top-level entry pointing at /book-list/", () => {
+    expect(BOOK_LIST_NAV).toEqual({ label: "芒格书单", href: "/book-list/" });
   });
 });
 

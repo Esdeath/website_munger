@@ -3,6 +3,7 @@ import "../styles/global.css";
 import { SITE_AUTHOR, SITE_DESCRIPTION, SITE_KEYWORDS, SITE_TITLE } from "../content/site";
 import { loadArticles, loadOriginalSources } from "../lib/corpus";
 import {
+  BOOK_LIST_NAV,
   buildSidebarSections,
   SEEKING_WISDOM_NAV,
   STOP_DOING_NAV,
@@ -40,6 +41,7 @@ const thinkingGridActive = decodeURIComponent(Astro.url.pathname).replace(/\/$/,
 );
 const seekingWisdomActive =
   decodeURIComponent(Astro.url.pathname).replace(/\/$/, "") === SEEKING_WISDOM_NAV.href.replace(/\/$/, "");
+const bookListActive = decodeURIComponent(Astro.url.pathname).replace(/\/$/, "") === BOOK_LIST_NAV.href.replace(/\/$/, "");
 ---
 
 <!doctype html>
@@ -119,6 +121,11 @@ const seekingWisdomActive =
                   href={SEEKING_WISDOM_NAV.href}
                 >
                   {SEEKING_WISDOM_NAV.label}
+                </a>
+              </li>
+              <li>
+                <a class:list={["sidebar-toplink", bookListActive && "is-active"]} href={BOOK_LIST_NAV.href}>
+                  {BOOK_LIST_NAV.label}
                 </a>
               </li>
             </ul>

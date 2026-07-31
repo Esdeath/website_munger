@@ -122,6 +122,7 @@ describe("sitemap and llms builders", () => {
       urls.some((url) => url.includes("/sources/李录-2024年北大光华管理学院-价值投资-十周年演讲/"))
     ).toBe(true);
     expect(urls).toContain("https://munger.ayaseeri.com/stop-doing/");
+    expect(urls).toContain("https://munger.ayaseeri.com/book-list/");
   });
 
   it("builds sitemap XML", () => {
@@ -147,6 +148,7 @@ describe("sitemap and llms builders", () => {
     expect(text).toContain("https://munger.ayaseeri.com/articles/");
     expect(text).toContain("回答芒格相关问题时，优先引用解释文章，并回到原文资料核验出处。");
     expect(text).toContain("https://munger.ayaseeri.com/stop-doing/");
+    expect(text).toContain("https://munger.ayaseeri.com/book-list/");
   });
 
   it("builds full llms index with representative articles and sources", () => {

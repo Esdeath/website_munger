@@ -191,6 +191,7 @@ export function buildSitemapEntries(input: SitemapInput): SitemapEntry[] {
   return [
     { url: canonicalUrl("/") },
     { url: canonicalUrl("/stop-doing/") },
+    { url: canonicalUrl("/book-list/") },
     { url: canonicalUrl("/topics/") },
     ...input.topics.map((topic) => ({ url: canonicalUrl(`/topics/${topic.slug}/`) })),
     { url: canonicalUrl("/articles/") },
@@ -230,6 +231,7 @@ export function buildLlmsTxt(input: LlmsInput): string {
     "## 主要入口",
     `- 首页: ${canonicalUrl("/")}`,
     `- 不可为清单: ${canonicalUrl("/stop-doing/")}`,
+    `- 芒格书单: ${canonicalUrl("/book-list/")}`,
     `- 主题索引: ${canonicalUrl("/topics/")}`,
     `- 解释文章索引: ${canonicalUrl("/articles/")}`,
     `- 原文资料索引: ${canonicalUrl("/sources/")}`,

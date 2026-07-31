@@ -93,5 +93,6 @@ export function buildArchiveCards(topics: TopicDefinition[], articles: Knowledge
 }
 
 export const STOP_DOING_NAV = { label: "不可为清单", href: "/stop-doing/" } as const;
+export const BOOK_LIST_NAV = { label: "芒格书单", href: "/book-list/" } as const;
 export const THINKING_GRID_NAV = { label: "思维格栅", href: "/thinking-grids/" } as const;
 export const SEEKING_WISDOM_NAV = { label: "探索智慧", href: "/sources/seeking-wisdom-中文版/" } as const;

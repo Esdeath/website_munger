@@ -1,0 +1,90 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import { loadBookList, statusDisplayLabel } from "../lib/book-list";
+import { buildCollectionPageSchema, canonicalUrl } from "../lib/seo";
+
+const groups = loadBookList();
+const totalCount = groups.reduce((sum, group) => sum + group.books.length, 0);
+
+const description =
+  "查理·芒格公开推荐过的46本书：《穷查理宝典》正式书单20本、股东会与荐语明确推荐19项、强正面评价7项，附中文版核对状态与豆瓣链接。";
+
+const structuredData = buildCollectionPageSchema({
+  title: "芒格书单",
+  description,
+  pathname: "/book-list/",
+  itemUrls: groups.map((group) => canonicalUrl(`/book-list/#${group.definition.slug}`))
+});
+
+const pitfalls = [
+  "《Andrew Carnegie》（第7项）的作者必须是 Joseph Frazier Wall。中文市场上同名或近似书名的卡内基传记很多，不能只看书名替换。",
+  "三本富兰克林书不是一本：第11项是富兰克林自传，第22项是 Carl Van Doren 所著传记，第28项是 Walter Isaacson 所著传记。",
+  "《林登·约翰逊传》（第27项）是一个系列，按原清单只计1项。中文已确认出版第1卷《权力之路》，豆瓣预告页不能当作已经出版。",
+  "《科学火星人》（第31项）已于2023年出版简体版，旧网络书单标注的「无中文版」已经过时。",
+  "《基因或教养》（第41项）简体版已于2025年出版，豆瓣直达页目前主要显示繁体版。",
+  "《探索智慧：从达尔文到芒格》（第44项）的豆瓣中文条目出版信息不完整，购买前需核对出版社、ISBN和版权页。",
+  "《In the Plex》（第45项）目前只确认繁体版《Google總部大揭密》，不要把其他介绍Google的简体书当作同一本。"
+];
+---
+
+<BaseLayout title="芒格书单" description={description} structuredData={structuredData}>
+  <section class="page">
+    <p class="eyebrow">芒格书单</p>
+    <h1 class="hero-title">芒格公开推荐过的46本书。</h1>
+    <p class="page-lead">
+      按「39+7」口径整理：前39项来自《穷查理宝典》附录正式书单与股东会明确推荐，后7项是芒格高度肯定或间接背书、但证据强度稍弱的书。每本都核对了英文原名、作者与中文版状态，并给出豆瓣链接。核对日期：2026年7月27日。
+    </p>
+
+    <nav class="anchor-toc" aria-label="分组目录">
+      <ul>
+        {groups.map((group) => (
+          <li>
+            <a href={`#${group.definition.slug}`}>{group.definition.title}</a>
+          </li>
+        ))}
+      </ul>
+    </nav>
+
+    {groups.map((group) => (
+      <section class="book-list-group" id={group.definition.slug}>
+        <h2>{group.definition.title}</h2>
+        <p class="book-group-description">{group.definition.description}</p>
+        <ol class="book-entries">
+          {group.books.map((book) => (
+            <li class="book-entry">
+              <p class="book-entry-title">
+                <span class="book-entry-index">{book.index}</span>
+                <span class="book-entry-name">{book.chineseTitle ?? `《${book.englishTitle}》`}</span>
+                <span class:list={["book-status", `book-status-${book.status}`]}>
+                  {statusDisplayLabel(book.status)}
+                </span>
+              </p>
+              <p class="book-entry-original">
+                {book.englishTitle} —— {book.author} ·
+                <a href={book.doubanUrl} rel="noopener noreferrer" target="_blank">豆瓣</a>
+              </p>
+              <p class="book-entry-meta">推荐出处：{book.recommendation}</p>
+              <p class="book-entry-note">{book.note}</p>
+            </li>
+          ))}
+        </ol>
+      </section>
+    ))}
+
+    <section class="book-list-group" id="pitfalls">
+      <h2>容易买错或查错的重点</h2>
+      <ol class="book-pitfalls">
+        {pitfalls.map((item) => (
+          <li>{item}</li>
+        ))}
+      </ol>
+    </section>
+
+    <section class="book-list-group" id="usage">
+      <h2>使用建议</h2>
+      <p class="book-group-description">
+        购买前至少核对三项：英文原作名、作者、中文版权页上的原作名。这比只看中文书名可靠，因为商业类、传记类图书经常改名再版，也常出现不同原书使用相似中文标题的情况。本书单只做版本与链接核对，不加入主观「推荐指数」或阅读顺序，以免把芒格的真实推荐与整理者的个人判断混在一起。共{totalCount}个书目条目。
+      </p>
+    </section>
+  </section>
+</BaseLayout>
