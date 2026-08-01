@@ -5,6 +5,7 @@ import {
   loadOriginalSources,
   parseCorpusManifest
 } from "../src/lib/corpus";
+import { renderMarkdownToHtml } from "../src/lib/render";
 
 const manifestMarkdown = `# 原始语料清单
 
@@ -171,6 +172,19 @@ describe("loaders against repository content", () => {
     const sources = loadOriginalSources();
     expect(sources.length).toBeGreaterThanOrEqual(80);
     expect(sources.find((source) => source.filePath.includes("2023年 每日期刊股东会讲话"))).toBeDefined();
+  });
+
+  it("does not expose strong-emphasis markers in rendered original sources", async () => {
+    const malformedSources: string[] = [];
+
+    for (const source of loadOriginalSources()) {
+      const html = await renderMarkdownToHtml(source.body);
+      if (html.includes("**")) {
+        malformedSources.push(source.filePath);
+      }
+    }
+
+    expect(malformedSources).toEqual([]);
   });
 
   it("loads the standalone Seeking Wisdom HTML at its established source slug", () => {

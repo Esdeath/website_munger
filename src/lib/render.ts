@@ -41,6 +41,50 @@ function remarkHeadingIds() {
   };
 }
 
+function repairLiteralStrongMarkers(node: MarkdownNode): void {
+  if (!node.children?.length) {
+    return;
+  }
+
+  const nextChildren: MarkdownNode[] = [];
+
+  for (const child of node.children) {
+    if (child.type === "text" && typeof child.value === "string" && child.value.includes("**")) {
+      const repaired: MarkdownNode[] = [];
+      let lastIndex = 0;
+
+      for (const match of child.value.matchAll(/\*\*([^*\n]+?)\*\*/g)) {
+        const index = match.index ?? 0;
+        if (index > lastIndex) {
+          repaired.push({ type: "text", value: child.value.slice(lastIndex, index) });
+        }
+        repaired.push({
+          type: "strong",
+          children: [{ type: "text", value: match[1] }]
+        });
+        lastIndex = index + match[0].length;
+      }
+
+      if (lastIndex > 0) {
+        if (lastIndex < child.value.length) {
+          repaired.push({ type: "text", value: child.value.slice(lastIndex) });
+        }
+        nextChildren.push(...repaired);
+        continue;
+      }
+    }
+
+    repairLiteralStrongMarkers(child);
+    nextChildren.push(child);
+  }
+
+  node.children = nextChildren;
+}
+
+function remarkLiteralStrongMarkers() {
+  return (tree: Node) => repairLiteralStrongMarkers(tree as MarkdownNode);
+}
+
 function escapeRegExp(value: string): string {
   return value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 }
@@ -159,6 +203,7 @@ function remarkRelativeLinks(resolve: NonNullable<RenderMarkdownOptions["relativ
 export async function renderMarkdownToHtml(body: string, options: RenderMarkdownOptions = {}): Promise<string> {
   const processor = remark()
     .use(remarkGfm)
+    .use(remarkLiteralStrongMarkers)
     .use(remarkHeadingIds);
 
   if (options.relativeLinkResolver) {

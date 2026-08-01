@@ -83,6 +83,12 @@ describe("renderMarkdownToHtml", () => {
     );
   });
 
+  it("renders strong labels that end with Chinese punctuation", async () => {
+    await expect(renderMarkdownToHtml("**采访者：**听起来他确实是个理想的老师。")).resolves.toBe(
+      "<p><strong>采访者：</strong>听起来他确实是个理想的老师。</p>\n"
+    );
+  });
+
   it("links keyword mentions to their article pages", async () => {
     await expect(
       renderMarkdownToHtml("能力圈和护城河需要一起看。", {
