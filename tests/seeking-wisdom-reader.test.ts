@@ -4,27 +4,27 @@ import { describe, expect, it } from "vitest";
 const reader = readFileSync("public/sources/seeking-wisdom-中文版/reader.html", "utf8");
 
 describe("Seeking Wisdom standalone reader", () => {
-  it("uses the knowledge-base paper and orange theme", () => {
-    expect(reader).toContain("--bg: #f4f0e8;");
-    expect(reader).toContain("--bg-panel: #fffaf4;");
-    expect(reader).toContain("--text: #2f2a24;");
-    expect(reader).toContain("--accent: #d89138;");
-    expect(reader).not.toContain('id="theme-toggle"');
-    expect(reader).not.toContain("wisdom-theme");
+  it("is the Bevelin reader document", () => {
+    expect(reader).toContain("<title>探索智慧：从达尔文到芒格 —— 皮特·贝弗林</title>");
+    expect(reader).toContain('lang="zh-CN"');
   });
 
-  it("keeps the desktop table of contents on the right", () => {
-    expect(reader).toMatch(/#sidebar \{[\s\S]*?right:0;[\s\S]*?left:auto;/);
-    expect(reader).toContain("border-left:1px solid var(--border);");
-    expect(reader).toContain("#sidebar.collapsed { transform: translateX(100%); }");
-    expect(reader).toMatch(/#main \{[\s\S]*?margin-right: var\(--sidebar-w\);/);
-    expect(reader).toContain("#main.full { margin-right:0; }");
+  it("carries the whole book: four chapters, four appendices, preface and epilogue", () => {
+    for (const id of ["ack", "preface", "ch1", "ch2", "ch3", "ch4", "app1", "app2", "app3", "app4", "epilogue"]) {
+      expect(reader).toContain(`id="${id}"`);
+    }
   });
 
-  it("opens the mobile table of contents from the right", () => {
-    const mobile = reader.slice(reader.indexOf("@media (max-width: 860px)"));
+  it("is fully self-contained so the embedded reader works offline", () => {
+    expect(reader).not.toMatch(/(?:src|href)="https?:\/\//);
+  });
 
-    expect(mobile).toContain("#sidebar { transform: translateX(100%); }");
-    expect(mobile).toContain("#main { margin-right:0;");
+  it("keeps the reader controls: table of contents, font size, search and themes", () => {
+    for (const id of ["menuBtn", "fsDown", "fsUp", "q", "progress", "resume"]) {
+      expect(reader).toContain(`id="${id}"`);
+    }
+    for (const theme of ["light", "warm", "night"]) {
+      expect(reader).toContain(`data-theme="${theme}"`);
+    }
   });
 });
