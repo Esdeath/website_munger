@@ -9,27 +9,15 @@
 
 *,*::before,*::after{box-sizing:border-box}
 :root{
-  --paper:#eceeea; --page:#fcfcfa; --ink:#1b2320; --ink-soft:#485350; --muted:#78837e;
-  --rule:#dbe0db; --rule-soft:#e8ebe7; --amber:#9a6f1c; --sel:#dbe7df;
-  --accent:#5b4a2f; --quote-bg:#f5f0e8;
-  --shadow:0 1px 0 rgba(27,35,32,.04), 0 18px 44px rgba(27,35,32,.06);
+  --paper:#f4f0e8; --panel:#fffaf4; --page:#fffdf8; --ink:#2f2a24; --ink-soft:#544c42; --muted:#7b7268;
+  --rule:#ead8c3; --rule-soft:#fff1da; --amber:#d89138; --sel:#fff1da;
+  --accent:#a85f18; --quote-bg:#fff5eb;
+  --shadow:0 1px 0 rgba(119,75,32,.04), 0 18px 42px rgba(119,75,32,.1);
   --serif:"Songti SC","Noto Serif CJK SC","Source Han Serif SC","SimSun",serif;
   --kai:"Kaiti SC","STKaiti","KaiTi","Songti SC",serif;
   --sans:"PingFang SC","Hiragino Sans GB","Microsoft YaHei","Helvetica Neue",sans-serif;
   --mono:ui-monospace,"SF Mono",SFMono-Regular,Menlo,Consolas,monospace;
   --measure:36em; --gutter:90px; --fs:17px; --bar:52px;
-}
-html[data-theme="warm"]{
-  --paper:#e7ddc9; --page:#f7f0e1; --ink:#2a2318; --ink-soft:#544835;
-  --muted:#857a63; --rule:#ddd0b6; --rule-soft:#eae0cb; --amber:#96671a; --sel:#eadcbb;
-  --accent:#6b5a3f; --quote-bg:#efe5d0;
-  --shadow:0 1px 0 rgba(42,35,24,.05), 0 18px 44px rgba(42,35,24,.08);
-}
-html[data-theme="night"]{
-  --paper:#121513; --page:#1a1e1c; --ink:#dfe4e0; --ink-soft:#b3bcb7; --muted:#828d88;
-  --rule:#2a302d; --rule-soft:#232825; --amber:#c9a052; --sel:#2c3a34;
-  --accent:#d4a858; --quote-bg:#1e2522;
-  --shadow:none;
 }
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--serif);
@@ -41,7 +29,7 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 
 /* ── 顶栏 ─────────── */
 .bar{position:fixed;inset:0 0 auto 0;z-index:40;height:var(--bar);display:flex;align-items:center;
-  gap:14px;padding:0 18px;background:var(--paper);border-bottom:1px solid var(--rule)}
+  gap:14px;padding:0 18px;background:var(--panel);border-bottom:1px solid var(--rule)}
 .controls{display:contents}
 .bar .brand{font-family:var(--kai);font-size:16px;letter-spacing:.04em;white-space:nowrap;
   overflow:hidden;text-overflow:ellipsis;flex:0 1 auto}
@@ -66,8 +54,8 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 .search input:focus + kbd{display:none}
 
 /* ── 目录侧边栏 ─────────── */
-.toc{position:fixed;top:var(--bar);bottom:0;left:0;width:280px;overflow-y:auto;overscroll-behavior:contain;
-  padding:16px 0 60px;border-right:1px solid var(--rule);background:var(--paper);z-index:30}
+.toc{position:fixed;top:var(--bar);bottom:0;right:0;left:auto;width:280px;overflow-y:auto;overscroll-behavior:contain;
+  padding:16px 0 60px;border-left:1px solid var(--rule);background:var(--panel);z-index:30}
 .toc-part{margin:0 0 2px}
 .toc-part>button{display:flex;align-items:baseline;gap:8px;width:100%;padding:8px 16px 6px;
   text-align:left;font-family:var(--sans);font-size:12.5px;line-height:1.45;color:var(--ink-soft);font-weight:600}
@@ -84,11 +72,11 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
   font-family:var(--mono);font-size:10px;line-height:1.9;color:var(--muted);letter-spacing:.05em}
 
 /* ── 正文 ─────────── */
-.wrap{margin-left:280px;padding:var(--bar) 0 0}
+.wrap{margin-right:280px;padding:var(--bar) 0 0}
 .sheet{background:var(--page);min-height:100vh;
   padding:0 clamp(20px,5vw,64px) 22vh}
 .col{max-width:var(--measure);margin:0 auto}
-@media (min-width:1240px){ .col{margin-left:calc(50% - var(--measure)/2 + var(--gutter)/2)} }
+@media (min-width:1240px){ .col{margin-left:calc(50% - var(--measure)/2 - var(--gutter)/2)} }
 
 /* 扉页 */
 .title-page{padding:14vh 0 10vh;border-bottom:1px solid var(--rule);margin-bottom:0}
@@ -211,14 +199,14 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 .tool{font-family:var(--mono);font-size:11px;letter-spacing:.06em;color:var(--muted);
   border:1px solid var(--rule);border-radius:5px;padding:5px 9px;white-space:nowrap}
 
-.resume{position:fixed;left:296px;bottom:22px;z-index:35;display:flex;align-items:center;gap:12px;
+.resume{position:fixed;left:16px;bottom:22px;z-index:35;display:flex;align-items:center;gap:12px;
   background:var(--page);border:1px solid var(--rule);border-radius:6px;padding:9px 12px;
   box-shadow:var(--shadow);font-family:var(--sans);font-size:12.5px;max-width:min(420px,70vw)}
 .resume[hidden]{display:none}
 .resume b{font-weight:600}
 .resume .x{font-family:var(--mono);font-size:11px;color:var(--muted)}
 
-.totop{position:fixed;right:16px;bottom:22px;z-index:35;font-family:var(--mono);font-size:11px;
+.totop{position:fixed;right:296px;bottom:22px;z-index:35;font-family:var(--mono);font-size:11px;
   letter-spacing:.08em;color:var(--muted);background:var(--page);border:1px solid var(--rule);
   border-radius:5px;padding:7px 10px;opacity:0;pointer-events:none;transition:opacity .2s}
 .totop.on{opacity:1;pointer-events:auto}
@@ -226,11 +214,12 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 /* ── 窄屏 ─────────── */
 @media (max-width:900px){
   .menu-btn{display:block}
-  .toc{transform:translateX(-100%);transition:transform .22s ease;box-shadow:var(--shadow)}
+  .toc{transform:translateX(100%);transition:transform .22s ease;box-shadow:var(--shadow)}
   body[data-toc="open"] .toc{transform:none}
-  .wrap{margin-left:0}
+  .wrap{margin-right:0}
   .sheet{padding-left:clamp(18px,5vw,30px);padding-right:clamp(18px,5vw,30px)}
   .resume{left:16px;right:16px;max-width:none}
+  .totop{right:16px}
   .search{flex:1 1 auto}
   .bar .brand{display:none}
   .results{width:100%;border-left:0}
@@ -381,7 +370,7 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 
 /* ══════════ 目录：三级 + 筛选 ══════════ */
 .toc{padding-top:0}
-.toc-filter{position:sticky;top:0;z-index:2;background:var(--paper);
+.toc-filter{position:sticky;top:0;z-index:2;background:var(--panel);
   padding:12px 14px 10px;border-bottom:1px solid var(--rule-soft)}
 .toc-filter input{width:100%;font-family:var(--sans);font-size:12.5px;
   padding:6px 24px 6px 9px;background:var(--page);border:1px solid var(--rule);
@@ -432,11 +421,6 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 <button aria-label="减小字号" id="fsDown">A−</button>
 <button aria-hidden="true" id="fsNow" style="cursor:default" tabindex="-1">17</button>
 <button aria-label="增大字号" id="fsUp">A+</button>
-</div>
-<div aria-label="配色" class="seg" role="group">
-<button aria-pressed="true" data-theme-btn="light">昼</button>
-<button aria-pressed="false" data-theme-btn="warm">暖</button>
-<button aria-pressed="false" data-theme-btn="night">夜</button>
 </div>
 </div>
 </div>
@@ -3514,7 +3498,7 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
       b.setAttribute("aria-pressed", b.dataset.themeBtn===t?"true":"false")})}
   function setSize(px){px=Math.max(14,Math.min(22,px));root.style.setProperty("--fs",px+"px");
     store.set("fs",px);document.getElementById("fsNow").textContent=px}
-  setTheme(store.get("theme","light"));
+  setTheme("light");
   setSize(parseFloat(store.get("fs","17")));
   document.querySelectorAll("[data-theme-btn]").forEach(function(b){
     b.addEventListener("click",function(){setTheme(b.dataset.themeBtn)})});
