@@ -11,8 +11,9 @@ describe("embedded Seeking Wisdom page", () => {
     expect(page).toContain('src="/sources/seeking-wisdom-中文版/reader.html"');
   });
 
-  it("places the top-level entry after the stop-doing list", () => {
-    const topLinks = layout.slice(layout.indexOf('<ul class="sidebar-tree">'), layout.indexOf("{sidebarSections.map"));
+  it("places the top-level entry after the stop-doing list, below the corpus sections", () => {
+    const mapIndex = layout.indexOf("{sidebarSections.map");
+    const topLinks = layout.slice(mapIndex, layout.indexOf("</nav>"));
 
     expect(topLinks.indexOf("STOP_DOING_NAV")).toBeGreaterThanOrEqual(0);
     expect(topLinks.indexOf("SEEKING_WISDOM_NAV")).toBeGreaterThan(topLinks.indexOf("STOP_DOING_NAV"));

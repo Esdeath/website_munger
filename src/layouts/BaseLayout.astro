@@ -103,6 +103,31 @@ const bookListActive = decodeURIComponent(Astro.url.pathname).replace(/\/$/, "")
         </label>
 
         <nav class="sidebar-nav">
+          {sidebarSections.map((section) => (
+            <section class="sidebar-section">
+              <h2>{section.title}</h2>
+              <ul class="sidebar-tree">
+                {section.groups.map((group) => (
+                  <li>
+                    <details open={group.open}>
+                      <summary>
+                        <span class="chevron" aria-hidden="true">›</span>
+                        <span class="sidebar-group-label">{group.label}</span>
+                        <span class="sidebar-count">· {group.count}</span>
+                      </summary>
+                      <ul class="sidebar-leaves">
+                        {group.children.map((leaf) => (
+                          <li>
+                            <a class:list={[leaf.active && "is-active"]} href={leaf.href}>{leaf.label}</a>
+                          </li>
+                        ))}
+                      </ul>
+                    </details>
+                  </li>
+                ))}
+              </ul>
+            </section>
+          ))}
           <section class="sidebar-section">
             <ul class="sidebar-tree">
               <li>
@@ -130,31 +155,6 @@ const bookListActive = decodeURIComponent(Astro.url.pathname).replace(/\/$/, "")
               </li>
             </ul>
           </section>
-          {sidebarSections.map((section) => (
-            <section class="sidebar-section">
-              <h2>{section.title}</h2>
-              <ul class="sidebar-tree">
-                {section.groups.map((group) => (
-                  <li>
-                    <details open={group.open}>
-                      <summary>
-                        <span class="chevron" aria-hidden="true">›</span>
-                        <span class="sidebar-group-label">{group.label}</span>
-                        <span class="sidebar-count">· {group.count}</span>
-                      </summary>
-                      <ul class="sidebar-leaves">
-                        {group.children.map((leaf) => (
-                          <li>
-                            <a class:list={[leaf.active && "is-active"]} href={leaf.href}>{leaf.label}</a>
-                          </li>
-                        ))}
-                      </ul>
-                    </details>
-                  </li>
-                ))}
-              </ul>
-            </section>
-          ))}
         </nav>
       </aside>
 
