@@ -10,6 +10,7 @@ import {
   THINKING_GRID_NAV
 } from "../lib/navigation";
 import { absoluteUrl, canonicalUrl } from "../lib/seo";
+import ThemePicker from "../components/ThemePicker.astro";
 
 interface Props {
   title?: string;
@@ -55,7 +56,30 @@ const bookListActive = decodeURIComponent(Astro.url.pathname).replace(/\/$/, "")
     <meta name="robots" content={robots} />
     <link rel="canonical" href={pageUrl} />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <meta name="theme-color" content="#f4f0e8" />
+    <meta name="theme-color" content="#f8f5f0" />
+    <script is:inline>
+      (function () {
+        try {
+          var stored = null;
+          try {
+            stored = localStorage.getItem("theme");
+          } catch (e) {}
+          var valid = stored === "light" || stored === "dark" || stored === "green";
+          var theme = valid
+            ? stored
+            : window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches
+              ? "dark"
+              : "light";
+          var root = document.documentElement;
+          root.classList.remove("dark", "green");
+          if (theme !== "light") root.classList.add(theme);
+          root.style.colorScheme = theme === "dark" ? "dark" : "light";
+          var colors = { light: "#f8f5f0", dark: "#1a1a1a", green: "#c0edc6" };
+          var meta = document.querySelector('meta[name="theme-color"]');
+          if (meta) meta.setAttribute("content", colors[theme]);
+        } catch (e) {}
+      })();
+    </script>
     <meta property="og:title" content={pageTitle} />
     <meta property="og:description" content={description} />
     <meta property="og:type" content={pageType === "article" ? "article" : "website"} />
@@ -95,7 +119,10 @@ const bookListActive = decodeURIComponent(Astro.url.pathname).replace(/\/$/, "")
       </header>
 
       <aside class="archive-sidebar" aria-label="知识库导航">
-        <a class="site-brand" href="/">{SITE_TITLE}</a>
+        <div class="sidebar-header">
+          <a class="site-brand" href="/">{SITE_TITLE}</a>
+          <ThemePicker placement="bottom-end" />
+        </div>
         <p class="sidebar-tagline">慢慢读，反复看，用原文校准判断。</p>
         <label class="search-box">
           <span class="sr-only">搜索</span>
