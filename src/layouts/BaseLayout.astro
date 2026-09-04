@@ -43,6 +43,7 @@ const thinkingGridActive = decodeURIComponent(Astro.url.pathname).replace(/\/$/,
 const seekingWisdomActive =
   decodeURIComponent(Astro.url.pathname).replace(/\/$/, "") === SEEKING_WISDOM_NAV.href.replace(/\/$/, "");
 const bookListActive = decodeURIComponent(Astro.url.pathname).replace(/\/$/, "") === BOOK_LIST_NAV.href.replace(/\/$/, "");
+const otherGroupOpen = thinkingGridActive || stopDoingActive || seekingWisdomActive || bookListActive;
 ---
 
 <!doctype html>
@@ -152,37 +153,34 @@ const bookListActive = decodeURIComponent(Astro.url.pathname).replace(/\/$/, "")
                     </details>
                   </li>
                 ))}
+                {section.title === "解读" && (
+                  <li>
+                    <details open={otherGroupOpen}>
+                      <summary>
+                        <span class="chevron" aria-hidden="true">›</span>
+                        <span class="sidebar-group-label">其他</span>
+                        <span class="sidebar-count">· 4</span>
+                      </summary>
+                      <ul class="sidebar-leaves">
+                        <li>
+                          <a class:list={[thinkingGridActive && "is-active"]} href={THINKING_GRID_NAV.href}>{THINKING_GRID_NAV.label}</a>
+                        </li>
+                        <li>
+                          <a class:list={[stopDoingActive && "is-active"]} href={STOP_DOING_NAV.href}>{STOP_DOING_NAV.label}</a>
+                        </li>
+                        <li>
+                          <a class:list={[seekingWisdomActive && "is-active"]} href={SEEKING_WISDOM_NAV.href}>{SEEKING_WISDOM_NAV.label}</a>
+                        </li>
+                        <li>
+                          <a class:list={[bookListActive && "is-active"]} href={BOOK_LIST_NAV.href}>{BOOK_LIST_NAV.label}</a>
+                        </li>
+                      </ul>
+                    </details>
+                  </li>
+                )}
               </ul>
             </section>
           ))}
-          <section class="sidebar-section">
-            <h2>其他</h2>
-            <ul class="sidebar-tree">
-              <li>
-                <a class:list={["sidebar-toplink", thinkingGridActive && "is-active"]} href={THINKING_GRID_NAV.href}>
-                  {THINKING_GRID_NAV.label}
-                </a>
-              </li>
-              <li>
-                <a class:list={["sidebar-toplink", stopDoingActive && "is-active"]} href={STOP_DOING_NAV.href}>
-                  {STOP_DOING_NAV.label}
-                </a>
-              </li>
-              <li>
-                <a
-                  class:list={["sidebar-toplink", seekingWisdomActive && "is-active"]}
-                  href={SEEKING_WISDOM_NAV.href}
-                >
-                  {SEEKING_WISDOM_NAV.label}
-                </a>
-              </li>
-              <li>
-                <a class:list={["sidebar-toplink", bookListActive && "is-active"]} href={BOOK_LIST_NAV.href}>
-                  {BOOK_LIST_NAV.label}
-                </a>
-              </li>
-            </ul>
-          </section>
         </nav>
       </aside>
 
