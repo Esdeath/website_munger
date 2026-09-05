@@ -8,6 +8,8 @@ const DEFAULT_DIRECTORY = path.join(ROOT, "thinking-grids");
 const INDEX_FILE_NAME = "思维格栅.md";
 const SUPPORTING_FILE_NAMES = new Set([INDEX_FILE_NAME, "README.md"]);
 
+export const THINKING_GRID_GROUP_COUNT = 7;
+
 export function bodyWithoutExcerpt(body: string): string {
   const withoutTitle = body.replace(/^#\s+.+(?:\r?\n|$)/, "").trimStart();
   const firstParagraphEnd = withoutTitle.search(/\r?\n\s*\r?\n/);
@@ -97,11 +99,13 @@ export function resolveThinkingGridMarkdownLink(
 function parseThinkingGridLayers(body: string, models: ThinkingGridDocument[]): ThinkingGridLayer[] {
   const modelBySlug = new Map(models.map((model) => [model.slug, model]));
   const sections = Array.from(body.matchAll(/^##[ \t]+(.+)\n([\s\S]*?)(?=^##[ \t]+|$(?![\s\S]))/gm))
-    .filter((match) => !["12 层导航", "使用顺序"].includes(match[1]))
+    .filter((match) => !["7 组导航", "使用顺序"].includes(match[1]))
     .map((match) => ({ title: match[1], body: match[2] }));
 
-  if (sections.length !== 12) {
-    throw new Error(`思维格栅索引应包含 12 层，实际解析到 ${sections.length} 层`);
+  if (sections.length !== THINKING_GRID_GROUP_COUNT) {
+    throw new Error(
+      `思维格栅索引应包含 ${THINKING_GRID_GROUP_COUNT} 组，实际解析到 ${sections.length} 组`
+    );
   }
 
   const layers = sections.map((section, index) => {
@@ -112,14 +116,14 @@ function parseThinkingGridLayers(body: string, models: ThinkingGridDocument[]): 
       .map((link) => {
         const slug = filePathToSlug(path.posix.basename(link.url));
         if (!modelBySlug.has(slug)) {
-          throw new Error(`思维格栅层“${section.title}”包含不存在的模型链接: ${link.url}`);
+          throw new Error(`思维格栅组“${section.title}”包含不存在的模型链接: ${link.url}`);
         }
 
         return { slug, title: link.title, href: thinkingGridHref(slug) };
       });
 
     if (!question || !purpose || layerModels.length === 0) {
-      throw new Error(`思维格栅层“${section.title}”缺少先问、用途或模型链接`);
+      throw new Error(`思维格栅组“${section.title}”缺少先问、用途或模型链接`);
     }
 
     return {

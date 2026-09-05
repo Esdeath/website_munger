@@ -21,11 +21,11 @@ const structuredData = [
 <BaseLayout title={snapshot.index.title} description={snapshot.index.excerpt} structuredData={structuredData}>
   <section class="page thinking-grid-page">
     <header class="thinking-grid-heading">
-      <p class="eyebrow">12 层思维模型</p>
+      <p class="eyebrow">7 组思维模型</p>
       <h1>{snapshot.index.title}</h1>
     </header>
 
-    <div class="thinking-grid-layers" aria-label="思维格栅十二层导航">
+    <div class="thinking-grid-layers" aria-label="思维格栅七组导航">
       {
         snapshot.layers.map((layer) => (
           <section class="thinking-grid-layer" aria-labelledby={`thinking-grid-layer-${layer.number}`}>

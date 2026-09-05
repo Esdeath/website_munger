@@ -2,6 +2,7 @@ import fs from "node:fs";
 import path from "node:path";
 import { describe, expect, it } from "vitest";
 import {
+  THINKING_GRID_GROUP_COUNT,
   bodyWithoutExcerpt,
   loadThinkingGridSnapshot,
   resolveThinkingGridMarkdownLink,
@@ -19,45 +20,62 @@ describe("thinking grid snapshot", () => {
     ).toBe("这是正文第二段。\n\n## 下一节\n\n后续内容。");
   });
 
-  it("contains the index, README, and 178 model documents", () => {
+  it("contains the index, README, and 108 model documents", () => {
     expect(fs.existsSync(snapshotDirectory)).toBe(true);
 
     const fileNames = fs.readdirSync(snapshotDirectory).filter((fileName) => fileName.endsWith(".md"));
-    expect(fileNames).toHaveLength(180);
+    expect(fileNames).toHaveLength(110);
     expect(fileNames).toContain("思维格栅.md");
     expect(fileNames).toContain("README.md");
   });
 
-  it("loads the 12-layer index and 178 standalone models", () => {
+  it("loads the 7-group index and 108 standalone models", () => {
     const snapshot = loadThinkingGridSnapshot();
 
     expect(snapshot.index.title).toBe("思维格栅");
-    expect(snapshot.index.body).toContain("## 12 层导航");
-    expect(snapshot.models).toHaveLength(178);
+    expect(snapshot.index.body).toContain("## 7 组导航");
+    expect(snapshot.models).toHaveLength(108);
     expect(snapshot.models.find((model) => model.slug === "概率思维与期望值")?.title).toBe(
       "概率思维与期望值：不要问会不会，要问值不值得"
     );
   });
 
-  it("derives twelve ordered layers with every copied model linked once", () => {
+  it("derives seven ordered groups with every copied model linked once", () => {
     const snapshot = loadThinkingGridSnapshot();
 
-    expect(snapshot.layers).toHaveLength(12);
+    expect(snapshot.layers).toHaveLength(THINKING_GRID_GROUP_COUNT);
     expect(snapshot.layers[0]).toMatchObject({
       number: 1,
-      title: "思维操作系统",
-      question: "我该如何思考？",
-      purpose: "判断、学习、解释与纠错。",
+      title: "判断的操作系统",
+      question: "我该用什么方式想这个问题？",
+      purpose: "拆解、检验、纠错与自我设限。",
       models: expect.arrayContaining([
         expect.objectContaining({ title: "二阶效应", href: "/thinking-grids/二阶效应/" })
       ])
     });
-    expect(snapshot.layers[11]).toMatchObject({
-      number: 12,
-      title: "制度、历史与价值判断"
+    expect(snapshot.layers[6]).toMatchObject({
+      number: 7,
+      title: "估值与下注"
     });
-    expect(snapshot.layers.flatMap((layer) => layer.models)).toHaveLength(178);
-    expect(new Set(snapshot.layers.flatMap((layer) => layer.models.map((model) => model.slug))).size).toBe(178);
+    expect(snapshot.layers.flatMap((layer) => layer.models)).toHaveLength(108);
+    expect(new Set(snapshot.layers.flatMap((layer) => layer.models.map((model) => model.slug))).size).toBe(108);
+  });
+
+  it("keeps Munger's 25-tendency canon inside the misjudgement group", () => {
+    const snapshot = loadThinkingGridSnapshot();
+    const misjudgement = snapshot.layers.find((layer) => layer.title === "人的误判");
+    const slugs = new Set(misjudgement?.models.map((model) => model.slug));
+
+    for (const canon of [
+      "被剥夺超级反应倾向",
+      "避免不一致性倾向",
+      "错误衡量易得性倾向",
+      "康德式公平倾向",
+      "废话倾向",
+      "lollapalooza-倾向"
+    ]) {
+      expect(slugs).toContain(canon);
+    }
   });
 
   it("renders the homepage from layers instead of the raw index markdown", () => {
@@ -79,7 +97,7 @@ describe("thinking grid snapshot", () => {
       "/thinking-grids/概率思维与期望值/"
     );
     expect(resolveThinkingGridMarkdownLink("README.md", snapshot)).toBeNull();
-    expect(resolveThinkingGridMarkdownLink("../taxonomy.md", snapshot)).toBeNull();
+    expect(resolveThinkingGridMarkdownLink("../已删除的模型.md", snapshot)).toBeNull();
     expect(resolveThinkingGridMarkdownLink("#思维操作系统", snapshot)).toBeUndefined();
     expect(resolveThinkingGridMarkdownLink("https://example.com/model.md", snapshot)).toBeUndefined();
   });
