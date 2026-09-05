@@ -161,4 +161,34 @@ describe("renderMarkdownToHtml", () => {
       '<a href="/thinking-grids/%E6%A8%A1%E5%9E%8B/">模型</a> 说明 <a href="#%E5%B1%82%E7%BA%A7">锚点</a>'
     );
   });
+
+  const resolveWiki = (url: string) => (url === "模型.md" ? "/thinking-grids/模型/" : null);
+
+  it("resolves wiki links, honours the display label, and unlinks missing targets", async () => {
+    await expect(
+      renderMarkdownToHtml("它和[[模型]]、[[模型|另一个名字]]、[[已删除的模型]]相连。", {
+        relativeLinkResolver: resolveWiki,
+        wikiLinks: true
+      })
+    ).resolves.toContain(
+      '它和<a href="/thinking-grids/%E6%A8%A1%E5%9E%8B/">模型</a>、' +
+        '<a href="/thinking-grids/%E6%A8%A1%E5%9E%8B/">另一个名字</a>、已删除的模型相连。'
+    );
+  });
+
+  it("leaves wiki-link syntax alone unless the caller opts in", async () => {
+    await expect(
+      renderMarkdownToHtml("它和[[模型]]相连。", { relativeLinkResolver: resolveWiki })
+    ).resolves.toContain("它和[[模型]]相连。");
+  });
+
+  it("never rewrites wiki-link syntax inside code", async () => {
+    const html = await renderMarkdownToHtml("`[[模型]]`\n\n```text\n[[模型]]\n```", {
+      relativeLinkResolver: resolveWiki,
+      wikiLinks: true
+    });
+
+    expect(html).toContain("<code>[[模型]]</code>");
+    expect(html).not.toContain("<a href=");
+  });
 });

@@ -17,7 +17,8 @@ export function getStaticPaths() {
 const { model } = Astro.props as { model: ThinkingGridDocument };
 const snapshot = loadThinkingGridSnapshot();
 const rendered = await renderMarkdownToHtml(bodyWithoutExcerpt(model.body), {
-  relativeLinkResolver: (url) => resolveThinkingGridMarkdownLink(url, snapshot)
+  relativeLinkResolver: (url) => resolveThinkingGridMarkdownLink(url, snapshot),
+  wikiLinks: true
 });
 const pathname = thinkingGridHref(model.slug);
 const structuredData = [

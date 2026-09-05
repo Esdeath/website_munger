@@ -16,6 +16,8 @@ export interface RenderMarkdownOptions {
   keywordLinks?: KeywordLink[];
   currentHref?: string;
   relativeLinkResolver?: (url: string) => string | null | undefined;
+  /** Resolve `[[模型名]]` / `[[模型名|显示文字]]` through relativeLinkResolver. */
+  wikiLinks?: boolean;
 }
 
 interface MarkdownNode {
@@ -200,6 +202,78 @@ function remarkRelativeLinks(resolve: NonNullable<RenderMarkdownOptions["relativ
   };
 }
 
+const WIKI_LINK_PATTERN = /\[\[([^\]|\n]+?)(?:\|([^\]\n]+?))?\]\]/g;
+
+function wikiLinkNodes(
+  value: string,
+  resolve: NonNullable<RenderMarkdownOptions["relativeLinkResolver"]>
+): MarkdownNode[] {
+  const nodes: MarkdownNode[] = [];
+  let lastIndex = 0;
+
+  for (const match of value.matchAll(WIKI_LINK_PATTERN)) {
+    const index = match.index ?? 0;
+    const target = match[1].trim();
+    const label = (match[2] ?? match[1]).trim();
+
+    if (index > lastIndex) {
+      nodes.push({ type: "text", value: value.slice(lastIndex, index) });
+    }
+
+    const href = resolve(`${target}.md`);
+    nodes.push(
+      typeof href === "string"
+        ? { type: "link", url: href, children: [{ type: "text", value: label }] }
+        : { type: "text", value: label }
+    );
+    lastIndex = index + match[0].length;
+  }
+
+  if (nodes.length === 0) {
+    return [{ type: "text", value }];
+  }
+  if (lastIndex < value.length) {
+    nodes.push({ type: "text", value: value.slice(lastIndex) });
+  }
+
+  return nodes;
+}
+
+function applyWikiLinks(
+  node: MarkdownNode,
+  resolve: NonNullable<RenderMarkdownOptions["relativeLinkResolver"]>,
+  insideLink = false
+): void {
+  if (!node.children?.length) {
+    return;
+  }
+
+  const nextChildren: MarkdownNode[] = [];
+  const childInsideLink = insideLink || node.type === "link";
+
+  for (const child of node.children) {
+    if (child.type === "text" && typeof child.value === "string" && child.value.includes("[[")) {
+      if (childInsideLink) {
+        child.value = child.value.replace(WIKI_LINK_PATTERN, (_, target: string, label?: string) =>
+          (label ?? target).trim()
+        );
+      } else {
+        nextChildren.push(...wikiLinkNodes(child.value, resolve));
+        continue;
+      }
+    }
+
+    applyWikiLinks(child, resolve, childInsideLink);
+    nextChildren.push(child);
+  }
+
+  node.children = nextChildren;
+}
+
+function remarkWikiLinks(resolve: NonNullable<RenderMarkdownOptions["relativeLinkResolver"]>) {
+  return (tree: Node) => applyWikiLinks(tree as MarkdownNode, resolve);
+}
+
 export async function renderMarkdownToHtml(body: string, options: RenderMarkdownOptions = {}): Promise<string> {
   const processor = remark()
     .use(remarkGfm)
@@ -208,6 +282,9 @@ export async function renderMarkdownToHtml(body: string, options: RenderMarkdown
 
   if (options.relativeLinkResolver) {
     processor.use(remarkRelativeLinks, options.relativeLinkResolver);
+    if (options.wikiLinks) {
+      processor.use(remarkWikiLinks, options.relativeLinkResolver);
+    }
   }
 
   if (options.keywordLinks?.length) {
