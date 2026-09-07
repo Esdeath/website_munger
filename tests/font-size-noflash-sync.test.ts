@@ -19,7 +19,7 @@ describe("BaseLayout no-flash font-size script stays in sync with font-size.ts",
     expect(layout).toContain(`[${[...ARTICLE_FONT_SIZE_LEVELS].join(", ")}]`);
   });
   it("embeds the default percent", () => {
-    expect(layout).toMatch(new RegExp(`DEFAULT\\s*=\\s*${ARTICLE_FONT_SIZE_DEFAULT}`));
+    expect(layout).toMatch(new RegExp(`DEFAULT\\s*=\\s*${ARTICLE_FONT_SIZE_DEFAULT}\\b`));
   });
   it("sets the --article-font-scale custom property before paint", () => {
     expect(layout).toContain('setProperty("--article-font-scale"');
