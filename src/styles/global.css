@@ -1345,7 +1345,7 @@ input:focus-visible {
   }
 
   .article-body {
-    font-size: 1rem;
+    font-size: var(--article-font-scale);
     line-height: 1.72;
   }
 
