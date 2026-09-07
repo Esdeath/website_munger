@@ -196,6 +196,12 @@ input:focus-visible {
   gap: 12px;
 }
 
+.sidebar-tools {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
 .site-brand {
   display: block;
   color: var(--green-dark);

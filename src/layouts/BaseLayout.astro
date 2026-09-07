@@ -11,6 +11,7 @@ import {
 } from "../lib/navigation";
 import { absoluteUrl, canonicalUrl } from "../lib/seo";
 import ThemePicker from "../components/ThemePicker.astro";
+import FontSizePicker from "../components/FontSizePicker.astro";
 
 interface Props {
   title?: string;
@@ -81,6 +82,21 @@ const otherGroupOpen = thinkingGridActive || stopDoingActive || seekingWisdomAct
         } catch (e) {}
       })();
     </script>
+    <script is:inline>
+      (function () {
+        try {
+          var LEVELS = [90, 100, 110, 120, 130];
+          var DEFAULT = 100;
+          var raw = null;
+          try {
+            raw = localStorage.getItem("article-font-size-percent");
+          } catch (e) {}
+          var parsed = Number(raw);
+          var percent = LEVELS.indexOf(parsed) !== -1 ? parsed : DEFAULT;
+          document.documentElement.style.setProperty("--article-font-scale", percent + "%");
+        } catch (e) {}
+      })();
+    </script>
     <meta property="og:title" content={pageTitle} />
     <meta property="og:description" content={description} />
     <meta property="og:type" content={pageType === "article" ? "article" : "website"} />
@@ -122,7 +138,10 @@ const otherGroupOpen = thinkingGridActive || stopDoingActive || seekingWisdomAct
       <aside class="archive-sidebar" aria-label="知识库导航">
         <div class="sidebar-header">
           <a class="site-brand" href="/">{SITE_TITLE}</a>
-          <ThemePicker placement="bottom-end" />
+          <div class="sidebar-tools">
+            <FontSizePicker placement="bottom-end" />
+            <ThemePicker placement="bottom-end" />
+          </div>
         </div>
         <p class="sidebar-tagline">慢慢读，反复看，用原文校准判断。</p>
         <label class="search-box">
