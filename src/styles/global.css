@@ -47,6 +47,7 @@
   --fs-section: 1.4rem;
   --fs-hero-min: 2.1rem;
   --fs-hero-max: 3.2rem;
+  --article-font-scale: 100%;
   --mobile-topbar: 54px;
   font-family: "Noto Serif SC", "Songti SC", "STSong", "Times New Roman", serif;
 }
@@ -671,7 +672,7 @@ input:focus-visible {
 .article-body {
   max-width: 980px;
   color: var(--ink);
-  font-size: 1rem;
+  font-size: var(--article-font-scale);
   font-weight: 400;
   line-height: 1.75;
 }
