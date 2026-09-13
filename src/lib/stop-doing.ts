@@ -1,7 +1,8 @@
 import fs from "node:fs";
 import path from "node:path";
 import { TOPICS, type TopicDefinition } from "../content/site";
-import { loadOriginalSources, type OriginalSource } from "./corpus";
+import { loadSiteCorpus, type OriginalSource } from "./corpus";
+import { sourceLabelMatchesTitle } from "./relations";
 
 export interface StopDoingEntry {
   headline: string;
@@ -21,13 +22,6 @@ const CONTENT_PATH = "stop-doing/不可为清单.md";
 
 // 各类引号:CJK 括号 + 中英弯/直引号(与 check_stop_doing.py 对齐)
 const QUOTE_CHARS = /[「」『』""''"']/g;
-
-function sourceLabelMatchesTitle(label: string, title: string): boolean {
-  const normalizedLabel = label.replace(/\s+/g, "");
-  const normalizedTitle = title.replace(/\s+/g, "");
-  const labelWithoutYear = normalizedLabel.replace(/[（(](19|20)\d{2}[）)]/g, "");
-  return normalizedTitle.includes(labelWithoutYear) || labelWithoutYear.includes(normalizedTitle);
-}
 
 function resolveSourceSlug(
   sourceTitle: string,
@@ -126,6 +120,6 @@ export function parseStopDoingList(
 
 export function loadStopDoingList(): StopDoingGroup[] {
   const markdown = fs.readFileSync(path.join(ROOT, CONTENT_PATH), "utf8");
-  const sources = loadOriginalSources().map((s) => ({ slug: s.slug, title: s.title }));
+  const sources = loadSiteCorpus().sources.map((source) => ({ slug: source.slug, title: source.title }));
   return parseStopDoingList(markdown, sources);
 }

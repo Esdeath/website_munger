@@ -1,6 +1,6 @@
 import { TOPICS, type TopicDefinition } from "../content/site";
 import type { KnowledgeArticle, OriginalSource } from "./corpus";
-import { articlesForTopic, compareArticlesForDisplay, topicForCategory } from "./relations";
+import { articlesForTopic, compareArticlesForDisplay } from "./relations";
 import { SOURCE_DEFINITIONS, type SourceType } from "./source-types";
 import { textToSlug } from "./slug";
 
@@ -37,12 +37,18 @@ function normalizePath(path: string): string {
   return path.endsWith("/") ? path : `${path}/`;
 }
 
+function pathIsActive(currentPath: string, href: string, includeDescendants = false): boolean {
+  const current = normalizePath(currentPath);
+  const target = normalizePath(href);
+  return includeDescendants ? current.startsWith(target) : current === target;
+}
+
 export function categoryHref(category: string): string {
   return `/articles/#${textToSlug(category)}`;
 }
 
 function toLeaf(label: string, href: string, currentPath: string): SidebarLeaf {
-  return { label, href, active: normalizePath(currentPath) === normalizePath(href) };
+  return { label, href, active: pathIsActive(currentPath, href) };
 }
 
 function makeGroup(label: string, children: SidebarLeaf[]): SidebarGroup {
@@ -69,7 +75,7 @@ export function buildSidebarSections(
     makeGroup(
       topicTitle,
       articles
-        .filter((article) => topicForCategory(article.category) === topicTitle)
+        .filter((article) => article.category === topicTitle)
         .sort(compareArticlesForDisplay)
         .map((article) => toLeaf(article.title, `/articles/${article.slug}/`, currentPath))
     );
@@ -92,7 +98,17 @@ export function buildArchiveCards(topics: TopicDefinition[], articles: Knowledge
   }));
 }
 
-export const STOP_DOING_NAV = { label: "不可为清单", href: "/stop-doing/" } as const;
-export const BOOK_LIST_NAV = { label: "芒格书单", href: "/book-list/" } as const;
-export const THINKING_GRID_NAV = { label: "思维格栅", href: "/thinking-grids/" } as const;
-export const SEEKING_WISDOM_NAV = { label: "探索智慧", href: "/sources/seeking-wisdom-中文版/" } as const;
+const OTHER_NAV_ITEMS = [
+  { label: "思维格栅", href: "/thinking-grids/", includeDescendants: true },
+  { label: "不可为清单", href: "/stop-doing/", includeDescendants: false },
+  { label: "探索智慧", href: "/sources/seeking-wisdom-中文版/", includeDescendants: false },
+  { label: "芒格书单", href: "/book-list/", includeDescendants: false }
+] as const;
+
+export function buildOtherNavigation(currentPath = ""): SidebarLeaf[] {
+  return OTHER_NAV_ITEMS.map(({ label, href, includeDescendants }) => ({
+    label,
+    href,
+    active: pathIsActive(currentPath, href, includeDescendants)
+  }));
+}

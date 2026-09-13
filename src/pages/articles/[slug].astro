@@ -1,18 +1,17 @@
 ---
 import ArticleShare from "../../components/ArticleShare.astro";
-import BaseLayout from "../../layouts/BaseLayout.astro";
-import { loadArticles, loadOriginalSources } from "../../lib/corpus";
+import ReaderPage from "../../components/ReaderPage.astro";
+import { loadSiteCorpus } from "../../lib/corpus";
 import { renderMarkdownToHtml } from "../../lib/render";
 import { keywordLinksForArticles, relatedArticles, sourcesForArticle } from "../../lib/relations";
 import { buildArticleSchema, buildBreadcrumbSchema, canonicalUrl } from "../../lib/seo";
 
 export function getStaticPaths() {
-  return loadArticles().map((article) => ({ params: { slug: article.slug }, props: { article } }));
+  return loadSiteCorpus().articles.map((article) => ({ params: { slug: article.slug }, props: { article } }));
 }
 
 const { article } = Astro.props;
-const allArticles = loadArticles();
-const sources = loadOriginalSources();
+const { articles: allArticles, sources } = loadSiteCorpus();
 const matchedSources = sourcesForArticle(article, sources);
 const related = relatedArticles(article, allArticles);
 const keywordLinks = keywordLinksForArticles(allArticles);
@@ -41,60 +40,60 @@ const structuredData = [
 ];
 ---
 
-<BaseLayout title={article.title} description={article.excerpt} shell="reader" type="article" structuredData={structuredData}>
-  <article class="reader-layout">
-    <div class="reader-content">
-      <header class="reader-header">
-        <h1>{article.title}</h1>
-        <p>{article.category}</p>
-        <p class="reader-intro">{article.excerpt}</p>
-      </header>
-      <ArticleShare
-        title={article.title}
-        url={canonicalUrl(`/articles/${article.slug}/`)}
-        markdown={article.body}
-        html={rendered}
-      />
-      <div class="article-body" set:html={rendered} />
-    </div>
+<ReaderPage
+  title={article.title}
+  description={article.excerpt}
+  type="article"
+  structuredData={structuredData}
+  html={rendered}
+>
+  <Fragment slot="header">
+    <h1>{article.title}</h1>
+    <p>{article.category}</p>
+    <p class="reader-intro">{article.excerpt}</p>
+  </Fragment>
 
-    <input id="reader-drawer-state" class="drawer-state reader-drawer-state" type="checkbox" />
-    <label class="drawer-scrim reader-drawer-scrim" for="reader-drawer-state" aria-hidden="true"></label>
+  <ArticleShare
+    slot="actions"
+    title={article.title}
+    url={canonicalUrl(`/articles/${article.slug}/`)}
+    markdown={article.body}
+    html={rendered}
+  />
 
-    <aside class="reader-aside">
-      <section class="info-panel">
-        <h2>文章信息</h2>
-        <p>{article.category} · {article.quoteCount} 处引用</p>
-        <p>{article.sources.length} 个原文来源</p>
-      </section>
+  <Fragment slot="aside">
+    <section class="info-panel">
+      <h2>文章信息</h2>
+      <p>{article.category} · {article.quoteCount} 处引用</p>
+      <p>{article.sources.length} 个原文来源</p>
+    </section>
 
-      <section class="info-panel">
-        <h2>本篇目录（{article.headings.length}）</h2>
-        <ul class="link-list">
-          {article.headings.map((heading) => (
-            <li><a href={`#${heading.slug}`}>{heading.text}</a></li>
-          ))}
-        </ul>
-      </section>
+    <section class="info-panel">
+      <h2>本篇目录（{article.headings.length}）</h2>
+      <ul class="link-list">
+        {article.headings.map((heading) => (
+          <li><a href={`#${heading.slug}`}>{heading.text}</a></li>
+        ))}
+      </ul>
+    </section>
 
-      <section class="info-panel">
-        <h2>来源追溯</h2>
-        <ul class="link-list">
-          {matchedSources.map((source) => (
-            <li><a href={`/sources/${source.slug}/`}>{source.title}</a></li>
-          ))}
-          {matchedSources.length === 0 && article.sources.map((sourceLabel) => <li>{sourceLabel}</li>)}
-        </ul>
-      </section>
+    <section class="info-panel">
+      <h2>来源追溯</h2>
+      <ul class="link-list">
+        {matchedSources.map((source) => (
+          <li><a href={`/sources/${source.slug}/`}>{source.title}</a></li>
+        ))}
+        {matchedSources.length === 0 && article.sources.map((sourceLabel) => <li>{sourceLabel}</li>)}
+      </ul>
+    </section>
 
-      <section class="info-panel">
-        <h2>相关主题</h2>
-        <ul class="link-list">
-          {related.map((item) => (
-            <li><a href={`/articles/${item.slug}/`}>{item.keyword} →</a></li>
-          ))}
-        </ul>
-      </section>
-    </aside>
-  </article>
-</BaseLayout>
+    <section class="info-panel">
+      <h2>相关主题</h2>
+      <ul class="link-list">
+        {related.map((item) => (
+          <li><a href={`/articles/${item.slug}/`}>{item.keyword} →</a></li>
+        ))}
+      </ul>
+    </section>
+  </Fragment>
+</ReaderPage>

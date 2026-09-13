@@ -1,7 +1,7 @@
 ---
 import { TOPICS } from "../../content/site";
 import BaseLayout from "../../layouts/BaseLayout.astro";
-import { loadArticles, loadOriginalSources } from "../../lib/corpus";
+import { loadSiteCorpus } from "../../lib/corpus";
 import { articlesForTopic, sourcesForArticle } from "../../lib/relations";
 import { buildBreadcrumbSchema, buildCollectionPageSchema, canonicalUrl } from "../../lib/seo";
 
@@ -10,8 +10,9 @@ export function getStaticPaths() {
 }
 
 const { topic } = Astro.props;
-const articles = articlesForTopic(loadArticles(), topic);
-const sources = loadOriginalSources();
+const corpus = loadSiteCorpus();
+const articles = articlesForTopic(corpus.articles, topic);
+const sources = corpus.sources;
 const researchSources = Array.from(
   new Map(
     articles

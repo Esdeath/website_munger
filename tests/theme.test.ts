@@ -2,9 +2,8 @@ import { describe, expect, it } from "vitest";
 import {
   applyTheme,
   isTheme,
-  resolveInitialTheme,
   THEMES,
-  themeMetaColors,
+  themeMeta,
   type ThemeTargets
 } from "../src/lib/theme";
 
@@ -35,20 +34,6 @@ describe("isTheme", () => {
   });
 });
 
-describe("resolveInitialTheme", () => {
-  it("uses a valid stored theme regardless of system preference", () => {
-    expect(resolveInitialTheme("green", false)).toBe("green");
-    expect(resolveInitialTheme("green", true)).toBe("green");
-  });
-  it("falls back to dark when the system prefers dark", () => {
-    expect(resolveInitialTheme(null, true)).toBe("dark");
-    expect(resolveInitialTheme("nonsense", true)).toBe("dark");
-  });
-  it("falls back to light otherwise", () => {
-    expect(resolveInitialTheme(null, false)).toBe("light");
-  });
-});
-
 describe("applyTheme", () => {
   it("light clears theme classes and sets a light scheme + meta", () => {
     const { targets, classes, style, meta } = makeTargets();
@@ -57,7 +42,7 @@ describe("applyTheme", () => {
     expect(classes.has("dark")).toBe(false);
     expect(classes.has("green")).toBe(false);
     expect(style.colorScheme).toBe("light");
-    expect(meta()).toBe(themeMetaColors.light);
+    expect(meta()).toBe(themeMeta.light.color);
   });
   it("dark adds the dark class and a dark scheme", () => {
     const { targets, classes, style, meta } = makeTargets();
@@ -65,7 +50,7 @@ describe("applyTheme", () => {
     expect(classes.has("dark")).toBe(true);
     expect(classes.has("green")).toBe(false);
     expect(style.colorScheme).toBe("dark");
-    expect(meta()).toBe(themeMetaColors.dark);
+    expect(meta()).toBe(themeMeta.dark.color);
   });
   it("green adds the green class with a light scheme", () => {
     const { targets, classes, style, meta } = makeTargets();
@@ -73,7 +58,7 @@ describe("applyTheme", () => {
     expect(classes.has("green")).toBe(true);
     expect(classes.has("dark")).toBe(false);
     expect(style.colorScheme).toBe("light");
-    expect(meta()).toBe(themeMetaColors.green);
+    expect(meta()).toBe(themeMeta.green.color);
   });
   it("does not throw when the meta element is absent", () => {
     const { targets } = makeTargets();

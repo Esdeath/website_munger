@@ -44,6 +44,11 @@ export interface CorpusManifestEntry {
   status: string;
 }
 
+export interface SiteCorpus {
+  articles: KnowledgeArticle[];
+  sources: OriginalSource[];
+}
+
 function readMarkdownFiles(directory: "articles" | SourceDirectory): string[] {
   return fs
     .readdirSync(path.join(ROOT, directory))
@@ -122,7 +127,7 @@ export function loadCorpusManifest(): CorpusManifestEntry[] {
   return parseCorpusManifest(readRepoFile("docs/article-production/state/corpus-manifest.md"));
 }
 
-export function loadArticles(): KnowledgeArticle[] {
+function readArticles(): KnowledgeArticle[] {
   return readMarkdownFiles("articles").map((filePath) => {
     const parsed = parseMarkdownDocument(filePath, readRepoFile(filePath));
     return {
@@ -143,7 +148,7 @@ export function loadArticles(): KnowledgeArticle[] {
   });
 }
 
-export function loadOriginalSources(): OriginalSource[] {
+function readOriginalSources(): OriginalSource[] {
   const markdownSources = SOURCE_DEFINITIONS.flatMap(({ directory, type }) =>
     readMarkdownFiles(directory).map((filePath) => {
       const raw = readRepoFile(filePath);
@@ -165,10 +170,25 @@ export function loadOriginalSources(): OriginalSource[] {
 
   const standaloneSources = STANDALONE_SOURCES.map((source) => ({
     ...source,
-    body: readRepoFile(source.filePath),
+    // Standalone documents are served directly in an iframe, not rendered as Markdown.
+    body: "",
     headings: [],
     standalone: true as const
   }));
 
   return [...markdownSources, ...standaloneSources];
+}
+
+let buildCorpus: SiteCorpus | undefined;
+
+export function loadSiteCorpus(): SiteCorpus {
+  // Root-level Markdown files are outside Vite's module graph, so dev reads them on every refresh.
+  const corpus = import.meta.env.PROD
+    ? (buildCorpus ??= { articles: readArticles(), sources: readOriginalSources() })
+    : { articles: readArticles(), sources: readOriginalSources() };
+
+  return {
+    articles: [...corpus.articles],
+    sources: [...corpus.sources]
+  };
 }

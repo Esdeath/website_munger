@@ -71,5 +71,3 @@ export const TOPICS: TopicDefinition[] = [
     keywords: ["通货膨胀", "利率", "泡沫", "金融危机", "衍生品", "杠杆", "监管", "投机", "赌博"]
   }
 ];
-
-export const READING_PATH_KEYWORDS = ["能力圈", "多元思维模型", "避免愚蠢", "激励机制"];

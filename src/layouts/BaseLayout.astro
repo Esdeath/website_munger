@@ -1,50 +1,42 @@
 ---
 import "../styles/global.css";
 import { SITE_AUTHOR, SITE_DESCRIPTION, SITE_KEYWORDS, SITE_TITLE } from "../content/site";
-import { loadArticles, loadOriginalSources } from "../lib/corpus";
-import {
-  BOOK_LIST_NAV,
-  buildSidebarSections,
-  SEEKING_WISDOM_NAV,
-  STOP_DOING_NAV,
-  THINKING_GRID_NAV
-} from "../lib/navigation";
-import { absoluteUrl, canonicalUrl } from "../lib/seo";
+import { loadSiteCorpus } from "../lib/corpus";
+import { buildOtherNavigation, buildSidebarSections } from "../lib/navigation";
+import { canonicalUrl } from "../lib/seo";
 import ThemePicker from "../components/ThemePicker.astro";
 import FontSizePicker from "../components/FontSizePicker.astro";
+import {
+  ARTICLE_FONT_SIZE_DEFAULT,
+  ARTICLE_FONT_SIZE_LEVELS,
+  ARTICLE_FONT_SIZE_STORAGE_KEY
+} from "../lib/font-size";
+import { THEMES, THEME_STORAGE_KEY, themeMeta } from "../lib/theme";
 
 interface Props {
-  title?: string;
+  title: string;
   description?: string;
   shell?: "archive" | "reader";
   type?: "website" | "article";
-  image?: string;
-  noindex?: boolean;
   structuredData?: Record<string, unknown> | Record<string, unknown>[];
 }
 
-const pageTitle = Astro.props.title ? `${Astro.props.title} | ${SITE_TITLE}` : SITE_TITLE;
+const pageTitle = `${Astro.props.title} | ${SITE_TITLE}`;
 const description = Astro.props.description ?? SITE_DESCRIPTION;
 const shell = Astro.props.shell ?? "archive";
 const pageType = Astro.props.type ?? "website";
-const robots = Astro.props.noindex ? "noindex,nofollow" : "index,follow";
 const pageUrl = canonicalUrl(Astro.url.pathname);
-const imageUrl = Astro.props.image ? absoluteUrl(Astro.props.image) : undefined;
 const structuredData = Astro.props.structuredData
   ? Array.isArray(Astro.props.structuredData)
     ? Astro.props.structuredData
     : [Astro.props.structuredData]
   : [];
 const structuredDataJson = structuredData.length === 1 ? JSON.stringify(structuredData[0]) : JSON.stringify(structuredData);
-const sidebarSections = buildSidebarSections(loadArticles(), loadOriginalSources(), decodeURIComponent(Astro.url.pathname));
-const stopDoingActive = decodeURIComponent(Astro.url.pathname).replace(/\/$/, "") === STOP_DOING_NAV.href.replace(/\/$/, "");
-const thinkingGridActive = decodeURIComponent(Astro.url.pathname).replace(/\/$/, "").startsWith(
-  THINKING_GRID_NAV.href.replace(/\/$/, "")
-);
-const seekingWisdomActive =
-  decodeURIComponent(Astro.url.pathname).replace(/\/$/, "") === SEEKING_WISDOM_NAV.href.replace(/\/$/, "");
-const bookListActive = decodeURIComponent(Astro.url.pathname).replace(/\/$/, "") === BOOK_LIST_NAV.href.replace(/\/$/, "");
-const otherGroupOpen = thinkingGridActive || stopDoingActive || seekingWisdomActive || bookListActive;
+const siteCorpus = loadSiteCorpus();
+const currentPath = decodeURIComponent(Astro.url.pathname);
+const sidebarSections = buildSidebarSections(siteCorpus.articles, siteCorpus.sources, currentPath);
+const otherNavigation = buildOtherNavigation(currentPath);
+const otherGroupOpen = otherNavigation.some((item) => item.active);
 ---
 
 <!doctype html>
@@ -55,18 +47,23 @@ const otherGroupOpen = thinkingGridActive || stopDoingActive || seekingWisdomAct
     <meta name="description" content={description} />
     <meta name="author" content={SITE_AUTHOR} />
     <meta name="keywords" content={SITE_KEYWORDS.join(",")} />
-    <meta name="robots" content={robots} />
+    <meta name="robots" content="index,follow" />
     <link rel="canonical" href={pageUrl} />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <meta name="theme-color" content="#f8f5f0" />
-    <script is:inline>
+    <meta name="theme-color" content={themeMeta.light.color} />
+    <script
+      is:inline
+      define:vars={{ THEMES, themeMeta, THEME_STORAGE_KEY }}
+    >
+      // @ts-ignore Astro injects define:vars before this inline bootstrap runs.
+      var themeConfig = { options: THEMES, meta: themeMeta, storageKey: THEME_STORAGE_KEY };
       (function () {
         try {
           var stored = null;
           try {
-            stored = localStorage.getItem("theme");
+            stored = localStorage.getItem(themeConfig.storageKey);
           } catch (e) {}
-          var valid = stored === "light" || stored === "dark" || stored === "green";
+          var valid = themeConfig.options.indexOf(stored) !== -1;
           var theme = valid
             ? stored
             : window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches
@@ -76,23 +73,33 @@ const otherGroupOpen = thinkingGridActive || stopDoingActive || seekingWisdomAct
           root.classList.remove("dark", "green");
           if (theme !== "light") root.classList.add(theme);
           root.style.colorScheme = theme === "dark" ? "dark" : "light";
-          var colors = { light: "#f8f5f0", dark: "#1a1a1a", green: "#c0edc6" };
           var meta = document.querySelector('meta[name="theme-color"]');
-          if (meta) meta.setAttribute("content", colors[theme]);
+          if (meta) meta.setAttribute("content", themeConfig.meta[theme].color);
         } catch (e) {}
       })();
     </script>
-    <script is:inline>
+    <script
+      is:inline
+      define:vars={{
+        ARTICLE_FONT_SIZE_LEVELS,
+        ARTICLE_FONT_SIZE_DEFAULT,
+        ARTICLE_FONT_SIZE_STORAGE_KEY
+      }}
+    >
+      // @ts-ignore Astro injects define:vars before this inline bootstrap runs.
+      var fontSizeConfig = {
+        levels: ARTICLE_FONT_SIZE_LEVELS,
+        defaultPercent: ARTICLE_FONT_SIZE_DEFAULT,
+        storageKey: ARTICLE_FONT_SIZE_STORAGE_KEY
+      };
       (function () {
         try {
-          var LEVELS = [90, 100, 110, 120, 130];
-          var DEFAULT = 100;
           var raw = null;
           try {
-            raw = localStorage.getItem("article-font-size-percent");
+            raw = localStorage.getItem(fontSizeConfig.storageKey);
           } catch (e) {}
           var parsed = Number(raw);
-          var percent = LEVELS.indexOf(parsed) !== -1 ? parsed : DEFAULT;
+          var percent = fontSizeConfig.levels.indexOf(parsed) !== -1 ? parsed : fontSizeConfig.defaultPercent;
           document.documentElement.style.setProperty("--article-font-scale", percent + "%");
         } catch (e) {}
       })();
@@ -103,11 +110,9 @@ const otherGroupOpen = thinkingGridActive || stopDoingActive || seekingWisdomAct
     <meta property="og:url" content={pageUrl} />
     <meta property="og:site_name" content={SITE_TITLE} />
     <meta property="og:locale" content="zh_CN" />
-    {imageUrl && <meta property="og:image" content={imageUrl} />}
-    <meta name="twitter:card" content={imageUrl ? "summary_large_image" : "summary"} />
+    <meta name="twitter:card" content="summary" />
     <meta name="twitter:title" content={pageTitle} />
     <meta name="twitter:description" content={description} />
-    {imageUrl && <meta name="twitter:image" content={imageUrl} />}
     {structuredData.length > 0 && <script is:inline type="application/ld+json" set:html={structuredDataJson}></script>}
     <script is:inline>
       var _hmt = _hmt || [];
@@ -139,8 +144,8 @@ const otherGroupOpen = thinkingGridActive || stopDoingActive || seekingWisdomAct
         <div class="sidebar-header">
           <a class="site-brand" href="/">{SITE_TITLE}</a>
           <div class="sidebar-tools">
-            <FontSizePicker placement="bottom-end" />
-            <ThemePicker placement="bottom-end" />
+            <FontSizePicker />
+            <ThemePicker />
           </div>
         </div>
         <p class="sidebar-tagline">慢慢读，反复看，用原文校准判断。</p>
@@ -178,21 +183,14 @@ const otherGroupOpen = thinkingGridActive || stopDoingActive || seekingWisdomAct
                       <summary>
                         <span class="chevron" aria-hidden="true">›</span>
                         <span class="sidebar-group-label">其他</span>
-                        <span class="sidebar-count">· 4</span>
+                        <span class="sidebar-count">· {otherNavigation.length}</span>
                       </summary>
                       <ul class="sidebar-leaves">
-                        <li>
-                          <a class:list={[thinkingGridActive && "is-active"]} href={THINKING_GRID_NAV.href}>{THINKING_GRID_NAV.label}</a>
-                        </li>
-                        <li>
-                          <a class:list={[stopDoingActive && "is-active"]} href={STOP_DOING_NAV.href}>{STOP_DOING_NAV.label}</a>
-                        </li>
-                        <li>
-                          <a class:list={[seekingWisdomActive && "is-active"]} href={SEEKING_WISDOM_NAV.href}>{SEEKING_WISDOM_NAV.label}</a>
-                        </li>
-                        <li>
-                          <a class:list={[bookListActive && "is-active"]} href={BOOK_LIST_NAV.href}>{BOOK_LIST_NAV.label}</a>
-                        </li>
+                        {otherNavigation.map((item) => (
+                          <li>
+                            <a class:list={[item.active && "is-active"]} href={item.href}>{item.label}</a>
+                          </li>
+                        ))}
                       </ul>
                     </details>
                   </li>

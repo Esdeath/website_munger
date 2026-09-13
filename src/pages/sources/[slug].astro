@@ -1,7 +1,7 @@
 ---
 import ArticleShare from "../../components/ArticleShare.astro";
-import BaseLayout from "../../layouts/BaseLayout.astro";
-import { loadArticles, loadOriginalSources } from "../../lib/corpus";
+import ReaderPage from "../../components/ReaderPage.astro";
+import { loadSiteCorpus } from "../../lib/corpus";
 import { renderMarkdownToHtml } from "../../lib/render";
 import {
   buildSourceArticleMap,
@@ -9,17 +9,17 @@ import {
   mentionedArticlesForSource,
   sameYearSources
 } from "../../lib/relations";
-import { buildBreadcrumbSchema, buildCreativeWorkSchema, canonicalUrl, sourceTypeLabel } from "../../lib/seo";
+import { buildBreadcrumbSchema, buildCreativeWorkSchema, canonicalUrl } from "../../lib/seo";
+import { sourceTypeLabel } from "../../lib/source-types";
 
 export function getStaticPaths() {
-  return loadOriginalSources()
+  return loadSiteCorpus().sources
     .filter((source) => !source.standalone)
     .map((source) => ({ params: { slug: source.slug }, props: { source } }));
 }
 
 const { source } = Astro.props;
-const articles = loadArticles();
-const allSources = loadOriginalSources();
+const { articles, sources: allSources } = loadSiteCorpus();
 const sourceArticleMap = buildSourceArticleMap(articles, allSources);
 const citedBy = sourceArticleMap.get(source.slug) ?? [];
 const mentionedArticles = mentionedArticlesForSource(source, articles);
@@ -44,58 +44,52 @@ const structuredData = [
 ];
 ---
 
-<BaseLayout title={source.title} description={source.excerpt} shell="reader" structuredData={structuredData}>
-  <article class="reader-layout">
-    <div class="reader-content">
-      <header class="reader-header">
-        <h1>{source.title}</h1>
-        <p>{sourceLabel}</p>
-      </header>
-      <ArticleShare
-        title={source.title}
-        url={canonicalUrl(`/sources/${source.slug}/`)}
-        markdown={bodyWithoutDuplicateTitle}
-        html={rendered}
-      />
-      <div class="article-body" set:html={rendered} />
-    </div>
+<ReaderPage title={source.title} description={source.excerpt} structuredData={structuredData} html={rendered}>
+  <Fragment slot="header">
+    <h1>{source.title}</h1>
+    <p>{sourceLabel}</p>
+  </Fragment>
 
-    <input id="reader-drawer-state" class="drawer-state reader-drawer-state" type="checkbox" />
-    <label class="drawer-scrim reader-drawer-scrim" for="reader-drawer-state" aria-hidden="true"></label>
+  <ArticleShare
+    slot="actions"
+    title={source.title}
+    url={canonicalUrl(`/sources/${source.slug}/`)}
+    markdown={bodyWithoutDuplicateTitle}
+    html={rendered}
+  />
 
-    <aside class="reader-aside">
-      <section class="info-panel">
-        <h2>原文信息</h2>
-        <p>{sourceLabel} · 第 {source.year} 年</p>
-        <p>{citedBy.length} 篇解读引用</p>
-      </section>
+  <Fragment slot="aside">
+    <section class="info-panel">
+      <h2>原文信息</h2>
+      <p>{sourceLabel} · 第 {source.year} 年</p>
+      <p>{citedBy.length} 篇解读引用</p>
+    </section>
 
-      <section class="info-panel">
-        <h2>本篇目录（{source.headings.length}）</h2>
-        <ul class="link-list">
-          {source.headings.map((heading) => (
-            <li><a href={`#${heading.slug}`}>{heading.text}</a></li>
-          ))}
-        </ul>
-      </section>
+    <section class="info-panel">
+      <h2>本篇目录（{source.headings.length}）</h2>
+      <ul class="link-list">
+        {source.headings.map((heading) => (
+          <li><a href={`#${heading.slug}`}>{heading.text}</a></li>
+        ))}
+      </ul>
+    </section>
 
-      <section class="info-panel">
-        <h2>本篇涉及的关键词（{mentionedArticles.length}）</h2>
-        <ul class="keyword-list">
-          {mentionedArticles.map((article) => (
-            <li><a href={`/articles/${article.slug}/`}>{article.keyword}</a></li>
-          ))}
-        </ul>
-      </section>
+    <section class="info-panel">
+      <h2>本篇涉及的关键词（{mentionedArticles.length}）</h2>
+      <ul class="keyword-list">
+        {mentionedArticles.map((article) => (
+          <li><a href={`/articles/${article.slug}/`}>{article.keyword}</a></li>
+        ))}
+      </ul>
+    </section>
 
-      <section class="info-panel">
-        <h2>同类原文</h2>
-        <ul class="link-list">
-          {sameYear.map((item) => (
-            <li><a href={`/sources/${item.slug}/`}>{item.title} →</a></li>
-          ))}
-        </ul>
-      </section>
-    </aside>
-  </article>
-</BaseLayout>
+    <section class="info-panel">
+      <h2>同类原文</h2>
+      <ul class="link-list">
+        {sameYear.map((item) => (
+          <li><a href={`/sources/${item.slug}/`}>{item.title} →</a></li>
+        ))}
+      </ul>
+    </section>
+  </Fragment>
+</ReaderPage>

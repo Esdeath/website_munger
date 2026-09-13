@@ -49,17 +49,14 @@ describe("responsive layout CSS", () => {
   });
 
   it("keeps reader sidebars behind a mobile drawer control", () => {
-    const articlePage = readFileSync("src/pages/articles/[slug].astro", "utf8");
-    const sourcePage = readFileSync("src/pages/sources/[slug].astro", "utf8");
+    const readerPage = readFileSync("src/components/ReaderPage.astro", "utf8");
 
-    for (const pageSource of [articlePage, sourcePage]) {
-      expect(pageSource).toContain('id="reader-drawer-state"');
-      expect(pageSource).toContain('class="drawer-state reader-drawer-state"');
-      expect(pageSource).toContain('class="drawer-scrim reader-drawer-scrim"');
-      expect(pageSource.indexOf('<aside class="reader-aside"')).toBeGreaterThan(
-        pageSource.indexOf('id="reader-drawer-state"')
-      );
-    }
+    expect(readerPage).toContain('id="reader-drawer-state"');
+    expect(readerPage).toContain('class="drawer-state reader-drawer-state"');
+    expect(readerPage).toContain('class="drawer-scrim reader-drawer-scrim"');
+    expect(readerPage.indexOf('<aside class="reader-aside"')).toBeGreaterThan(
+      readerPage.indexOf('id="reader-drawer-state"')
+    );
   });
 
   it("enhances the navigation into a fixed sidebar only on wide desktop widths", () => {

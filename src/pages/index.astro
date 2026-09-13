@@ -1,13 +1,12 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
 import { TOPICS } from "../content/site";
-import { loadArticles, loadOriginalSources } from "../lib/corpus";
+import { loadSiteCorpus } from "../lib/corpus";
 import { buildArchiveCards } from "../lib/navigation";
 import { buildCollectionPageSchema, buildWebsiteSchema, canonicalUrl } from "../lib/seo";
 import { SOURCE_DEFINITIONS } from "../lib/source-types";
 
-const articles = loadArticles();
-const sources = loadOriginalSources();
+const { articles, sources } = loadSiteCorpus();
 const archiveCards = buildArchiveCards(TOPICS, articles);
 const originalCards = SOURCE_DEFINITIONS.map((definition) => ({
   mark: definition.mark,

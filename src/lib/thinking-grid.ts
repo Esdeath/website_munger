@@ -146,7 +146,7 @@ function parseThinkingGridLayers(body: string, models: ThinkingGridDocument[]): 
   return layers;
 }
 
-export function loadThinkingGridSnapshot(directory = DEFAULT_DIRECTORY): ThinkingGridSnapshot {
+function readThinkingGridSnapshot(directory: string): ThinkingGridSnapshot {
   if (!fs.existsSync(directory)) {
     throw new Error(`思维格栅快照目录不存在: ${directory}`);
   }
@@ -175,4 +175,19 @@ export function loadThinkingGridSnapshot(directory = DEFAULT_DIRECTORY): Thinkin
   }
 
   return { ...snapshot, layers: parseThinkingGridLayers(index.body, models) };
+}
+
+let buildSnapshot: ThinkingGridSnapshot | undefined;
+
+export function loadThinkingGridSnapshot(directory = DEFAULT_DIRECTORY): ThinkingGridSnapshot {
+  if (!import.meta.env.PROD || directory !== DEFAULT_DIRECTORY) {
+    return readThinkingGridSnapshot(directory);
+  }
+
+  buildSnapshot ??= readThinkingGridSnapshot(directory);
+  return {
+    ...buildSnapshot,
+    models: [...buildSnapshot.models],
+    layers: buildSnapshot.layers.map((layer) => ({ ...layer, models: [...layer.models] }))
+  };
 }

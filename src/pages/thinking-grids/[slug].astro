@@ -1,5 +1,5 @@
 ---
-import BaseLayout from "../../layouts/BaseLayout.astro";
+import ReaderPage from "../../components/ReaderPage.astro";
 import { renderMarkdownToHtml } from "../../lib/render";
 import {
   bodyWithoutExcerpt,
@@ -37,34 +37,32 @@ const structuredData = [
 ];
 ---
 
-<BaseLayout title={model.title} description={model.excerpt} shell="reader" type="article" structuredData={structuredData}>
-  <article class="reader-layout">
-    <div class="reader-content">
-      <header class="reader-header">
-        <p>思维格栅</p>
-        <h1>{model.title}</h1>
-        <p class="reader-intro">{model.excerpt}</p>
-      </header>
-      <div class="article-body" set:html={rendered} />
-    </div>
+<ReaderPage
+  title={model.title}
+  description={model.excerpt}
+  type="article"
+  structuredData={structuredData}
+  html={rendered}
+>
+  <Fragment slot="header">
+    <p>思维格栅</p>
+    <h1>{model.title}</h1>
+    <p class="reader-intro">{model.excerpt}</p>
+  </Fragment>
 
-    <input id="reader-drawer-state" class="drawer-state reader-drawer-state" type="checkbox" />
-    <label class="drawer-scrim reader-drawer-scrim" for="reader-drawer-state" aria-hidden="true"></label>
+  <Fragment slot="aside">
+    <section class="info-panel">
+      <h2>模型信息</h2>
+      <p>思维格栅 · 模型文章</p>
+    </section>
 
-    <aside class="reader-aside">
-      <section class="info-panel">
-        <h2>模型信息</h2>
-        <p>思维格栅 · 模型文章</p>
-      </section>
-
-      <section class="info-panel">
-        <h2>本篇目录（{model.headings.length}）</h2>
-        <ul class="link-list">
-          {model.headings.map((heading) => (
-            <li><a href={`#${heading.slug}`}>{heading.text}</a></li>
-          ))}
-        </ul>
-      </section>
-    </aside>
-  </article>
-</BaseLayout>
+    <section class="info-panel">
+      <h2>本篇目录（{model.headings.length}）</h2>
+      <ul class="link-list">
+        {model.headings.map((heading) => (
+          <li><a href={`#${heading.slug}`}>{heading.text}</a></li>
+        ))}
+      </ul>
+    </section>
+  </Fragment>
+</ReaderPage>

@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { SITE_URL, TOPICS } from "../src/content/site";
-import { loadArticles, loadOriginalSources } from "../src/lib/corpus";
+import { loadSiteCorpus } from "../src/lib/corpus";
 import {
   absoluteUrl,
   buildArticleSchema,
@@ -11,9 +11,11 @@ import {
   buildSitemapEntries,
   buildSitemapXml,
   buildWebsiteSchema,
-  canonicalUrl,
-  sourceTypeLabel
+  canonicalUrl
 } from "../src/lib/seo";
+import { sourceTypeLabel } from "../src/lib/source-types";
+
+const repositoryCorpus = loadSiteCorpus();
 
 describe("SEO URL helpers", () => {
   it("uses the production domain", () => {
@@ -107,8 +109,8 @@ describe("sitemap and llms builders", () => {
   it("builds sitemap entries for core routes and corpus pages", () => {
     const entries = buildSitemapEntries({
       topics: TOPICS,
-      articles: loadArticles(),
-      sources: loadOriginalSources()
+      articles: repositoryCorpus.articles,
+      sources: repositoryCorpus.sources
     });
     const urls = entries.map((entry) => entry.url);
 
@@ -154,8 +156,8 @@ describe("sitemap and llms builders", () => {
   it("builds full llms index with representative articles and sources", () => {
     const text = buildLlmsFullTxt({
       topics: TOPICS,
-      articles: loadArticles(),
-      sources: loadOriginalSources()
+      articles: repositoryCorpus.articles,
+      sources: repositoryCorpus.sources
     });
 
     expect(text).toContain("## 主题索引");

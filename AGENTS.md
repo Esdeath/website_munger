@@ -22,7 +22,7 @@ npm run check            # FULL GATE: validate:content + astro check + vitest ru
 python3 tools/check_article.py "articles/<file>.md"  # verify one essay's quotes are verbatim
 ```
 
-`npm run check` is the canonical pre-commit gate. `astro check` does TypeScript/Astro typechecking (config extends `astro/tsconfigs/strict`; `@/*` maps to `src/*`).
+`npm run check` is the canonical pre-commit gate. `astro check` does TypeScript/Astro typechecking with `astro/tsconfigs/strict`.
 
 ## Architecture
 
@@ -34,11 +34,11 @@ The three content directories live at the **repository root**, not under `src/`:
 - `shareholders/` — Blue Chip / Wesco / Daily Journal shareholder letters & meeting transcripts.
 - `speech/` — speeches, interviews, statements, long-form conversations.
 
-`src/lib/corpus.ts` is the single loader: it reads these directories directly from `process.cwd()` via `node:fs` at build time (`loadArticles()`, `loadOriginalSources()`). There is no Astro content collection / `src/content/config.ts`. Anything that needs content calls these functions. `src/content/site.ts` is **not** a content collection — it is a hand-maintained config module (site metadata + the `TOPICS` array).
+`src/lib/corpus.ts` is the single loader: `loadSiteCorpus()` reads these directories directly from `process.cwd()` via `node:fs`, returning articles and original sources together. Static builds cache the parsed collections while each caller receives independent arrays. There is no Astro content collection / `src/content/config.ts`. `src/content/site.ts` is **not** a content collection — it is a hand-maintained config module (site metadata + the `TOPICS` array).
 
 ### Topic mapping
 
-`src/content/site.ts` defines 8 `TOPICS` (investment-principles, thinking-methods, human-misjudgment, etc.). An article belongs to a topic when its frontmatter `category` string equals a topic's `title` — `relations.ts:topicForCategory` is currently an identity function, so the join is by exact Chinese category name. Articles, source-to-article maps, and "related articles" are all computed in `src/lib/relations.ts`.
+`src/content/site.ts` defines 8 `TOPICS` (investment-principles, thinking-methods, human-misjudgment, etc.). An article belongs to a topic when its frontmatter `category` string exactly equals a topic's `title`. Articles, source-to-article maps, and "related articles" are all computed in `src/lib/relations.ts`.
 
 ### Page generation
 
@@ -48,6 +48,8 @@ Routes in `src/pages/` use `getStaticPaths()` over the corpus to emit one static
 - Slugs come from the **filename** via `src/lib/slug.ts:filePathToSlug` (handles CJK punctuation → dashes). Slugs are derived, not stored.
 - `[sourceDirectory]/images/[image].png.ts` serves images out of `shareholders/images/` and `speech/images/` through a dynamic route (with path-traversal guards).
 - SEO/agent routes are generated, not static files: `sitemap.xml.ts`, `robots.txt.ts`, `llms.txt.ts`, `llms-full.txt.ts`.
+
+The article, original-source, and thinking-grid detail routes share `src/components/ReaderPage.astro`; each route supplies only its header, actions, rendered Markdown, and aside panels.
 
 ### Markdown rendering & automatic cross-linking
 

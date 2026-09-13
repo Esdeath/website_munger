@@ -9,8 +9,6 @@ import {
 import type { KnowledgeArticle, OriginalSource } from "./corpus";
 import { sourceTypeLabel } from "./source-types";
 
-export { sourceTypeLabel };
-
 export interface BreadcrumbItem {
   name: string;
   pathname: string;

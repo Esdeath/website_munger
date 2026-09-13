@@ -18,6 +18,6 @@ describe("ThemePicker component", () => {
   });
   it("applies and persists the selected theme on the client", () => {
     expect(src).toContain("applyTheme(");
-    expect(src).toContain('localStorage.setItem("theme"');
+    expect(src).toContain("localStorage.setItem(THEME_STORAGE_KEY");
   });
 });

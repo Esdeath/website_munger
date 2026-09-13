@@ -2,15 +2,7 @@ import type { TopicDefinition } from "../content/site";
 import type { KnowledgeArticle, OriginalSource } from "./corpus";
 import type { KeywordLink } from "./render";
 
-export function topicForCategory(category: string): string {
-  return category;
-}
-
-export function articleKeywords(article: KnowledgeArticle): string[] {
-  return [...new Set([article.keyword, ...article.aliases].map((keyword) => keyword.trim()).filter(Boolean))];
-}
-
-function sourceLabelMatchesTitle(label: string, title: string): boolean {
+export function sourceLabelMatchesTitle(label: string, title: string): boolean {
   const normalizedLabel = label.replace(/\s+/g, "");
   const normalizedTitle = title.replace(/\s+/g, "");
   const labelWithoutYear = normalizedLabel.replace(/[（(](19|20)\d{2}[）)]/g, "");
@@ -19,7 +11,7 @@ function sourceLabelMatchesTitle(label: string, title: string): boolean {
 
 export function articlesForTopic(articles: KnowledgeArticle[], topic: TopicDefinition): KnowledgeArticle[] {
   return articles
-    .filter((article) => topicForCategory(article.category) === topic.title)
+    .filter((article) => article.category === topic.title)
     .sort(compareArticlesForDisplay);
 }
 

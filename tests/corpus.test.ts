@@ -1,8 +1,8 @@
-import { describe, expect, it } from "vitest";
+import fs from "node:fs";
+import { describe, expect, it, vi } from "vitest";
 import {
-  loadArticles,
   loadCorpusManifest,
-  loadOriginalSources,
+  loadSiteCorpus,
   parseCorpusManifest
 } from "../src/lib/corpus";
 import { renderMarkdownToHtml } from "../src/lib/render";
@@ -14,6 +14,10 @@ const manifestMarkdown = `# 原始语料清单
 | \`shareholders/2023年 每日期刊股东会讲话.md\` | 2023 | 2023年 每日期刊股东会讲话 | 股东信/股东会 | 未记录 | 需复核 |
 | \`speech/查理芒格：2023年《最后的访谈CNBC》.md\` | 2023 | 查理芒格：2023年《最后的访谈CNBC》 | 访谈 | 未记录 | 需复核 |
 `;
+
+const repositoryCorpus = loadSiteCorpus();
+const repositoryArticles = repositoryCorpus.articles;
+const repositorySources = repositoryCorpus.sources;
 
 describe("parseCorpusManifest", () => {
   it("parses corpus rows from the manifest table", () => {
@@ -40,19 +44,48 @@ describe("parseCorpusManifest", () => {
 
 describe("loaders against repository content", () => {
   it("loads completed articles", () => {
-    const articles = loadArticles();
-    expect(articles.length).toBeGreaterThanOrEqual(70);
-    expect(articles.find((article) => article.keyword === "能力圈")).toBeDefined();
+    expect(repositoryArticles.length).toBeGreaterThanOrEqual(70);
+    expect(repositoryArticles.find((article) => article.keyword === "能力圈")).toBeDefined();
+  });
+
+  it("loads a complete site corpus through one entry point", () => {
+    expect(repositoryArticles.length).toBeGreaterThanOrEqual(70);
+    expect(repositorySources.length).toBeGreaterThanOrEqual(80);
+  });
+
+  it("reuses parsed collections during production builds", () => {
+    vi.stubEnv("PROD", true);
+    const readFile = vi.spyOn(fs, "readFileSync");
+
+    try {
+      const first = loadSiteCorpus();
+      const readsAfterFirstLoad = readFile.mock.calls.length;
+      const second = loadSiteCorpus();
+
+      expect(readsAfterFirstLoad).toBeGreaterThan(0);
+      expect(readFile).toHaveBeenCalledTimes(readsAfterFirstLoad);
+      expect(second.articles).not.toBe(first.articles);
+      expect(second.sources).not.toBe(first.sources);
+
+      first.articles.reverse();
+      first.sources.reverse();
+      const third = loadSiteCorpus();
+      expect(third.articles[0]?.slug).toBe(second.articles[0]?.slug);
+      expect(third.sources[0]?.slug).toBe(second.sources[0]?.slug);
+    } finally {
+      readFile.mockRestore();
+      vi.unstubAllEnvs();
+    }
   });
 
   it("loads article keyword aliases", () => {
-    const lecture = loadArticles().find((article) => article.title.startsWith("思维模型讲义01"));
+    const lecture = repositoryArticles.find((article) => article.title.startsWith("思维模型讲义01"));
 
     expect(lecture?.aliases).toEqual(expect.arrayContaining(["铁锤人综合症"]));
   });
 
   it("absorbs the three duplicate thought-method articles into their lecture counterparts", () => {
-    const articles = loadArticles();
+    const articles = repositoryArticles;
     const lecture01 = articles.find((article) => article.title.startsWith("思维模型讲义01"));
     const lecture02 = articles.find((article) => article.title.startsWith("思维模型讲义02"));
     const lecture09 = articles.find((article) => article.title.startsWith("思维模型讲义09"));
@@ -90,7 +123,7 @@ describe("loaders against repository content", () => {
   });
 
   it("absorbs hard-science and misjudgment-psychology topics into their lecture counterparts", () => {
-    const articles = loadArticles();
+    const articles = repositoryArticles;
     const hardScience = articles.find((article) => article.title.startsWith("思维模型讲义04"));
     const psychology = articles.find((article) => article.title.startsWith("思维模型讲义06"));
 
@@ -107,7 +140,7 @@ describe("loaders against repository content", () => {
   });
 
   it("absorbs scale disadvantages and technology topics into their lecture counterparts", () => {
-    const articles = loadArticles();
+    const articles = repositoryArticles;
     const scale = articles.find((article) => article.title.startsWith("思维模型讲义07"));
     const competition = articles.find((article) => article.title.startsWith("思维模型讲义08"));
 
@@ -120,7 +153,7 @@ describe("loaders against repository content", () => {
   });
 
   it("absorbs checklist and common-sense methods into their judgment-discipline articles", () => {
-    const articles = loadArticles();
+    const articles = repositoryArticles;
     const inversion = articles.find((article) => article.title.startsWith("思维模型讲义10"));
     const rationality = articles.find((article) => article.title.startsWith("思维模型讲义11"));
 
@@ -145,7 +178,7 @@ describe("loaders against repository content", () => {
   });
 
   it("removes all nine absorbed source files from the final corpus", () => {
-    const filePaths = loadArticles().map((article) => article.filePath);
+    const filePaths = repositoryArticles.map((article) => article.filePath);
 
     expect(filePaths).not.toEqual(
       expect.arrayContaining([
@@ -163,21 +196,20 @@ describe("loaders against repository content", () => {
   });
 
   it("normalizes article dates to YYYY-MM-DD strings", () => {
-    const datedArticle = loadArticles().find((article) => article.date !== undefined);
+    const datedArticle = repositoryArticles.find((article) => article.date !== undefined);
 
     expect(datedArticle?.date).toMatch(/^\d{4}-\d{2}-\d{2}$/);
   });
 
   it("loads original source files", () => {
-    const sources = loadOriginalSources();
-    expect(sources.length).toBeGreaterThanOrEqual(80);
-    expect(sources.find((source) => source.filePath.includes("2023年 每日期刊股东会讲话"))).toBeDefined();
+    expect(repositorySources.length).toBeGreaterThanOrEqual(80);
+    expect(repositorySources.find((source) => source.filePath.includes("2023年 每日期刊股东会讲话"))).toBeDefined();
   });
 
   it("does not expose strong-emphasis markers in rendered original sources", async () => {
     const malformedSources: string[] = [];
 
-    for (const source of loadOriginalSources()) {
+    for (const source of repositorySources) {
       const html = await renderMarkdownToHtml(source.body);
       if (html.includes("**")) {
         malformedSources.push(source.filePath);
@@ -188,7 +220,7 @@ describe("loaders against repository content", () => {
   });
 
   it("loads the standalone Seeking Wisdom HTML at its established source slug", () => {
-    const source = loadOriginalSources().find((item) => item.slug === "seeking-wisdom-中文版");
+    const source = repositorySources.find((item) => item.slug === "seeking-wisdom-中文版");
 
     expect(source).toEqual(
       expect.objectContaining({
@@ -202,7 +234,7 @@ describe("loaders against repository content", () => {
   });
 
   it("loads all Li Lu source files as a separate source type", () => {
-    const sources = loadOriginalSources().filter((source) => source.type === "li-lu");
+    const sources = repositorySources.filter((source) => source.type === "li-lu");
 
     expect(sources).toHaveLength(14);
     expect(sources).toEqual(
@@ -222,7 +254,7 @@ describe("loaders against repository content", () => {
   });
 
   it("loads Li Lu source titles without Markdown formatting markers", () => {
-    const titles = loadOriginalSources()
+    const titles = repositorySources
       .filter((source) => source.type === "li-lu")
       .map((source) => source.title);
 
@@ -231,14 +263,14 @@ describe("loaders against repository content", () => {
   });
 
   it("rewrites original source relative image paths to source-directory absolute paths", () => {
-    const source = loadOriginalSources().find((item) => item.filePath === "shareholders/1987年 西科金融股东会讲话.md");
+    const source = repositorySources.find((item) => item.filePath === "shareholders/1987年 西科金融股东会讲话.md");
 
     expect(source?.body).toContain("](/shareholders/images/image_-2856457156250514870.png)");
     expect(source?.body).not.toContain("](images/image_-2856457156250514870.png)");
   });
 
   it("rewrites Li Lu relative image paths to li-lu absolute paths", () => {
-    const source = loadOriginalSources().find(
+    const source = repositorySources.find(
       (item) => item.filePath === "li-lu/李录：2006年哥伦比亚大学商学院演讲.md"
     );
 

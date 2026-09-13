@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { TOPICS } from "../src/content/site";
-import { loadArticles, type KnowledgeArticle, type OriginalSource } from "../src/lib/corpus";
+import { loadSiteCorpus, type KnowledgeArticle, type OriginalSource } from "../src/lib/corpus";
 import {
   articlesForTopic,
   buildSourceArticleMap,
@@ -9,8 +9,7 @@ import {
   mentionedArticlesForSource,
   relatedArticles,
   sameYearSources,
-  sourcesForArticle,
-  topicForCategory
+  sourcesForArticle
 } from "../src/lib/relations";
 
 const articles = [
@@ -93,7 +92,7 @@ describe("articlesForTopic", () => {
   });
 
   it("keeps the final 12-part thinking-model lecture curriculum", () => {
-    const lectures = loadArticles()
+    const lectures = loadSiteCorpus().articles
       .filter((article) => article.category === "思维模型讲义")
       .sort(compareArticlesForDisplay);
 
@@ -150,7 +149,6 @@ describe("articlesForTopic", () => {
     const investment = TOPICS.find((item) => item.slug === "investment-principles")!;
     const macroWarning = TOPICS.find((item) => item.slug === "macro-warnings")!;
 
-    expect(topicForCategory(macro.category)).toBe("宏观警示");
     expect(articlesForTopic([macro], investment)).toEqual([]);
     expect(articlesForTopic([macro], macroWarning).map((article) => article.keyword)).toEqual(["利率"]);
   });

@@ -1,0 +1,38 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+
+interface Props {
+  title: string;
+  description?: string;
+  type?: "website" | "article";
+  structuredData?: Record<string, unknown> | Record<string, unknown>[];
+  html: string;
+}
+
+const { title, description, type, structuredData, html } = Astro.props;
+---
+
+<BaseLayout
+  title={title}
+  description={description}
+  shell="reader"
+  type={type}
+  structuredData={structuredData}
+>
+  <article class="reader-layout">
+    <div class="reader-content">
+      <header class="reader-header">
+        <slot name="header" />
+      </header>
+      <slot name="actions" />
+      <div class="article-body" set:html={html} />
+    </div>
+
+    <input id="reader-drawer-state" class="drawer-state reader-drawer-state" type="checkbox" />
+    <label class="drawer-scrim reader-drawer-scrim" for="reader-drawer-state" aria-hidden="true"></label>
+
+    <aside class="reader-aside">
+      <slot name="aside" />
+    </aside>
+  </article>
+</BaseLayout>

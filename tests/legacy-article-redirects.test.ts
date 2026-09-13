@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { LEGACY_ARTICLE_REDIRECTS } from "../src/content/legacy-article-redirects";
-import { loadArticles } from "../src/lib/corpus";
+import { loadSiteCorpus } from "../src/lib/corpus";
 
 describe("legacy article redirects", () => {
   it("redirects every retired route directly to its final lecture", () => {
@@ -34,7 +34,7 @@ describe("legacy article redirects", () => {
   it("uses 23 direct redirects whose targets are final article routes", () => {
     const sources = Object.keys(LEGACY_ARTICLE_REDIRECTS);
     const targets = Object.values(LEGACY_ARTICLE_REDIRECTS);
-    const articleRoutes = new Set(loadArticles().map((article) => `/articles/${article.slug}/`));
+    const articleRoutes = new Set(loadSiteCorpus().articles.map((article) => `/articles/${article.slug}/`));
 
     expect(sources).toHaveLength(23);
     expect(targets.every((target) => !sources.includes(target))).toBe(true);

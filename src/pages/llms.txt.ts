@@ -1,12 +1,13 @@
 import { TOPICS } from "../content/site";
-import { loadArticles, loadOriginalSources } from "../lib/corpus";
+import { loadSiteCorpus } from "../lib/corpus";
 import { buildLlmsTxt } from "../lib/seo";
 
 export function GET() {
+  const { articles, sources } = loadSiteCorpus();
   const text = buildLlmsTxt({
     topics: TOPICS,
-    articleCount: loadArticles().length,
-    sourceCount: loadOriginalSources().length
+    articleCount: articles.length,
+    sourceCount: sources.length
   });
 
   return new Response(`${text}\n`, {

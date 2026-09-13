@@ -1,12 +1,13 @@
 import { TOPICS } from "../content/site";
-import { loadArticles, loadOriginalSources } from "../lib/corpus";
+import { loadSiteCorpus } from "../lib/corpus";
 import { buildSitemapEntries, buildSitemapXml } from "../lib/seo";
 
 export function GET() {
+  const { articles, sources } = loadSiteCorpus();
   const entries = buildSitemapEntries({
     topics: TOPICS,
-    articles: loadArticles(),
-    sources: loadOriginalSources()
+    articles,
+    sources
   });
 
   return new Response(buildSitemapXml(entries), {

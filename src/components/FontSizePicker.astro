@@ -1,13 +1,8 @@
 ---
-interface Props {
-  placement?: "top-start" | "bottom-end";
-}
-
-const placement = Astro.props.placement ?? "bottom-end";
-const panelId = `font-size-panel-${Math.random().toString(36).slice(2, 8)}`;
+const panelId = "font-size-panel";
 ---
 
-<div class="font-size-picker" data-font-picker data-placement={placement}>
+<div class="font-size-picker" data-font-picker>
   <button
     class="font-size-trigger"
     type="button"
@@ -99,6 +94,8 @@ const panelId = `font-size-panel-${Math.random().toString(36).slice(2, 8)}`;
 
   .font-size-panel {
     position: absolute;
+    top: calc(100% + 8px);
+    right: 0;
     z-index: 80;
     width: 172px;
     padding: 9px;
@@ -107,16 +104,6 @@ const panelId = `font-size-panel-${Math.random().toString(36).slice(2, 8)}`;
     background: var(--paper);
     color: var(--ink);
     box-shadow: var(--shadow);
-  }
-
-  .font-size-picker[data-placement="top-start"] .font-size-panel {
-    bottom: calc(100% + 8px);
-    left: 0;
-  }
-
-  .font-size-picker[data-placement="bottom-end"] .font-size-panel {
-    top: calc(100% + 8px);
-    right: 0;
   }
 
   .font-size-label {

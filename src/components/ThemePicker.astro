@@ -1,16 +1,11 @@
 ---
 import { THEMES, themeMeta } from "../lib/theme";
 
-interface Props {
-  placement?: "top-start" | "bottom-end";
-}
-
-const placement = Astro.props.placement ?? "bottom-end";
 const options = THEMES.map((value) => ({ value, ...themeMeta[value] }));
-const menuId = `theme-menu-${Math.random().toString(36).slice(2, 8)}`;
+const menuId = "theme-menu";
 ---
 
-<div class="theme-picker" data-theme-picker data-placement={placement}>
+<div class="theme-picker" data-theme-picker>
   <button
     class="theme-trigger"
     type="button"
@@ -106,6 +101,8 @@ const menuId = `theme-menu-${Math.random().toString(36).slice(2, 8)}`;
 
   .theme-menu {
     position: absolute;
+    top: calc(100% + 8px);
+    right: 0;
     z-index: 80;
     width: 172px;
     padding: 6px;
@@ -114,16 +111,6 @@ const menuId = `theme-menu-${Math.random().toString(36).slice(2, 8)}`;
     background: var(--paper);
     color: var(--ink);
     box-shadow: var(--shadow);
-  }
-
-  .theme-picker[data-placement="top-start"] .theme-menu {
-    bottom: calc(100% + 8px);
-    left: 0;
-  }
-
-  .theme-picker[data-placement="bottom-end"] .theme-menu {
-    top: calc(100% + 8px);
-    right: 0;
   }
 
   .theme-option {
@@ -178,7 +165,7 @@ const menuId = `theme-menu-${Math.random().toString(36).slice(2, 8)}`;
 </style>
 
 <script>
-  import { applyTheme, isTheme, themeMeta, type Theme, type ThemeTargets } from "../lib/theme";
+  import { applyTheme, isTheme, THEME_STORAGE_KEY, themeMeta, type Theme, type ThemeTargets } from "../lib/theme";
 
   function currentTargets(): ThemeTargets {
     return {
@@ -196,7 +183,7 @@ const menuId = `theme-menu-${Math.random().toString(36).slice(2, 8)}`;
 
   function persist(theme: Theme) {
     try {
-      localStorage.setItem("theme", theme);
+      localStorage.setItem(THEME_STORAGE_KEY, theme);
     } catch {
       // Storage may be blocked; the choice still applies to the current page.
     }

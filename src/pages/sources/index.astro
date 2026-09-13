@@ -1,10 +1,10 @@
 ---
 import BaseLayout from "../../layouts/BaseLayout.astro";
-import { loadOriginalSources } from "../../lib/corpus";
+import { loadSiteCorpus } from "../../lib/corpus";
 import { buildCollectionPageSchema, canonicalUrl } from "../../lib/seo";
 import { SOURCE_DEFINITIONS } from "../../lib/source-types";
 
-const sources = loadOriginalSources().sort(
+const sources = loadSiteCorpus().sources.sort(
   (a, b) => a.year.localeCompare(b.year) || a.title.localeCompare(b.title, "zh-Hans-CN")
 );
 const sourceGroups = SOURCE_DEFINITIONS.map((definition) => ({

@@ -3,11 +3,8 @@ import { TOPICS } from "../src/content/site";
 import type { KnowledgeArticle, OriginalSource } from "../src/lib/corpus";
 import {
   buildArchiveCards,
-  buildSidebarSections,
-  BOOK_LIST_NAV,
-  SEEKING_WISDOM_NAV,
-  STOP_DOING_NAV,
-  THINKING_GRID_NAV
+  buildOtherNavigation,
+  buildSidebarSections
 } from "../src/lib/navigation";
 
 const articles = [
@@ -138,27 +135,20 @@ describe("buildSidebarSections", () => {
   });
 });
 
-describe("STOP_DOING_NAV", () => {
-  it("is a top-level entry pointing at /stop-doing/", () => {
-    expect(STOP_DOING_NAV).toEqual({ label: "不可为清单", href: "/stop-doing/" });
+describe("buildOtherNavigation", () => {
+  it("builds the secondary entries in display order", () => {
+    expect(buildOtherNavigation().map(({ label, href }) => ({ label, href }))).toEqual([
+      { label: "思维格栅", href: "/thinking-grids/" },
+      { label: "不可为清单", href: "/stop-doing/" },
+      { label: "探索智慧", href: "/sources/seeking-wisdom-中文版/" },
+      { label: "芒格书单", href: "/book-list/" }
+    ]);
   });
-});
 
-describe("THINKING_GRID_NAV", () => {
-  it("is a top-level entry pointing at the thinking grid index", () => {
-    expect(THINKING_GRID_NAV).toEqual({ label: "思维格栅", href: "/thinking-grids/" });
-  });
-});
-
-describe("BOOK_LIST_NAV", () => {
-  it("is a top-level entry pointing at /book-list/", () => {
-    expect(BOOK_LIST_NAV).toEqual({ label: "芒格书单", href: "/book-list/" });
-  });
-});
-
-describe("SEEKING_WISDOM_NAV", () => {
-  it("is a top-level entry pointing at the embedded reader", () => {
-    expect(SEEKING_WISDOM_NAV).toEqual({ label: "探索智慧", href: "/sources/seeking-wisdom-中文版/" });
+  it("marks thinking-grid detail pages and exact standalone pages active", () => {
+    expect(buildOtherNavigation("/thinking-grids/能力圈/")[0].active).toBe(true);
+    expect(buildOtherNavigation("/stop-doing")[1].active).toBe(true);
+    expect(buildOtherNavigation("/book-list/extra")[3].active).toBe(false);
   });
 });
 

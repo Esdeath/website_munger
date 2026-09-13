@@ -45,7 +45,6 @@
   --fs-icon: 1.2rem;
   --fs-lead-max: 1.35rem;
   --fs-section: 1.4rem;
-  --fs-hero-min: 2.1rem;
   --fs-hero-max: 3.2rem;
   --article-font-scale: 100%;
   --mobile-topbar: 54px;
@@ -1505,18 +1504,4 @@ input:focus-visible {
   display: grid;
   gap: 0.75rem;
   line-height: 1.7;
-}
-
-.sidebar-toplink {
-  display: block;
-  font-weight: 600;
-  text-decoration: none;
-  padding: 0.25rem 10px;
-  border-left: 3px solid transparent;
-}
-
-.sidebar-toplink.is-active {
-  background: var(--green-soft);
-  border-left-color: var(--green);
-  color: var(--green-dark);
 }

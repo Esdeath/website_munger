@@ -1,12 +1,13 @@
 import { TOPICS } from "../content/site";
-import { loadArticles, loadOriginalSources } from "../lib/corpus";
+import { loadSiteCorpus } from "../lib/corpus";
 import { buildLlmsFullTxt } from "../lib/seo";
 
 export function GET() {
+  const { articles, sources } = loadSiteCorpus();
   const text = buildLlmsFullTxt({
     topics: TOPICS,
-    articles: loadArticles(),
-    sources: loadOriginalSources()
+    articles,
+    sources
   });
 
   return new Response(`${text}\n`, {
