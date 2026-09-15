@@ -9,6 +9,9 @@ node_modules/
 .astro/
 dist/
 
+# Generated working files
+tmp/
+
 # macOS
 .DS_Store
 
