@@ -141,14 +141,16 @@ describe("buildOtherNavigation", () => {
       { label: "思维格栅", href: "/thinking-grids/" },
       { label: "不可为清单", href: "/stop-doing/" },
       { label: "探索智慧", href: "/sources/seeking-wisdom-中文版/" },
+      { label: "芒格问答录", href: "/books/munger-qa/" },
       { label: "芒格书单", href: "/book-list/" }
     ]);
   });
 
-  it("marks thinking-grid detail pages and exact standalone pages active", () => {
+  it("marks descendant readers and exact standalone pages active", () => {
     expect(buildOtherNavigation("/thinking-grids/能力圈/")[0].active).toBe(true);
     expect(buildOtherNavigation("/stop-doing")[1].active).toBe(true);
-    expect(buildOtherNavigation("/book-list/extra")[3].active).toBe(false);
+    expect(buildOtherNavigation("/books/munger-qa/reader.html")[3].active).toBe(true);
+    expect(buildOtherNavigation("/book-list/extra")[4].active).toBe(false);
   });
 });
 

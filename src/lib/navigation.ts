@@ -102,6 +102,7 @@ const OTHER_NAV_ITEMS = [
   { label: "思维格栅", href: "/thinking-grids/", includeDescendants: true },
   { label: "不可为清单", href: "/stop-doing/", includeDescendants: false },
   { label: "探索智慧", href: "/sources/seeking-wisdom-中文版/", includeDescendants: false },
+  { label: "芒格问答录", href: "/books/munger-qa/", includeDescendants: true },
   { label: "芒格书单", href: "/book-list/", includeDescendants: false }
 ] as const;
 

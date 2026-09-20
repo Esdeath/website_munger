@@ -1,0 +1,18 @@
+---
+import BaseLayout from "../../../layouts/BaseLayout.astro";
+
+const title = "芒格问答录";
+const description = "从芒格股东会、演讲与访谈中文语料中精选并重编的 300 问，面向普通读者与价值投资者。";
+---
+
+<BaseLayout title={title} description={description}>
+  <section class="standalone-reader-page" aria-labelledby="munger-qa-title">
+    <h1 id="munger-qa-title" class="sr-only">{title}</h1>
+    <iframe
+      class="standalone-reader-frame"
+      src="/books/munger-qa/reader.html"
+      title={title}
+      loading="eager"
+    ></iframe>
+  </section>
+</BaseLayout>

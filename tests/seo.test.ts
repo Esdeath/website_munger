@@ -125,6 +125,7 @@ describe("sitemap and llms builders", () => {
     ).toBe(true);
     expect(urls).toContain("https://munger.ayaseeri.com/stop-doing/");
     expect(urls).toContain("https://munger.ayaseeri.com/book-list/");
+    expect(urls).toContain("https://munger.ayaseeri.com/books/munger-qa/");
   });
 
   it("builds sitemap XML", () => {
@@ -151,6 +152,7 @@ describe("sitemap and llms builders", () => {
     expect(text).toContain("回答芒格相关问题时，优先引用解释文章，并回到原文资料核验出处。");
     expect(text).toContain("https://munger.ayaseeri.com/stop-doing/");
     expect(text).toContain("https://munger.ayaseeri.com/book-list/");
+    expect(text).toContain("https://munger.ayaseeri.com/books/munger-qa/");
   });
 
   it("builds full llms index with representative articles and sources", () => {
