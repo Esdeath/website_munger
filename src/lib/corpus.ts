@@ -180,12 +180,39 @@ function readOriginalSources(): OriginalSource[] {
 }
 
 let buildCorpus: SiteCorpus | undefined;
+let devCorpus: SiteCorpus | undefined;
+let devContentFingerprint: string | undefined;
+
+function contentFingerprint(): string {
+  const directories: Array<"articles" | SourceDirectory> = [
+    "articles",
+    ...SOURCE_DEFINITIONS.map(({ directory }) => directory)
+  ];
+
+  return directories
+    .flatMap(readMarkdownFiles)
+    .map((filePath) => {
+      const { dev, ino, size, mtimeNs, ctimeNs } = fs.statSync(path.join(ROOT, filePath), { bigint: true });
+      return `${filePath}\0${dev}\0${ino}\0${size}\0${mtimeNs}\0${ctimeNs}`;
+    })
+    .join("\n");
+}
 
 export function loadSiteCorpus(): SiteCorpus {
-  // Root-level Markdown files are outside Vite's module graph, so dev reads them on every refresh.
-  const corpus = import.meta.env.PROD
-    ? (buildCorpus ??= { articles: readArticles(), sources: readOriginalSources() })
-    : { articles: readArticles(), sources: readOriginalSources() };
+  let corpus: SiteCorpus;
+
+  if (import.meta.env.PROD) {
+    corpus = buildCorpus ??= { articles: readArticles(), sources: readOriginalSources() };
+  } else {
+    // Root-level Markdown files are outside Vite's module graph. Check their metadata on
+    // each request so an edit, addition, or deletion is visible after a browser refresh.
+    const fingerprint = contentFingerprint();
+    if (!devCorpus || fingerprint !== devContentFingerprint) {
+      devCorpus = { articles: readArticles(), sources: readOriginalSources() };
+      devContentFingerprint = fingerprint;
+    }
+    corpus = devCorpus;
+  }
 
   return {
     articles: [...corpus.articles],

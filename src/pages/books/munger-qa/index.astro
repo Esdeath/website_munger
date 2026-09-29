@@ -3,6 +3,7 @@ import BaseLayout from "../../../layouts/BaseLayout.astro";
 
 const title = "芒格问答录";
 const description = "从芒格股东会、演讲与访谈中文语料中精选并重编的 300 问，面向普通读者与价值投资者。";
+const readerSrc = import.meta.env.DEV ? "/books/munger-qa/reader.html" : "/books/munger-qa/reader";
 ---
 
 <BaseLayout title={title} description={description}>
@@ -10,7 +11,7 @@ const description = "从芒格股东会、演讲与访谈中文语料中精选�
     <h1 id="munger-qa-title" class="sr-only">{title}</h1>
     <iframe
       class="standalone-reader-frame"
-      src="/books/munger-qa/reader.html"
+      src={readerSrc}
       title={title}
       loading="eager"
     ></iframe>

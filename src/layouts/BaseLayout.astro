@@ -117,10 +117,26 @@ const otherGroupOpen = otherNavigation.some((item) => item.active);
     <script is:inline>
       var _hmt = _hmt || [];
       (function() {
-        var hm = document.createElement("script");
-        hm.src = "https://hm.baidu.com/hm.js?27ba6ea2e1b2f30c1acf9ed6977e1c8b";
-        var s = document.getElementsByTagName("script")[0];
-        s.parentNode.insertBefore(hm, s);
+        function loadAnalytics() {
+          var hm = document.createElement("script");
+          hm.async = true;
+          hm.src = "https://hm.baidu.com/hm.js?27ba6ea2e1b2f30c1acf9ed6977e1c8b";
+          document.head.appendChild(hm);
+        }
+
+        function scheduleAnalytics() {
+          if ("requestIdleCallback" in window) {
+            window.requestIdleCallback(loadAnalytics, { timeout: 2000 });
+          } else {
+            window.setTimeout(loadAnalytics, 2000);
+          }
+        }
+
+        if (document.readyState === "loading") {
+          document.addEventListener("DOMContentLoaded", scheduleAnalytics, { once: true });
+        } else {
+          scheduleAnalytics();
+        }
       })();
     </script>
     <title>{pageTitle}</title>

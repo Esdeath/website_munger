@@ -149,7 +149,7 @@ describe("buildOtherNavigation", () => {
   it("marks descendant readers and exact standalone pages active", () => {
     expect(buildOtherNavigation("/thinking-grids/能力圈/")[0].active).toBe(true);
     expect(buildOtherNavigation("/stop-doing")[1].active).toBe(true);
-    expect(buildOtherNavigation("/books/munger-qa/reader.html")[3].active).toBe(true);
+    expect(buildOtherNavigation("/books/munger-qa/reader")[3].active).toBe(true);
     expect(buildOtherNavigation("/book-list/extra")[4].active).toBe(false);
   });
 });

@@ -3,6 +3,9 @@ import BaseLayout from "../../../layouts/BaseLayout.astro";
 import { STANDALONE_SOURCES } from "../../../content/standalone-sources";
 
 const source = STANDALONE_SOURCES[0];
+const readerSrc = import.meta.env.DEV
+  ? "/sources/seeking-wisdom-中文版/reader.html"
+  : "/sources/seeking-wisdom-中文版/reader";
 ---
 
 <BaseLayout title={source.title} description={source.excerpt}>
@@ -10,7 +13,7 @@ const source = STANDALONE_SOURCES[0];
     <h1 id="standalone-reader-title" class="sr-only">{source.title}</h1>
     <iframe
       class="standalone-reader-frame"
-      src="/sources/seeking-wisdom-中文版/reader.html"
+      src={readerSrc}
       title={source.title}
       loading="eager"
     ></iframe>

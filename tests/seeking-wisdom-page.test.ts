@@ -7,6 +7,8 @@ describe("embedded Seeking Wisdom page", () => {
   it("renders the standalone reader inside the shared site layout", () => {
     expect(page).toContain('<BaseLayout title={source.title} description={source.excerpt}>');
     expect(page).toContain('class="standalone-reader-frame"');
-    expect(page).toContain('src="/sources/seeking-wisdom-中文版/reader.html"');
+    expect(page).toContain('src={readerSrc}');
+    expect(page).toContain('"/sources/seeking-wisdom-中文版/reader.html"');
+    expect(page).toContain('"/sources/seeking-wisdom-中文版/reader"');
   });
 });

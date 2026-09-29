@@ -1,4 +1,5 @@
 import fs from "node:fs";
+import path from "node:path";
 import { describe, expect, it, vi } from "vitest";
 import {
   loadCorpusManifest,
@@ -73,6 +74,55 @@ describe("loaders against repository content", () => {
       expect(third.articles[0]?.slug).toBe(second.articles[0]?.slug);
       expect(third.sources[0]?.slug).toBe(second.sources[0]?.slug);
     } finally {
+      readFile.mockRestore();
+      vi.unstubAllEnvs();
+    }
+  });
+
+  it("reuses parsed content in development and reloads an edited Markdown file", () => {
+    vi.stubEnv("PROD", false);
+    const article = repositoryArticles.find((item) => item.keyword === "能力圈")!;
+    const articlePath = path.join(process.cwd(), article.filePath);
+    const originalText = fs.readFileSync(articlePath, "utf8");
+    const originalStat = fs.statSync.bind(fs);
+    const originalRead = fs.readFileSync.bind(fs);
+    let revision = 0;
+    const statFile = vi.spyOn(fs, "statSync").mockImplementation((filePath) => {
+      const stat = originalStat(filePath, { bigint: true });
+      return revision > 0 && String(filePath) === articlePath
+        ? Object.assign(stat, { mtimeNs: stat.mtimeNs + BigInt(revision) })
+        : stat;
+    });
+    const readFile = vi.spyOn(fs, "readFileSync").mockImplementation((filePath) =>
+      revision > 0 && String(filePath) === articlePath
+        ? `${originalText}\n\nDEV_CACHE_EDIT_${revision}\n`
+        : originalRead(filePath, "utf8")
+    );
+
+    try {
+      const first = loadSiteCorpus();
+      readFile.mockClear();
+      const second = loadSiteCorpus();
+
+      expect(readFile).not.toHaveBeenCalled();
+      expect(second.articles).not.toBe(first.articles);
+      expect(second.sources).not.toBe(first.sources);
+
+      first.articles.reverse();
+      first.sources.reverse();
+      expect(loadSiteCorpus().articles[0]?.slug).toBe(second.articles[0]?.slug);
+      expect(loadSiteCorpus().sources[0]?.slug).toBe(second.sources[0]?.slug);
+
+      revision = 1;
+      const changed = loadSiteCorpus();
+      expect(readFile).toHaveBeenCalled();
+      expect(changed.articles.find((item) => item.slug === article.slug)?.body).toContain("DEV_CACHE_EDIT_1");
+
+      readFile.mockClear();
+      loadSiteCorpus();
+      expect(readFile).not.toHaveBeenCalled();
+    } finally {
+      statFile.mockRestore();
       readFile.mockRestore();
       vi.unstubAllEnvs();
     }
