@@ -1,6 +1,6 @@
 # 原始语料清单
 
-本文件记录原始语料及辅助摘要的状态。新增资料、补来源链接、清洗语料后都更新这里。中文摘要不属于可逐字引用的原始语料。
+本文件记录原始语料、全文译稿及辅助摘要的状态。新增资料、补来源链接、清洗语料后都更新这里。中文摘要不属于可逐字引用的原始语料。
 
 ## 字段说明
 
@@ -9,7 +9,7 @@
 | 本地文件 | 语料文件相对路径 |
 | 年份 | 资料发生或发表年份；股东信使用财年，实际签署日期见正文 |
 | 书名/资料名 | 原始资料标题或来源名 |
-| 类型 | 股东信/股东会/演讲/访谈/书面陈述/资料/资料（中文摘要） |
+| 类型 | 股东信/股东会/演讲/访谈/书面陈述/资料/资料（中文摘要）/资料（中文全文） |
 | 来源链接 | 原始链接;没有就写 `未记录` |
 | 清洗状态 | 未清洗/已清洗/需复核；摘要注明复核方式及非逐字语料身份 |
 
@@ -102,39 +102,39 @@
 | `speech/查理芒格：25种人类误判心理学.md` | 未标明 | 查理芒格：25种人类误判心理学 | 资料 | 未记录 | 需复核 |
 | `speech/查理芒格：芒格主义-查理的即席谈话.md` | 未标明 | 查理芒格：芒格主义-查理的即席谈话 | 资料 | 未记录 | 需复核 |
 | `speech/查理芒格：问题清单.md` | 未标明 | 查理芒格：问题清单 | 资料 | 未记录 | 需复核 |
-| `shareholders/1983年 西科金融致股东信—中文摘要.md` | 1983 | 1983年 西科金融致股东信—中文摘要 | 资料（中文摘要） | [原始来源](https://worldlypartners.com/wp-content/uploads/2024/01/wesco-1983-letter-to-shareholders.pdf) | 摘要已复核（OCR 并核对签署日期）；非逐字语料 |
-| `shareholders/1984年 西科金融致股东信—中文摘要.md` | 1984 | 1984年 西科金融致股东信—中文摘要 | 资料（中文摘要） | [原始来源](https://worldlypartners.com/wp-content/uploads/2024/01/wesco-1984-letter-to-shareholders.pdf) | 摘要已复核（OCR 并核对签署日期）；非逐字语料 |
-| `shareholders/1985年 西科金融致股东信—中文摘要.md` | 1985 | 1985年 西科金融致股东信—中文摘要 | 资料（中文摘要） | [原始来源](https://worldlypartners.com/wp-content/uploads/2024/01/wesco-1985-letter-to-shareholders.pdf) | 摘要已复核（OCR 并核对签署日期）；非逐字语料 |
-| `shareholders/1986年 西科金融致股东信—中文摘要.md` | 1986 | 1986年 西科金融致股东信—中文摘要 | 资料（中文摘要） | [原始来源](https://worldlypartners.com/wp-content/uploads/2024/01/wesco-1986-letter-to-shareholders.pdf) | 摘要已复核（OCR 并核对签署日期）；非逐字语料 |
-| `shareholders/1987年 西科金融致股东信—中文摘要.md` | 1987 | 1987年 西科金融致股东信—中文摘要 | 资料（中文摘要） | [原始来源](https://worldlypartners.com/wp-content/uploads/2024/01/wesco-1987-letter-to-shareholders.pdf) | 摘要已复核（OCR 并核对签署日期）；非逐字语料 |
-| `shareholders/1988年 西科金融致股东信—中文摘要.md` | 1988 | 1988年 西科金融致股东信—中文摘要 | 资料（中文摘要） | [原始来源](https://worldlypartners.com/wp-content/uploads/2024/01/wesco-1988-letter-to-shareholders.pdf) | 摘要已复核（OCR 并核对签署日期）；非逐字语料 |
-| `shareholders/1989年 西科金融致股东信—中文摘要.md` | 1989 | 1989年 西科金融致股东信—中文摘要 | 资料（中文摘要） | [原始来源](https://worldlypartners.com/wp-content/uploads/2024/01/wesco-1989-letter-to-shareholders.pdf) | 摘要已复核（OCR 并核对签署日期）；非逐字语料 |
-| `shareholders/1990年 西科金融致股东信—中文摘要.md` | 1990 | 1990年 西科金融致股东信—中文摘要 | 资料（中文摘要） | [原始来源](https://worldlypartners.com/wp-content/uploads/2024/01/wesco-1990-letter-to-shareholders.pdf) | 摘要已复核（OCR 并核对签署日期）；非逐字语料 |
-| `shareholders/1991年 西科金融致股东信—中文摘要.md` | 1991 | 1991年 西科金融致股东信—中文摘要 | 资料（中文摘要） | [原始来源](https://worldlypartners.com/wp-content/uploads/2024/01/wesco-1991-letter-to-shareholders.pdf) | 摘要已复核（OCR 并核对签署日期）；非逐字语料 |
-| `shareholders/1992年 西科金融致股东信—中文摘要.md` | 1992 | 1992年 西科金融致股东信—中文摘要 | 资料（中文摘要） | [原始来源](https://worldlypartners.com/wp-content/uploads/2024/01/wesco-1992-letter-to-shareholders.pdf) | 摘要已复核（OCR 并核对签署日期）；非逐字语料 |
-| `shareholders/1993年 西科金融致股东信—中文摘要.md` | 1993 | 1993年 西科金融致股东信—中文摘要 | 资料（中文摘要） | [原始来源](https://worldlypartners.com/wp-content/uploads/2024/01/wesco-1993-letter-to-shareholders.pdf) | 摘要已复核（OCR 并核对签署日期）；非逐字语料 |
-| `shareholders/1994年 西科金融致股东信—中文摘要.md` | 1994 | 1994年 西科金融致股东信—中文摘要 | 资料（中文摘要） | [原始来源](https://worldlypartners.com/wp-content/uploads/2024/01/wesco-1994-letter-to-shareholders.pdf) | 摘要已复核（OCR 并核对签署日期）；非逐字语料 |
-| `shareholders/1995年 西科金融致股东信—中文摘要.md` | 1995 | 1995年 西科金融致股东信—中文摘要 | 资料（中文摘要） | [原始来源](https://worldlypartners.com/wp-content/uploads/2024/01/wesco-1995-letter-to-shareholders.pdf) | 摘要已复核（OCR 并核对签署日期）；非逐字语料 |
-| `shareholders/1996年 西科金融致股东信—中文摘要.md` | 1996 | 1996年 西科金融致股东信—中文摘要 | 资料（中文摘要） | [原始来源](https://worldlypartners.com/wp-content/uploads/2024/01/wesco-1996-letter-to-shareholders.pdf) | 摘要已复核（OCR 并核对签署日期）；非逐字语料 |
-| `shareholders/1997年 西科金融致股东信—中文摘要.md` | 1997 | 1997年 西科金融致股东信—中文摘要 | 资料（中文摘要） | [原始来源](https://worldlypartners.com/wp-content/uploads/2024/01/wesco-1997-letter-to-shareholders.pdf) | 摘要已复核（PDF 文本层）；非逐字语料 |
-| `shareholders/1998年 西科金融致股东信—中文摘要.md` | 1998 | 1998年 西科金融致股东信—中文摘要 | 资料（中文摘要） | [原始来源](https://worldlypartners.com/wp-content/uploads/2024/01/wesco-1998-letter-to-shareholders.pdf) | 摘要已复核（PDF 文本层）；非逐字语料 |
-| `shareholders/1999年 西科金融致股东信—中文摘要.md` | 1999 | 1999年 西科金融致股东信—中文摘要 | 资料（中文摘要） | [原始来源](https://worldlypartners.com/wp-content/uploads/2024/01/wesco-1999-letter-to-shareholders.pdf) | 摘要已复核（PDF 文本层）；非逐字语料 |
-| `shareholders/2000年 西科金融致股东信—中文摘要.md` | 2000 | 2000年 西科金融致股东信—中文摘要 | 资料（中文摘要） | [原始来源](https://worldlypartners.com/wp-content/uploads/2024/01/wesco-2000-letter-to-shareholders.pdf) | 摘要已复核（PDF 文本层）；非逐字语料 |
-| `shareholders/2001年 西科金融致股东信—中文摘要.md` | 2001 | 2001年 西科金融致股东信—中文摘要 | 资料（中文摘要） | [原始来源](https://worldlypartners.com/wp-content/uploads/2024/01/wesco-2001-letter-to-shareholders.pdf) | 摘要已复核（PDF 文本层）；非逐字语料 |
-| `shareholders/2002年 西科金融致股东信—中文摘要.md` | 2002 | 2002年 西科金融致股东信—中文摘要 | 资料（中文摘要） | [原始来源](https://worldlypartners.com/wp-content/uploads/2024/01/wesco-2002-letter-to-shareholders.pdf) | 摘要已复核（PDF 文本层）；非逐字语料 |
-| `shareholders/2003年 西科金融致股东信—中文摘要.md` | 2003 | 2003年 西科金融致股东信—中文摘要 | 资料（中文摘要） | [原始来源](https://worldlypartners.com/wp-content/uploads/2024/01/wesco-2003-letter-to-shareholders.pdf) | 摘要已复核（PDF 文本层）；非逐字语料 |
-| `shareholders/2004年 西科金融致股东信—中文摘要.md` | 2004 | 2004年 西科金融致股东信—中文摘要 | 资料（中文摘要） | [原始来源](https://worldlypartners.com/wp-content/uploads/2024/01/wesco-2004-letter-to-shareholders.pdf) | 摘要已复核（PDF 文本层）；非逐字语料 |
-| `shareholders/2005年 西科金融致股东信—中文摘要.md` | 2005 | 2005年 西科金融致股东信—中文摘要 | 资料（中文摘要） | [原始来源](https://worldlypartners.com/wp-content/uploads/2024/01/wesco-2005-letter-to-shareholders.pdf) | 摘要已复核（PDF 文本层）；非逐字语料 |
-| `shareholders/2006年 西科金融致股东信—中文摘要.md` | 2006 | 2006年 西科金融致股东信—中文摘要 | 资料（中文摘要） | [原始来源](https://worldlypartners.com/wp-content/uploads/2024/01/wesco-2006-letter-to-shareholders.pdf) | 摘要已复核（PDF 文本层）；非逐字语料 |
-| `shareholders/2007年 西科金融致股东信—中文摘要.md` | 2007 | 2007年 西科金融致股东信—中文摘要 | 资料（中文摘要） | [原始来源](https://worldlypartners.com/wp-content/uploads/2024/01/wesco-2007-letter-to-shareholders.pdf) | 摘要已复核（PDF 文本层）；非逐字语料 |
-| `shareholders/2008年 西科金融致股东信—中文摘要.md` | 2008 | 2008年 西科金融致股东信—中文摘要 | 资料（中文摘要） | [原始来源](https://worldlypartners.com/wp-content/uploads/2024/01/wesco-2008-letter-to-shareholders.pdf) | 摘要已复核（PDF 文本层）；非逐字语料 |
-| `shareholders/2009年 西科金融致股东信—中文摘要.md` | 2009 | 2009年 西科金融致股东信—中文摘要 | 资料（中文摘要） | [原始来源](https://worldlypartners.com/wp-content/uploads/2024/01/wesco-2009-letter-to-shareholders.pdf) | 摘要已复核（PDF 文本层）；非逐字语料 |
-| `shareholders/2004年 西科金融股东会记录—中文摘要.md` | 2004 | 2004年 西科金融股东会记录—中文摘要 | 资料（中文摘要） | [原始来源](https://worldlypartners.com/wp-content/uploads/2024/01/2004-wesco-annual-meeting-notes-of-charlie-mungers-remarks-whitney-tilson.pdf) | 摘要已复核（PDF 文本层）；非逐字语料 |
-| `shareholders/2005年 西科金融股东会记录—中文摘要.md` | 2005 | 2005年 西科金融股东会记录—中文摘要 | 资料（中文摘要） | [原始来源](https://worldlypartners.com/wp-content/uploads/2024/01/2005-wesco-annual-meeting-notes-of-charlie-mungers-remarks-whitney-tilson.pdf) | 摘要已复核（PDF 文本层）；非逐字语料 |
-| `shareholders/2006年 西科金融股东会记录—中文摘要.md` | 2006 | 2006年 西科金融股东会记录—中文摘要 | 资料（中文摘要） | [原始来源](https://worldlypartners.com/wp-content/uploads/2024/01/2006-wesco-annual-meeting-notes-of-charlie-mungers-remarks-whitney-tilson.pdf) | 摘要已复核（PDF 文本层）；非逐字语料 |
-| `shareholders/2008年 西科金融股东会记录—中文摘要.md` | 2008 | 2008年 西科金融股东会记录—中文摘要 | 资料（中文摘要） | [原始来源](https://worldlypartners.com/wp-content/uploads/2024/01/2008-wesco-annual-meeting-notes-of-charlie-mungers-remarks-peter-boodell.pdf) | 摘要已复核（PDF 文本层）；非逐字语料 |
-| `shareholders/2009年 西科金融股东会记录—中文摘要.md` | 2009 | 2009年 西科金融股东会记录—中文摘要 | 资料（中文摘要） | [原始来源](https://worldlypartners.com/wp-content/uploads/2024/01/2009-wesco-annual-meeting-notes-of-charlie-mungers-remarks-peter-boodell.pdf) | 摘要已复核（PDF 文本层）；非逐字语料 |
-| `shareholders/2011年 西科合并后芒格对话会记录—中文摘要.md` | 2011 | 2011年 西科合并后芒格对话会记录—中文摘要 | 资料（中文摘要） | [原始来源](https://worldlypartners.com/wp-content/uploads/2024/01/2011-wesco-annual-meeting-notes-of-charlie-mungers-remarks-the-inoculated-investor.pdf) | 摘要已复核（PDF 文本层）；非逐字语料 |
-| `shareholders/2013年 每日期刊股东会记录—中文摘要.md` | 2013 | 2013年 每日期刊股东会记录—中文摘要 | 资料（中文摘要） | [原始来源](https://worldlypartners.com/wp-content/uploads/2024/01/2013-daily-journal-corp-annual-meeting-notes-of-charlie-mungers-remarks.pdf) | 摘要已复核（PDF 文本层）；非逐字语料 |
+| `shareholders/1983年 西科金融致股东信—中文全文.md` | 1983 | 1983年 西科金融致股东信—中文全文 | 资料（中文全文） | [原始来源](https://worldlypartners.com/wp-content/uploads/2024/01/wesco-1983-letter-to-shareholders.pdf) | 用户提供 PDF；全文翻译；OCR＋页面核验；独立逐页及数字复核通过；修复已复验 |
+| `shareholders/1984年 西科金融致股东信—中文全文.md` | 1984 | 1984年 西科金融致股东信—中文全文 | 资料（中文全文） | [原始来源](https://worldlypartners.com/wp-content/uploads/2024/01/wesco-1984-letter-to-shareholders.pdf) | 用户提供 PDF；全文翻译；OCR＋页面核验；独立逐页及数字复核通过；修复已复验 |
+| `shareholders/1985年 西科金融致股东信—中文全文.md` | 1985 | 1985年 西科金融致股东信—中文全文 | 资料（中文全文） | [原始来源](https://worldlypartners.com/wp-content/uploads/2024/01/wesco-1985-letter-to-shareholders.pdf) | 用户提供 PDF；全文翻译；OCR＋页面核验；独立逐页及数字复核通过；修复已复验 |
+| `shareholders/1986年 西科金融致股东信—中文全文.md` | 1986 | 1986年 西科金融致股东信—中文全文 | 资料（中文全文） | [原始来源](https://worldlypartners.com/wp-content/uploads/2024/01/wesco-1986-letter-to-shareholders.pdf) | 用户提供 PDF；全文翻译；OCR＋页面核验；独立逐页及数字复核通过；修复已复验 |
+| `shareholders/1987年 西科金融致股东信—中文全文.md` | 1987 | 1987年 西科金融致股东信—中文全文 | 资料（中文全文） | [原始来源](https://worldlypartners.com/wp-content/uploads/2024/01/wesco-1987-letter-to-shareholders.pdf) | 用户提供 PDF；全文翻译；OCR＋页面核验；独立逐页及数字复核通过；修复已复验 |
+| `shareholders/1988年 西科金融致股东信—中文全文.md` | 1988 | 1988年 西科金融致股东信—中文全文 | 资料（中文全文） | [原始来源](https://worldlypartners.com/wp-content/uploads/2024/01/wesco-1988-letter-to-shareholders.pdf) | 用户提供 PDF；全文翻译；OCR＋页面核验；独立逐页及数字复核通过；修复已复验 |
+| `shareholders/1989年 西科金融致股东信—中文全文.md` | 1989 | 1989年 西科金融致股东信—中文全文 | 资料（中文全文） | [原始来源](https://worldlypartners.com/wp-content/uploads/2024/01/wesco-1989-letter-to-shareholders.pdf) | 用户提供 PDF；全文翻译；OCR＋页面核验；独立逐页及数字复核通过；修复已复验 |
+| `shareholders/1990年 西科金融致股东信—中文全文.md` | 1990 | 1990年 西科金融致股东信—中文全文 | 资料（中文全文） | [原始来源](https://worldlypartners.com/wp-content/uploads/2024/01/wesco-1990-letter-to-shareholders.pdf) | 用户提供 PDF；全文翻译；OCR＋页面核验；独立逐页及数字复核通过；修复已复验 |
+| `shareholders/1991年 西科金融致股东信—中文全文.md` | 1991 | 1991年 西科金融致股东信—中文全文 | 资料（中文全文） | [原始来源](https://worldlypartners.com/wp-content/uploads/2024/01/wesco-1991-letter-to-shareholders.pdf) | 用户提供 PDF；全文翻译；OCR＋页面核验；独立逐页及数字复核通过；修复已复验 |
+| `shareholders/1992年 西科金融致股东信—中文全文.md` | 1992 | 1992年 西科金融致股东信—中文全文 | 资料（中文全文） | [原始来源](https://worldlypartners.com/wp-content/uploads/2024/01/wesco-1992-letter-to-shareholders.pdf) | 用户提供 PDF；全文翻译；OCR＋页面核验；独立逐页及数字复核通过；修复已复验 |
+| `shareholders/1993年 西科金融致股东信—中文全文.md` | 1993 | 1993年 西科金融致股东信—中文全文 | 资料（中文全文） | [原始来源](https://worldlypartners.com/wp-content/uploads/2024/01/wesco-1993-letter-to-shareholders.pdf) | 用户提供 PDF；全文翻译；OCR＋页面核验；独立逐页及数字复核通过；修复已复验 |
+| `shareholders/1994年 西科金融致股东信—中文全文.md` | 1994 | 1994年 西科金融致股东信—中文全文 | 资料（中文全文） | [原始来源](https://worldlypartners.com/wp-content/uploads/2024/01/wesco-1994-letter-to-shareholders.pdf) | 用户提供 PDF；全文翻译；OCR＋页面核验；独立逐页及数字复核通过；修复已复验 |
+| `shareholders/1995年 西科金融致股东信—中文全文.md` | 1995 | 1995年 西科金融致股东信—中文全文 | 资料（中文全文） | [原始来源](https://worldlypartners.com/wp-content/uploads/2024/01/wesco-1995-letter-to-shareholders.pdf) | 用户提供 PDF；全文翻译；OCR＋页面核验；独立逐页及数字复核通过；修复已复验 |
+| `shareholders/1996年 西科金融致股东信—中文全文.md` | 1996 | 1996年 西科金融致股东信—中文全文 | 资料（中文全文） | [原始来源](https://worldlypartners.com/wp-content/uploads/2024/01/wesco-1996-letter-to-shareholders.pdf) | 用户提供 PDF；全文翻译；OCR＋页面核验；独立逐页及数字复核通过；修复已复验 |
+| `shareholders/1997年 西科金融致股东信—中文全文.md` | 1997 | 1997年 西科金融致股东信—中文全文 | 资料（中文全文） | [原始来源](https://worldlypartners.com/wp-content/uploads/2024/01/wesco-1997-letter-to-shareholders.pdf) | 用户提供 PDF；全文翻译；PDF 文本层；独立逐页及数字复核通过；修复已复验 |
+| `shareholders/1998年 西科金融致股东信—中文全文.md` | 1998 | 1998年 西科金融致股东信—中文全文 | 资料（中文全文） | [原始来源](https://worldlypartners.com/wp-content/uploads/2024/01/wesco-1998-letter-to-shareholders.pdf) | 用户提供 PDF；全文翻译；PDF 文本层；独立逐页及数字复核通过；修复已复验 |
+| `shareholders/1999年 西科金融致股东信—中文全文.md` | 1999 | 1999年 西科金融致股东信—中文全文 | 资料（中文全文） | [原始来源](https://worldlypartners.com/wp-content/uploads/2024/01/wesco-1999-letter-to-shareholders.pdf) | 用户提供 PDF；全文翻译；PDF 文本层；独立逐页及数字复核通过；修复已复验 |
+| `shareholders/2000年 西科金融致股东信—中文全文.md` | 2000 | 2000年 西科金融致股东信—中文全文 | 资料（中文全文） | [原始来源](https://worldlypartners.com/wp-content/uploads/2024/01/wesco-2000-letter-to-shareholders.pdf) | 用户提供 PDF；全文翻译；PDF 文本层；独立逐页及数字复核通过；修复已复验 |
+| `shareholders/2001年 西科金融致股东信—中文全文.md` | 2001 | 2001年 西科金融致股东信—中文全文 | 资料（中文全文） | [原始来源](https://worldlypartners.com/wp-content/uploads/2024/01/wesco-2001-letter-to-shareholders.pdf) | 用户提供 PDF；全文翻译；PDF 文本层；独立逐页及数字复核通过；修复已复验 |
+| `shareholders/2002年 西科金融致股东信—中文全文.md` | 2002 | 2002年 西科金融致股东信—中文全文 | 资料（中文全文） | [原始来源](https://worldlypartners.com/wp-content/uploads/2024/01/wesco-2002-letter-to-shareholders.pdf) | 用户提供 PDF；全文翻译；PDF 文本层；独立逐页及数字复核通过；修复已复验 |
+| `shareholders/2003年 西科金融致股东信—中文全文.md` | 2003 | 2003年 西科金融致股东信—中文全文 | 资料（中文全文） | [原始来源](https://worldlypartners.com/wp-content/uploads/2024/01/wesco-2003-letter-to-shareholders.pdf) | 用户提供 PDF；全文翻译；PDF 文本层；独立逐页及数字复核通过；修复已复验 |
+| `shareholders/2004年 西科金融致股东信—中文全文.md` | 2004 | 2004年 西科金融致股东信—中文全文 | 资料（中文全文） | [原始来源](https://worldlypartners.com/wp-content/uploads/2024/01/wesco-2004-letter-to-shareholders.pdf) | 用户提供 PDF；全文翻译；PDF 文本层；独立逐页及数字复核通过；修复已复验 |
+| `shareholders/2005年 西科金融致股东信—中文全文.md` | 2005 | 2005年 西科金融致股东信—中文全文 | 资料（中文全文） | [原始来源](https://worldlypartners.com/wp-content/uploads/2024/01/wesco-2005-letter-to-shareholders.pdf) | 用户提供 PDF；全文翻译；PDF 文本层；独立逐页及数字复核通过；修复已复验 |
+| `shareholders/2006年 西科金融致股东信—中文全文.md` | 2006 | 2006年 西科金融致股东信—中文全文 | 资料（中文全文） | [原始来源](https://worldlypartners.com/wp-content/uploads/2024/01/wesco-2006-letter-to-shareholders.pdf) | 用户提供 PDF；全文翻译；PDF 文本层；独立逐页及数字复核通过；修复已复验 |
+| `shareholders/2007年 西科金融致股东信—中文全文.md` | 2007 | 2007年 西科金融致股东信—中文全文 | 资料（中文全文） | [原始来源](https://worldlypartners.com/wp-content/uploads/2024/01/wesco-2007-letter-to-shareholders.pdf) | 用户提供 PDF；全文翻译；PDF 文本层；独立逐页及数字复核通过；修复已复验 |
+| `shareholders/2008年 西科金融致股东信—中文全文.md` | 2008 | 2008年 西科金融致股东信—中文全文 | 资料（中文全文） | [原始来源](https://worldlypartners.com/wp-content/uploads/2024/01/wesco-2008-letter-to-shareholders.pdf) | 用户提供 PDF；全文翻译；PDF 文本层；独立逐页及数字复核通过；修复已复验 |
+| `shareholders/2009年 西科金融致股东信—中文全文.md` | 2009 | 2009年 西科金融致股东信—中文全文 | 资料（中文全文） | [原始来源](https://worldlypartners.com/wp-content/uploads/2024/01/wesco-2009-letter-to-shareholders.pdf) | 用户提供 PDF；全文翻译；PDF 文本层；独立逐页及数字复核通过；修复已复验 |
+| `shareholders/2004年 西科金融股东会记录—中文全文.md` | 2004 | 2004年 西科金融股东会记录—中文全文 | 资料（中文全文） | [原始来源](https://worldlypartners.com/wp-content/uploads/2024/01/2004-wesco-annual-meeting-notes-of-charlie-mungers-remarks-whitney-tilson.pdf) | 用户提供 PDF；全文翻译；PDF 文本层；独立逐页及数字复核通过；修复已复验 |
+| `shareholders/2005年 西科金融股东会记录—中文全文.md` | 2005 | 2005年 西科金融股东会记录—中文全文 | 资料（中文全文） | [原始来源](https://worldlypartners.com/wp-content/uploads/2024/01/2005-wesco-annual-meeting-notes-of-charlie-mungers-remarks-whitney-tilson.pdf) | 用户提供 PDF；全文翻译；PDF 文本层；独立逐页及数字复核通过；修复已复验 |
+| `shareholders/2006年 西科金融股东会记录—中文全文.md` | 2006 | 2006年 西科金融股东会记录—中文全文 | 资料（中文全文） | [原始来源](https://worldlypartners.com/wp-content/uploads/2024/01/2006-wesco-annual-meeting-notes-of-charlie-mungers-remarks-whitney-tilson.pdf) | 用户提供 PDF；全文翻译；PDF 文本层；独立逐页及数字复核通过；修复已复验 |
+| `shareholders/2008年 西科金融股东会记录—中文全文.md` | 2008 | 2008年 西科金融股东会记录—中文全文 | 资料（中文全文） | [原始来源](https://worldlypartners.com/wp-content/uploads/2024/01/2008-wesco-annual-meeting-notes-of-charlie-mungers-remarks-peter-boodell.pdf) | 用户提供 PDF；全文翻译；PDF 文本层；独立逐页及数字复核通过；修复已复验 |
+| `shareholders/2009年 西科金融股东会记录—中文全文.md` | 2009 | 2009年 西科金融股东会记录—中文全文 | 资料（中文全文） | [原始来源](https://worldlypartners.com/wp-content/uploads/2024/01/2009-wesco-annual-meeting-notes-of-charlie-mungers-remarks-peter-boodell.pdf) | 用户提供 PDF；全文翻译；PDF 文本层；独立逐页及数字复核通过；修复已复验 |
+| `shareholders/2011年 西科合并后芒格对话会记录—中文全文.md` | 2011 | 2011年 西科合并后芒格对话会记录—中文全文 | 资料（中文全文） | [原始来源](https://worldlypartners.com/wp-content/uploads/2024/01/2011-wesco-annual-meeting-notes-of-charlie-mungers-remarks-the-inoculated-investor.pdf) | 用户提供 PDF；全文翻译；PDF 文本层；独立逐页及数字复核通过；修复已复验 |
+| `shareholders/2013年 每日期刊股东会记录—中文全文.md` | 2013 | 2013年 每日期刊股东会记录—中文全文 | 资料（中文全文） | [原始来源](https://worldlypartners.com/wp-content/uploads/2024/01/2013-daily-journal-corp-annual-meeting-notes-of-charlie-mungers-remarks.pdf) | 用户提供 PDF；全文翻译；PDF 文本层；独立逐页及数字复核通过；修复已复验 |
 | `speech/2019年 雅虎财经五月芒格访谈—中文摘要.md` | 2019 | 2019年 雅虎财经五月芒格访谈—中文摘要 | 资料（中文摘要） | [原始来源](https://www.youtube.com/watch?v=RFxXl9eAWV4) | 摘要已复核（英文自动字幕及时间定位）；非逐字语料 |
 | `speech/2019年 CNBC巴菲特芒格盖茨联合访谈—中文摘要.md` | 2019 | 2019年 CNBC巴菲特芒格盖茨联合访谈—中文摘要 | 资料（中文摘要） | [原始来源](https://www.youtube.com/watch?v=2hdDE7XYr30) | 摘要已复核（英文自动字幕及时间定位）；非逐字语料 |

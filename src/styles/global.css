@@ -739,6 +739,36 @@ input:focus-visible {
   height: auto;
 }
 
+.article-body table {
+  display: block;
+  max-width: 100%;
+  overflow-x: auto;
+  margin: 24px 0 32px;
+  border-collapse: collapse;
+  font-size: 0.88em;
+  line-height: 1.55;
+  font-variant-numeric: tabular-nums;
+}
+
+.article-body th,
+.article-body td {
+  padding: 10px 14px;
+  border: 1px solid var(--line);
+  vertical-align: top;
+  min-width: 96px;
+}
+
+.article-body th {
+  color: var(--ink-strong);
+  background: var(--paper);
+  font-weight: 700;
+}
+
+.article-body th:first-child,
+.article-body td:first-child {
+  min-width: 180px;
+}
+
 .reader-aside {
   position: fixed;
   inset: var(--mobile-topbar) 0 0 auto;

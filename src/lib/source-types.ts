@@ -32,13 +32,16 @@ export function sourceTypeLabel(source: { type: SourceType }): string {
   return SOURCE_DEFINITIONS.find((definition) => definition.type === source.type)?.label ?? source.type;
 }
 
-export type SourceKind = "original" | "summary";
+export type SourceKind = "original" | "summary" | "translation";
 
 export function parseSourceKind(value: unknown): SourceKind {
-  return value === "summary" ? "summary" : "original";
+  return value === "summary" || value === "translation" ? value : "original";
 }
 
 export function sourcePresentation(source: { sourceKind?: SourceKind }) {
+  if (source.sourceKind === "translation") {
+    return { label: "中文全文", informationHeading: "来源信息", relatedHeading: "同类资料" };
+  }
   return source.sourceKind === "summary"
     ? { label: "中文摘要", informationHeading: "来源信息", relatedHeading: "同类资料" }
     : { label: "", informationHeading: "原文信息", relatedHeading: "同类原文" };

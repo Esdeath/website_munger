@@ -26,17 +26,20 @@ class SummaryExclusionTests(unittest.TestCase):
         self.assertFalse(is_summary('# 正文\nsource_kind: summary'))
         self.assertFalse(is_summary('---\ntitle: old\n---\nsource_kind: summary'))
         self.assertFalse(is_summary('---\nsource_kind: original\n---\n正文'))
+        self.assertFalse(is_summary('---\nsource_kind: translation\n---\n全文译文'))
 
     def test_both_quote_checkers_exclude_summary_text_and_titles(self):
         with tempfile.TemporaryDirectory() as temp:
             folder = Path(temp) / 'speech'
             folder.mkdir()
             (folder / 'original.md').write_text('# 原始标题\n保留逐字原文', encoding='utf8')
+            (folder / 'translation.md').write_text('---\nsource_kind: translation\n---\n# 全文标题\n保留完整译文', encoding='utf8')
             (folder / 'summary.md').write_text('---\nsource_kind: summary\n---\n# 摘要标题\n不可作引文', encoding='utf8')
             for module in [check_article, check_stop_doing]:
                 with patch.object(module, 'BASE', temp):
                     corpus = module.load_corpus()
                     self.assertIn('保留逐字原文', corpus)
+                    self.assertIn('保留完整译文', corpus)
                     self.assertNotIn('不可作引文', corpus)
                     self.assertNotIn('摘要标题', corpus)
             with patch.object(check_stop_doing, 'BASE', temp):
