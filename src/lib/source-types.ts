@@ -31,3 +31,15 @@ export const SOURCE_DIRECTORIES = SOURCE_DEFINITIONS.map((source) => source.dire
 export function sourceTypeLabel(source: { type: SourceType }): string {
   return SOURCE_DEFINITIONS.find((definition) => definition.type === source.type)?.label ?? source.type;
 }
+
+export type SourceKind = "original" | "summary";
+
+export function parseSourceKind(value: unknown): SourceKind {
+  return value === "summary" ? "summary" : "original";
+}
+
+export function sourcePresentation(source: { sourceKind?: SourceKind }) {
+  return source.sourceKind === "summary"
+    ? { label: "中文摘要", informationHeading: "来源信息", relatedHeading: "同类资料" }
+    : { label: "", informationHeading: "原文信息", relatedHeading: "同类原文" };
+}

@@ -2,7 +2,7 @@ import fs from "node:fs";
 import path from "node:path";
 import { STANDALONE_SOURCES } from "../content/standalone-sources";
 import { extractExcerpt, extractHeadings, parseMarkdownDocument } from "./markdown";
-import { SOURCE_DEFINITIONS, type SourceDirectory, type SourceType } from "./source-types";
+import { SOURCE_DEFINITIONS, type SourceDirectory, type SourceType, parseSourceKind, type SourceKind } from "./source-types";
 import { filePathToSlug } from "./slug";
 
 const ROOT = process.cwd();
@@ -33,6 +33,7 @@ export interface OriginalSource {
   body: string;
   headings: ReturnType<typeof extractHeadings>;
   standalone?: boolean;
+  sourceKind?: SourceKind;
 }
 
 export interface CorpusManifestEntry {
@@ -161,6 +162,7 @@ function readOriginalSources(): OriginalSource[] {
         title,
         type,
         year: inferYear(filePath, parsed.body),
+        sourceKind: parseSourceKind(parsed.data.source_kind),
         excerpt: extractExcerpt(parsed.body),
         body,
         headings: extractHeadings(parsed.body)
@@ -173,7 +175,8 @@ function readOriginalSources(): OriginalSource[] {
     // Standalone documents are served directly in an iframe, not rendered as Markdown.
     body: "",
     headings: [],
-    standalone: true as const
+    standalone: true as const,
+    sourceKind: "original" as const
   }));
 
   return [...markdownSources, ...standaloneSources];

@@ -8,6 +8,7 @@
               某条引用与其他文章逐字重复(可能是有意复用,需人工判断)。
 """
 import sys, re, glob, os
+from source_metadata import is_summary
 
 BASE = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 CORPUS_DIRS = ["shareholders", "speech"]
@@ -37,7 +38,9 @@ def load_corpus():
     for d in CORPUS_DIRS:
         for fp in glob.glob(os.path.join(BASE, d, "*.md")):
             with open(fp, encoding="utf-8") as f:
-                parts.append(f.read())
+                text = f.read()
+                if not is_summary(text):
+                    parts.append(text)
     return normalize("\n".join(parts))
 
 def load_other_essay_quotes(this_path):

@@ -7,6 +7,7 @@
 通过打印 PASS / exit 0;失败打印 FAIL + [ERR] / exit 1。
 """
 import sys, re, glob, os
+from source_metadata import is_summary
 
 BASE = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 CORPUS_DIRS = ["shareholders", "speech"]
@@ -29,7 +30,9 @@ def load_corpus():
     for d in CORPUS_DIRS:
         for fp in glob.glob(os.path.join(BASE, d, "*.md")):
             with open(fp, encoding="utf-8") as f:
-                parts.append(f.read())
+                text = f.read()
+                if not is_summary(text):
+                    parts.append(text)
     return normalize("\n".join(parts))
 
 
@@ -38,9 +41,12 @@ def load_corpus_titles():
     titles = []
     for d in CORPUS_DIRS:
         for fp in glob.glob(os.path.join(BASE, d, "*.md")):
-            titles.append(normalize(os.path.splitext(os.path.basename(fp))[0]))
             with open(fp, encoding="utf-8") as f:
-                m = re.search(r'(?m)^#\s+(.+)$', f.read())
+                text = f.read()
+                if is_summary(text):
+                    continue
+                titles.append(normalize(os.path.splitext(os.path.basename(fp))[0]))
+                m = re.search(r'(?m)^#\s+(.+)$', text)
                 if m:
                     titles.append(normalize(m.group(1)))
     return titles

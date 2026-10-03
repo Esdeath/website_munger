@@ -10,7 +10,7 @@ import {
   sameYearSources
 } from "../../lib/relations";
 import { buildBreadcrumbSchema, buildCreativeWorkSchema, canonicalUrl } from "../../lib/seo";
-import { sourceTypeLabel } from "../../lib/source-types";
+import { sourceTypeLabel, sourcePresentation } from "../../lib/source-types";
 
 export function getStaticPaths() {
   return loadSiteCorpus().sources
@@ -28,6 +28,7 @@ const bodyWithoutDuplicateTitle = source.body.replace(new RegExp(`^#\\s+${source
 const keywordLinks = keywordLinksForArticles(articles);
 const rendered = await renderMarkdownToHtml(bodyWithoutDuplicateTitle, { keywordLinks });
 const sourceLabel = sourceTypeLabel(source);
+const presentation = sourcePresentation(source);
 const structuredData = [
   buildCreativeWorkSchema({
     title: source.title,
@@ -47,7 +48,7 @@ const structuredData = [
 <ReaderPage title={source.title} description={source.excerpt} structuredData={structuredData} html={rendered}>
   <Fragment slot="header">
     <h1>{source.title}</h1>
-    <p>{sourceLabel}</p>
+    <p>{sourceLabel}{presentation.label && ` · ${presentation.label}`}</p>
   </Fragment>
 
   <ArticleShare
@@ -59,7 +60,7 @@ const structuredData = [
 
   <Fragment slot="aside">
     <section class="info-panel">
-      <h2>原文信息</h2>
+      <h2>{presentation.informationHeading}</h2>
       <p>{sourceLabel} · 第 {source.year} 年</p>
       <p>{citedBy.length} 篇解读引用</p>
     </section>
@@ -83,7 +84,7 @@ const structuredData = [
     </section>
 
     <section class="info-panel">
-      <h2>同类原文</h2>
+      <h2>{presentation.relatedHeading}</h2>
       <ul class="link-list">
         {sameYear.map((item) => (
           <li><a href={`/sources/${item.slug}/`}>{item.title} →</a></li>

@@ -10,10 +10,10 @@ describe("source detail page", () => {
   });
 
   it("shows source information, heading directory, body keywords, and related sources in order", () => {
-    const sourceInfo = sourcePage.indexOf("<h2>原文信息</h2>");
+    const sourceInfo = sourcePage.indexOf("<h2>{presentation.informationHeading}</h2>");
     const directory = sourcePage.indexOf("<h2>本篇目录（{source.headings.length}）</h2>");
     const keywords = sourcePage.indexOf("<h2>本篇涉及的关键词（{mentionedArticles.length}）</h2>");
-    const related = sourcePage.indexOf("<h2>同类原文</h2>");
+    const related = sourcePage.indexOf("<h2>{presentation.relatedHeading}</h2>");
 
     expect(sourceInfo).toBeGreaterThanOrEqual(0);
     expect(directory).toBeGreaterThan(sourceInfo);

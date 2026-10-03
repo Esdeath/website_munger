@@ -12,6 +12,7 @@ export interface ArticleFrontMatter {
   category?: string;
   order?: number;
   quote_count?: number;
+  source_kind?: string;
   sources?: string[];
   date?: string;
 }

@@ -12,6 +12,40 @@ sys.path.insert(0, str(ROOT / "tools"))
 from check_article import main, parse_quote_blocks  # noqa: E402
 
 
+from unittest.mock import patch
+import check_article
+import check_stop_doing
+from source_metadata import is_summary
+
+
+class SummaryExclusionTests(unittest.TestCase):
+    def test_only_frontmatter_marker_counts(self):
+        for value in ['summary', '"summary"', "'summary'", 'summary # note']:
+            self.assertTrue(is_summary('---\nsource_kind: ' + value + '\n---\n正文'))
+        self.assertTrue(is_summary('\ufeff---\r\nsource_kind: summary\r\n---\r\n正文'))
+        self.assertFalse(is_summary('# 正文\nsource_kind: summary'))
+        self.assertFalse(is_summary('---\ntitle: old\n---\nsource_kind: summary'))
+        self.assertFalse(is_summary('---\nsource_kind: original\n---\n正文'))
+
+    def test_both_quote_checkers_exclude_summary_text_and_titles(self):
+        with tempfile.TemporaryDirectory() as temp:
+            folder = Path(temp) / 'speech'
+            folder.mkdir()
+            (folder / 'original.md').write_text('# 原始标题\n保留逐字原文', encoding='utf8')
+            (folder / 'summary.md').write_text('---\nsource_kind: summary\n---\n# 摘要标题\n不可作引文', encoding='utf8')
+            for module in [check_article, check_stop_doing]:
+                with patch.object(module, 'BASE', temp):
+                    corpus = module.load_corpus()
+                    self.assertIn('保留逐字原文', corpus)
+                    self.assertNotIn('不可作引文', corpus)
+                    self.assertNotIn('摘要标题', corpus)
+            with patch.object(check_stop_doing, 'BASE', temp):
+                titles = check_stop_doing.load_corpus_titles()
+                self.assertIn('原始标题', titles)
+                self.assertNotIn('summary', titles)
+                self.assertNotIn('摘要标题', titles)
+
+
 class ParseQuoteBlocksTests(unittest.TestCase):
     def test_keeps_malformed_final_dash_line_in_quote_text(self):
         text = """> 「第一行引文
