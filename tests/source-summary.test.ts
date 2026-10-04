@@ -16,20 +16,16 @@ describe("summary source identity", () => {
     });
   });
 
-  it("keeps summaries for the two interviews whose originals were not supplied", () => {
+  it("excludes the two removed interview summaries from the corpus and manifest", () => {
     const sources = loadSiteCorpus().sources;
-    const summaries = sources.filter(source => source.sourceKind === "summary");
-    expect(summaries).toHaveLength(2);
     expect(sources.find(source => source.filePath === "shareholders/1977年 蓝筹印花致股东信.md")?.sourceKind).toBe("original");
     const manifest = loadCorpusManifest();
-    for (const source of summaries) {
-      expect(source.title).toMatch(/中文摘要$/);
-      expect(source.body).toContain("中文摘要，非全文译文，不作为芒格逐字引文使用");
-      expect(source.body).toContain("https://");
-      expect(manifest.find(row => row.filePath === source.filePath)?.type).toBe("资料（中文摘要）");
-      const summary = source.body.split("## 中文摘要\n")[1].split("## 阅读定位")[0].trim();
-      expect(summary.length).toBeGreaterThanOrEqual(200);
-      expect(summary.length).toBeLessThanOrEqual(350);
+    for (const filePath of [
+      "speech/2019年 雅虎财经五月芒格访谈—中文摘要.md",
+      "speech/2019年 CNBC巴菲特芒格盖茨联合访谈—中文摘要.md"
+    ]) {
+      expect(sources.find(source => source.filePath === filePath)).toBeUndefined();
+      expect(manifest.find(row => row.filePath === filePath)).toBeUndefined();
     }
   });
 

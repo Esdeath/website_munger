@@ -136,5 +136,3 @@
 | `shareholders/2009年 西科金融股东会记录—中文全文.md` | 2009 | 2009年 西科金融股东会记录—中文全文 | 资料（中文全文） | [原始来源](https://worldlypartners.com/wp-content/uploads/2024/01/2009-wesco-annual-meeting-notes-of-charlie-mungers-remarks-peter-boodell.pdf) | 用户提供 PDF；全文翻译；PDF 文本层；独立逐页及数字复核通过；修复已复验 |
 | `shareholders/2011年 西科合并后芒格对话会记录—中文全文.md` | 2011 | 2011年 西科合并后芒格对话会记录—中文全文 | 资料（中文全文） | [原始来源](https://worldlypartners.com/wp-content/uploads/2024/01/2011-wesco-annual-meeting-notes-of-charlie-mungers-remarks-the-inoculated-investor.pdf) | 用户提供 PDF；全文翻译；PDF 文本层；独立逐页及数字复核通过；修复已复验 |
 | `shareholders/2013年 每日期刊股东会记录—中文全文.md` | 2013 | 2013年 每日期刊股东会记录—中文全文 | 资料（中文全文） | [原始来源](https://worldlypartners.com/wp-content/uploads/2024/01/2013-daily-journal-corp-annual-meeting-notes-of-charlie-mungers-remarks.pdf) | 用户提供 PDF；全文翻译；PDF 文本层；独立逐页及数字复核通过；修复已复验 |
-| `speech/2019年 雅虎财经五月芒格访谈—中文摘要.md` | 2019 | 2019年 雅虎财经五月芒格访谈—中文摘要 | 资料（中文摘要） | [原始来源](https://www.youtube.com/watch?v=RFxXl9eAWV4) | 摘要已复核（英文自动字幕及时间定位）；非逐字语料 |
-| `speech/2019年 CNBC巴菲特芒格盖茨联合访谈—中文摘要.md` | 2019 | 2019年 CNBC巴菲特芒格盖茨联合访谈—中文摘要 | 资料（中文摘要） | [原始来源](https://www.youtube.com/watch?v=2hdDE7XYr30) | 摘要已复核（英文自动字幕及时间定位）；非逐字语料 |

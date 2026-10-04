@@ -1,8 +1,8 @@
 # Worldly Partners 37 项资料摘要收录核验
 
-> 后续更新：用户提供了 34 份 PDF，对应摘要已替换为中文全文；见[全文替换清单](worldly-full-translations-2026-10-03.md)。两场 2019 年访谈摘要及 2021 年待补项见下文。
+> 后续更新：用户提供了 34 份 PDF，对应摘要已替换为中文全文；见[全文替换清单](worldly-full-translations-2026-10-03.md)。两场 2019 年访谈摘要已按用户要求删除；2021 年待补项见下文。
 
-核验日期：2026-10-03。范围来自 [Charlie Munger Archive](https://worldlypartners.com/charlie-munger-archive/)。本批实际新增 36 篇中文摘要：27 封西科股东信、7 场会议／对话、2 场访谈；另 1 场待补。未新增全文或完整字幕，未提交、推送或部署。
+核验日期：2026-10-03。范围来自 [Charlie Munger Archive](https://worldlypartners.com/charlie-munger-archive/)。本批最初新增 36 篇中文摘要：27 封西科股东信、7 场会议／对话、2 场访谈；另 1 场待补。以下获取和验证记录对应首次摘要收录阶段，当时未新增全文或完整字幕，未提交、推送或部署。
 
 ## 获取与复核口径
 
@@ -50,8 +50,8 @@
 | 2009年 西科金融股东会记录—中文摘要 | 摘要已被全文替换：[shareholders/2009年 西科金融股东会记录—中文全文.md](../../../shareholders/2009年%20西科金融股东会记录—中文全文.md) | [来源](https://worldlypartners.com/wp-content/uploads/2024/01/2009-wesco-annual-meeting-notes-of-charlie-mungers-remarks-peter-boodell.pdf) | 2009-05-06；PDF 文本层 |
 | 2011年 西科合并后芒格对话会记录—中文摘要 | 摘要已被全文替换：[shareholders/2011年 西科合并后芒格对话会记录—中文全文.md](../../../shareholders/2011年%20西科合并后芒格对话会记录—中文全文.md) | [来源](https://worldlypartners.com/wp-content/uploads/2024/01/2011-wesco-annual-meeting-notes-of-charlie-mungers-remarks-the-inoculated-investor.pdf) | 2011-07-01；PDF 文本层 |
 | 2013年 每日期刊股东会记录—中文摘要 | 摘要已被全文替换：[shareholders/2013年 每日期刊股东会记录—中文全文.md](../../../shareholders/2013年%20每日期刊股东会记录—中文全文.md) | [来源](https://worldlypartners.com/wp-content/uploads/2024/01/2013-daily-journal-corp-annual-meeting-notes-of-charlie-mungers-remarks.pdf) | 2013-02-06；PDF 文本层 |
-| 2019年 雅虎财经五月芒格访谈—中文摘要 | 摘要已收录：[speech/2019年 雅虎财经五月芒格访谈—中文摘要.md](../../../speech/2019年%20雅虎财经五月芒格访谈—中文摘要.md) | [来源](https://www.youtube.com/watch?v=RFxXl9eAWV4) | 2019-05-09；官方频道英文自动字幕；文内时间定位 |
-| 2019年 CNBC巴菲特芒格盖茨联合访谈—中文摘要 | 摘要已收录：[speech/2019年 CNBC巴菲特芒格盖茨联合访谈—中文摘要.md](../../../speech/2019年%20CNBC巴菲特芒格盖茨联合访谈—中文摘要.md) | [来源](https://www.youtube.com/watch?v=2hdDE7XYr30) | 2019-05-06；官方频道英文自动字幕；文内时间定位 |
+| 2019年 雅虎财经五月芒格访谈—中文摘要 | 已按用户要求删除，2026-10-03 | [来源](https://www.youtube.com/watch?v=RFxXl9eAWV4) | 2019-05-09；首次收录依据为官方频道英文自动字幕 |
+| 2019年 CNBC巴菲特芒格盖茨联合访谈—中文摘要 | 已按用户要求删除，2026-10-03 | [来源](https://www.youtube.com/watch?v=2hdDE7XYr30) | 2019-05-06；首次收录依据为官方频道英文自动字幕 |
 | 2021 年芒格与巴菲特联合访谈 | 待补；未创建占位页面 | [存档原链接](https://www.youtube.com/watch?v=RQgD-PX3wSQ) | 原视频返回 Video unavailable，无法取得字幕或核对节目版本。 |
 
 ## 去重与待补说明
