@@ -286,7 +286,7 @@ describe("loaders against repository content", () => {
   it("loads all Li Lu source files as a separate source type", () => {
     const sources = repositorySources.filter((source) => source.type === "li-lu");
 
-    expect(sources).toHaveLength(14);
+    expect(sources).toHaveLength(15);
     expect(sources).toEqual(
       expect.arrayContaining([
         expect.objectContaining({
@@ -298,6 +298,11 @@ describe("loaders against repository content", () => {
           filePath: "li-lu/李录：2023年怀念我的老师查理·芒格.md",
           year: "2023",
           title: "李录：2023年怀念我的老师查理·芒格"
+        }),
+        expect.objectContaining({
+          filePath: "li-lu/李录：2026年格雷厄姆与多德年度午餐会对谈-价值投资、人工智能与人类的未来.md",
+          year: "2026",
+          title: "官方授权全文首发｜李录最新对谈：价值投资、人工智能与人类的未来"
         })
       ])
     );
