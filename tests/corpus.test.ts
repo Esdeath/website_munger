@@ -302,7 +302,7 @@ describe("loaders against repository content", () => {
         expect.objectContaining({
           filePath: "li-lu/李录：2026年格雷厄姆与多德年度午餐会对谈-价值投资、人工智能与人类的未来.md",
           year: "2026",
-          title: "官方授权全文首发｜李录最新对谈：价值投资、人工智能与人类的未来"
+          title: "2026李录最新对谈：价值投资、人工智能与人类的未来"
         })
       ])
     );
