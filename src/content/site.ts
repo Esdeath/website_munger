@@ -16,7 +16,7 @@ export interface SiteNetworkLink {
 
 // Sister sites in the ayaseeri.com network, shown as a switcher in the sidebar.
 export const SITE_NETWORK: SiteNetworkLink[] = [
-  { label: "主站", href: "https://www.ayaseeri.com/" },
+  { label: "段永平站", href: "https://www.ayaseeri.com/" },
   { label: "芒格", href: "https://munger.ayaseeri.com/", current: true },
   { label: "巴菲特", href: "https://buffett.ayaseeri.com/" }
 ];

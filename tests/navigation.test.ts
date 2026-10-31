@@ -157,7 +157,7 @@ describe("buildOtherNavigation", () => {
 describe("SITE_NETWORK", () => {
   it("links the three ayaseeri.com sister sites and marks the current one", () => {
     expect(SITE_NETWORK.map(({ label, href }) => ({ label, href }))).toEqual([
-      { label: "主站", href: "https://www.ayaseeri.com/" },
+      { label: "段永平站", href: "https://www.ayaseeri.com/" },
       { label: "芒格", href: "https://munger.ayaseeri.com/" },
       { label: "巴菲特", href: "https://buffett.ayaseeri.com/" }
     ]);
