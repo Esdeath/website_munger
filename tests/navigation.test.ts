@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { TOPICS } from "../src/content/site";
+import { SITE_NETWORK, TOPICS } from "../src/content/site";
 import type { KnowledgeArticle, OriginalSource } from "../src/lib/corpus";
 import {
   buildArchiveCards,
@@ -151,6 +151,20 @@ describe("buildOtherNavigation", () => {
     expect(buildOtherNavigation("/stop-doing")[1].active).toBe(true);
     expect(buildOtherNavigation("/books/munger-qa/reader")[3].active).toBe(true);
     expect(buildOtherNavigation("/book-list/extra")[4].active).toBe(false);
+  });
+});
+
+describe("SITE_NETWORK", () => {
+  it("links the three ayaseeri.com sister sites and marks the current one", () => {
+    expect(SITE_NETWORK.map(({ label, href }) => ({ label, href }))).toEqual([
+      { label: "主站", href: "https://www.ayaseeri.com/" },
+      { label: "芒格", href: "https://munger.ayaseeri.com/" },
+      { label: "巴菲特", href: "https://buffett.ayaseeri.com/" }
+    ]);
+
+    const current = SITE_NETWORK.filter((site) => site.current);
+    expect(current).toHaveLength(1);
+    expect(current[0].href).toBe("https://munger.ayaseeri.com/");
   });
 });
 

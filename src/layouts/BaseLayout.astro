@@ -1,6 +1,6 @@
 ---
 import "../styles/global.css";
-import { SITE_AUTHOR, SITE_DESCRIPTION, SITE_KEYWORDS, SITE_TITLE } from "../content/site";
+import { SITE_AUTHOR, SITE_DESCRIPTION, SITE_KEYWORDS, SITE_NETWORK, SITE_TITLE } from "../content/site";
 import { loadSiteCorpus } from "../lib/corpus";
 import { buildOtherNavigation, buildSidebarSections } from "../lib/navigation";
 import { canonicalUrl } from "../lib/seo";
@@ -165,6 +165,15 @@ const otherGroupOpen = otherNavigation.some((item) => item.active);
           </div>
         </div>
         <p class="sidebar-tagline">慢慢读，反复看，用原文校准判断。</p>
+        <nav class="site-switcher" aria-label="站点切换">
+          {SITE_NETWORK.map((site) => (
+            <a
+              class:list={["site-switcher-link", site.current && "is-current"]}
+              href={site.href}
+              aria-current={site.current ? "page" : undefined}
+            >{site.label}</a>
+          ))}
+        </nav>
         <label class="search-box">
           <span class="sr-only">搜索</span>
           <input type="search" placeholder="搜索关键词、文章..." />

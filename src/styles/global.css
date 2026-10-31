@@ -216,6 +216,37 @@ input:focus-visible {
   font-weight: 700;
 }
 
+.site-switcher {
+  display: flex;
+  gap: 6px;
+  margin: 0 0 14px;
+}
+
+.site-switcher-link {
+  flex: 1 1 0;
+  padding: 6px 4px;
+  background: var(--surface-input);
+  border: 1px solid var(--input-line);
+  border-radius: 3px;
+  color: var(--muted);
+  font-size: var(--fs-xxs);
+  font-weight: 700;
+  text-align: center;
+  white-space: nowrap;
+  transition: color 0.15s ease, border-color 0.15s ease, background 0.15s ease;
+}
+
+.site-switcher-link:hover {
+  color: var(--green-dark);
+  border-color: var(--green);
+}
+
+.site-switcher-link.is-current {
+  color: var(--green-dark);
+  background: var(--green-soft);
+  border-color: var(--green);
+}
+
 .search-box {
   display: block;
   margin-bottom: 14px;
