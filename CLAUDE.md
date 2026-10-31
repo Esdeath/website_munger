@@ -80,3 +80,7 @@ Key conventions when authoring/editing essays:
 - The script guarantees quotes are verbatim but cannot catch wrong year/source attribution or reversed meaning in awkward translations — those need a human/fact-checker reading the cited source file.
 
 The established workflow generates essays as parallel writer agents (one per keyword, separate files, agents do **not** run git) followed by one independent fact-checker per essay; the controller then commits. Convention: commit new essays **directly to `main`**, one `article: 关键词` commit per essay.
+
+## Shared typography (ink.css)
+
+`src/styles/ink.css` is a **copy** of `website_duan/app/assets/css/ink.css` — the font stacks (`--reading` = LXGW WenKai for article bodies, `--sans` for UI, `--serif` for heroes), reading sizes, measure and sidebar widths shared by all three ayaseeri.com sites. Edit it in website_duan and run `website_duan/scripts/sync-ink.sh`; don't edit the copy here. Colors stay in `global.css`. The WenKai file `public/fonts/lxgw-wenkai-tc-subset.woff2` is subset to this site's characters — regenerate with `uv run --with fonttools --with brotli scripts/build-font-subset.py` (source TTF goes in the gitignored `.fontsrc/`) after adding content with new characters.

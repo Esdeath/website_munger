@@ -17,3 +17,6 @@ tmp/
 
 # Local worktrees
 .worktrees/
+
+# 字体子集化用的原始 ttf（scripts/build-font-subset.py 按需下载）
+.fontsrc/

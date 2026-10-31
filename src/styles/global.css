@@ -24,7 +24,6 @@
   --surface-input: #fffaf4;
   --input-line: #777777;
   --placeholder: #9a8a78;
-  --top-glow: rgb(255 252 244 / 0.75);
   --inset-hi: rgb(255 255 255 / 0.72);
   --inset-hi-soft: rgb(255 255 255 / 0.65);
   --scrim: rgb(47 42 36 / 0.28);
@@ -32,8 +31,8 @@
   --aside-shadow: -18px 0 42px rgb(119 75 32 / 0.15);
   --topbar-shadow: 0 8px 24px rgb(119 75 32 / 0.1);
   --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
-  --sidebar: 320px;
-  --rightbar: 300px;
+  --sidebar: var(--sidebar-w);
+  --rightbar: var(--aside-w);
   --fs-xxs: 0.78rem;
   --fs-xs: 0.8rem;
   --fs-meta: 0.82rem;
@@ -48,7 +47,9 @@
   --fs-hero-max: 3.2rem;
   --article-font-scale: 100%;
   --mobile-topbar: 54px;
-  font-family: "Noto Serif SC", "Songti SC", "STSong", "Times New Roman", serif;
+  /* 字体与排版尺寸来自三站共享的 ink.css(先于本文件引入):
+     界面文字用 --sans,正文阅读区用 --reading(霞鹜文楷)。 */
+  font-family: var(--sans);
 }
 
 html.dark {
@@ -74,7 +75,6 @@ html.dark {
   --surface-input: #1c1c1c;
   --input-line: #4a4a4a;
   --placeholder: #8a8a8a;
-  --top-glow: rgb(255 240 225 / 0.04);
   --inset-hi: rgb(255 255 255 / 0.05);
   --inset-hi-soft: rgb(255 255 255 / 0.04);
   --scrim: rgb(0 0 0 / 0.55);
@@ -106,7 +106,6 @@ html.green {
   --surface-input: #ddf5e1;
   --input-line: #7a9a82;
   --placeholder: #6a8471;
-  --top-glow: rgb(232 251 235 / 0.55);
   --inset-hi: rgb(255 255 255 / 0.42);
   --inset-hi-soft: rgb(255 255 255 / 0.36);
   --scrim: rgb(24 34 27 / 0.32);
@@ -126,9 +125,7 @@ html {
 
 body {
   margin: 0;
-  background:
-    radial-gradient(circle at 54% 0%, var(--top-glow), transparent 34rem),
-    var(--bg);
+  background: var(--bg);
   color: var(--ink);
   font-size: 16px;
   line-height: 1.75;
@@ -225,11 +222,10 @@ input:focus-visible {
 .site-switcher-link {
   flex: 1 1 0;
   padding: 6px 4px;
-  background: var(--surface-input);
-  border: 1px solid var(--input-line);
+  border: 1px solid var(--line);
   border-radius: 3px;
   color: var(--muted);
-  font-size: var(--fs-xxs);
+  font-size: 12px;
   font-weight: 700;
   text-align: center;
   white-space: nowrap;
@@ -316,7 +312,7 @@ input:focus-visible {
   background: var(--green-soft);
   border: 1px solid var(--line);
   border-radius: 6px;
-  font: 900 var(--fs-nav) / 1.2 ui-sans-serif, system-ui, sans-serif;
+  font: 900 var(--fs-nav) / 1.2 var(--sans);
   cursor: pointer;
 }
 
@@ -482,6 +478,7 @@ input:focus-visible {
 .overview-hero h1 {
   margin: 0;
   color: var(--ink-strong);
+  font-family: var(--serif);
   font-size: clamp(1.9rem, 12vw, var(--fs-hero-max));
   font-weight: 800;
   line-height: 1.05;
@@ -521,8 +518,7 @@ input:focus-visible {
   padding: 24px 28px;
   background: var(--surface-card-strong);
   border: 1px solid var(--line);
-  border-radius: 10px;
-  box-shadow: var(--shadow);
+  border-radius: var(--radius);
   text-align: left;
 }
 
@@ -537,7 +533,7 @@ input:focus-visible {
   display: block;
   margin-top: 8px;
   color: var(--muted);
-  font: 700 var(--fs-meta) / 1.2 ui-sans-serif, system-ui, sans-serif;
+  font: 700 var(--fs-meta) / 1.2 var(--sans);
 }
 
 .card-arrow {
@@ -553,7 +549,7 @@ input:focus-visible {
 .section-kicker {
   margin: 0 0 10px;
   color: var(--green-dark);
-  font: 900 var(--fs-xs) / 1.2 ui-sans-serif, system-ui, sans-serif;
+  font: 900 var(--fs-xs) / 1.2 var(--sans);
   letter-spacing: 0.08em;
 }
 
@@ -585,7 +581,7 @@ input:focus-visible {
 
 .archive-card:hover {
   border-color: var(--green);
-  box-shadow: 0 0 0 1px var(--green), var(--shadow);
+  box-shadow: 0 0 0 1px var(--green);
 }
 
 .archive-mark {
@@ -636,6 +632,7 @@ input:focus-visible {
 
 .reader-content {
   min-width: 0;
+  font-size: var(--fs-reading);
 }
 
 .reader-header {
@@ -644,9 +641,10 @@ input:focus-visible {
 
 .reader-header h1 {
   margin: 0 0 24px;
-  color: var(--green-dark);
-  font-size: var(--fs-section);
-  line-height: 1.25;
+  color: var(--ink-strong);
+  font-size: var(--fs-h1-sm);
+  font-weight: 800;
+  line-height: 1.3;
   letter-spacing: 0;
 }
 
@@ -685,7 +683,7 @@ input:focus-visible {
   background: var(--paper);
   border: 1px solid var(--line-strong);
   border-radius: 6px;
-  font: 800 var(--fs-nav) / 1.2 ui-sans-serif, system-ui, sans-serif;
+  font: 800 var(--fs-nav) / 1.2 var(--sans);
   cursor: pointer;
 }
 
@@ -702,67 +700,101 @@ input:focus-visible {
 .article-share-status {
   min-width: 10em;
   color: var(--muted);
-  font: 700 var(--fs-meta) / 1.4 ui-sans-serif, system-ui, sans-serif;
+  font: 700 var(--fs-meta) / 1.4 var(--sans);
 }
 
 .article-body {
-  max-width: 980px;
+  max-width: var(--measure);
   color: var(--ink);
+  font-family: var(--reading);
   font-size: var(--article-font-scale);
   font-weight: 400;
-  line-height: 1.75;
+  line-height: var(--lh-reading);
+  letter-spacing: 0.01em;
 }
 
-.article-body p {
-  margin: 0 0 28px;
-  font-size: 1em;
+.article-body p,
+.article-body ul,
+.article-body ol {
+  margin: 0 0 var(--para-gap);
+}
+
+.article-body li + li {
+  margin-top: 6px;
 }
 
 .article-body a {
-  color: var(--green-dark);
-  border-bottom: 1px dotted var(--green);
-  font-weight: 800;
+  color: var(--orange);
+  font-weight: 600;
+  text-decoration: underline;
+  text-decoration-color: color-mix(in srgb, var(--orange) 30%, transparent);
+  text-decoration-thickness: 1px;
+  text-underline-offset: 4px;
 }
 
+.article-body a:hover {
+  text-decoration-color: var(--orange);
+}
+
+.article-body h1,
 .article-body h2,
-.article-body h3 {
-  margin: 52px 0 18px;
+.article-body h3,
+.article-body h4,
+.article-body h5,
+.article-body h6 {
   color: var(--ink-strong);
-  line-height: 1.35;
+  font-family: var(--sans);
+  font-weight: 600;
+  line-height: 1.5;
 }
 
 .article-body h1 {
-  font-size: 2em;
-}
-
-.article-body h2 {
   font-size: 1.5em;
 }
 
+.article-body h2 {
+  margin: 1.8em 0 0.4em;
+  padding-top: 1.2em;
+  border-top: 1px solid var(--line);
+  font-size: var(--fs-h2);
+}
+
+.article-body h2:first-child {
+  margin-top: 0;
+  padding-top: 0;
+  border-top: none;
+}
+
 .article-body h3 {
-  font-size: 1.17em;
+  margin: 1.4em 0 0.3em;
+  font-size: var(--fs-h3);
 }
 
-.article-body h4 {
-  font-size: 1em;
-}
-
-.article-body h5 {
-  font-size: 0.83em;
-}
-
+.article-body h4,
+.article-body h5,
 .article-body h6 {
-  font-size: 0.67em;
+  margin: 1.2em 0 0.3em;
+  color: var(--muted);
+  font-size: 0.882em;
 }
 
 .article-body blockquote {
-  margin: 34px 0;
-  padding: 22px 28px;
-  color: var(--green-dark);
-  background: var(--paper);
-  border: 1px solid var(--line);
-  border-left: 5px solid var(--green);
-  border-radius: 8px;
+  margin: 1em 0;
+  padding: 0.6em 1em;
+  color: var(--muted);
+  background: color-mix(in srgb, var(--ink) 4%, transparent);
+  border-left: 3px solid var(--orange);
+  border-radius: 0 4px 4px 0;
+  font-size: 0.941em;
+  line-height: 1.7;
+}
+
+.article-body blockquote p {
+  margin: 0 0 0.5em;
+}
+
+.article-body blockquote p:last-child {
+  margin-bottom: 0;
 }
 
 .article-body img {
@@ -901,8 +933,7 @@ input:focus-visible {
   padding: 24px;
   background: var(--paper);
   border: 1px solid var(--line);
-  border-radius: 12px;
-  box-shadow: var(--shadow);
+  border-radius: var(--radius);
 }
 
 .thinking-grid-layer-heading {
@@ -914,7 +945,7 @@ input:focus-visible {
 .thinking-grid-layer-number {
   margin: 2px 0 0;
   color: var(--green);
-  font: 800 1rem/1 ui-sans-serif, system-ui, sans-serif;
+  font: 800 1rem/1 var(--sans);
 }
 
 .thinking-grid-layer-count,
@@ -982,6 +1013,7 @@ input:focus-visible {
 
 .hero-title {
   margin: 0 0 18px;
+  font-family: var(--serif);
   color: var(--ink-strong);
   font-size: var(--fs-section);
   line-height: 1.15;
@@ -1073,11 +1105,6 @@ input:focus-visible {
 }
 
 @media (max-width: 1180px) {
-  :root {
-    --sidebar: 300px;
-    --rightbar: 280px;
-  }
-
   .reader-layout {
     gap: 28px;
   }
@@ -1119,6 +1146,13 @@ input:focus-visible {
 
   .reader-layout {
     padding: 34px 22px 70px;
+  }
+}
+
+@media (min-width: 1025px) {
+  .reader-header h1 {
+    font-size: var(--fs-h1);
+    letter-spacing: -0.02em;
   }
 }
 
@@ -1404,23 +1438,16 @@ input:focus-visible {
     padding-top: 9px;
   }
 
+  .reader-content {
+    font-size: var(--fs-reading-sm);
+  }
+
   .article-body {
     font-size: var(--article-font-scale);
-    line-height: 1.72;
-  }
-
-  .article-body p {
-    margin-bottom: 22px;
-  }
-
-  .article-body h2,
-  .article-body h3 {
-    margin-top: 38px;
   }
 
   .article-body blockquote {
-    margin: 26px 0;
-    padding: 18px;
+    padding: 0.5em 0.85em;
   }
 
   .card,
