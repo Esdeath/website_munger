@@ -542,6 +542,32 @@ input:focus-visible {
   line-height: 1;
 }
 
+.wechat-card {
+  justify-content: flex-start;
+  gap: 18px;
+  width: min(360px, 100%);
+  margin-top: 14px;
+  padding: 16px 20px;
+}
+
+.wechat-card .wechat-qr {
+  flex: 0 0 96px;
+  width: 96px;
+  height: 96px;
+  padding: 4px;
+  background: #fff;
+  border-radius: 6px;
+  image-rendering: pixelated;
+}
+
+.wechat-card .wechat-id {
+  display: block;
+  margin-top: 4px;
+  color: var(--red);
+  font: 800 var(--fs-title) / 1.3 var(--sans);
+  user-select: all;
+}
+
 .archive-section {
   margin-top: 34px;
 }
@@ -1388,6 +1414,11 @@ input:focus-visible {
 
   .author-card span:first-child {
     min-width: 0;
+  }
+
+  .wechat-card {
+    display: flex;
+    grid-template-columns: none;
   }
 
   .author-card strong {

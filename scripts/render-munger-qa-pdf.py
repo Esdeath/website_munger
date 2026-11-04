@@ -40,6 +40,10 @@ GREEN_DARK = colors.HexColor("#0d2d25")
 RED = colors.HexColor("#a63b32")
 RULE = colors.HexColor("#cbd5d0")
 PAPER = colors.HexColor("#ffffff")
+WECHAT_QR = Path(__file__).resolve().parents[1] / "public/images/wechat-qr.png"
+WECHAT_ID = "livemisaka"
+# 封面必带三个网站网址
+SITE_LINKS = [("段永平", "https://www.ayaseeri.com/"), ("芒格", "https://munger.ayaseeri.com/"), ("巴菲特", "https://buffett.ayaseeri.com/")]
 
 
 def register_fonts() -> tuple[str, str]:
@@ -111,6 +115,18 @@ class BookDocTemplate(BaseDocTemplate):
         canvas.setFont(self.sans, 7.5)
         canvas.drawString(25 * mm, 36 * mm, self.edition)
         canvas.drawString(25 * mm, 31 * mm, "据 website_munger 中文语料整理")
+        for i, (name, url) in enumerate(SITE_LINKS):
+            canvas.drawString(25 * mm, (56 - i * 4.6) * mm, f"{name}：{url}")
+        # 作者微信二维码：白底卡片贴在封面右下角，与网站首页共用 public/images/wechat-qr.png
+        qr_size = 24 * mm
+        pad = 1.6 * mm
+        qr_x = PAGE_WIDTH - 17 * mm - qr_size
+        qr_y = 29 * mm
+        canvas.setFillColor(colors.white)
+        canvas.roundRect(qr_x - pad, qr_y - pad, qr_size + 2 * pad, qr_size + 2 * pad, 1.2 * mm, stroke=0, fill=1)
+        canvas.drawImage(ImageReader(str(WECHAT_QR)), qr_x, qr_y, width=qr_size, height=qr_size)
+        canvas.setFont(self.sans, 7.5)
+        canvas.drawCentredString(qr_x + qr_size / 2, qr_y - pad - 4 * mm, f"作者微信：{WECHAT_ID}")
         canvas.restoreState()
 
     def draw_body_chrome(self, canvas, doc):
