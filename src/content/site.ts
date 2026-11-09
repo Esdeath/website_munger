@@ -18,7 +18,8 @@ export interface SiteNetworkLink {
 export const SITE_NETWORK: SiteNetworkLink[] = [
   { label: "段永平站", href: "https://www.ayaseeri.com/" },
   { label: "芒格", href: "https://munger.ayaseeri.com/", current: true },
-  { label: "巴菲特", href: "https://buffett.ayaseeri.com/" }
+  { label: "巴菲特", href: "https://buffett.ayaseeri.com/" },
+  { label: "帕伯莱", href: "https://pabrai.ayaseeri.com/" }
 ];
 export const SITE_AUTHOR = "滚雪球的Star";
 export const SITE_DESCRIPTION = "按主题地图组织的查理·芒格思想知识库，连接解释文章、股东会记录、演讲访谈与原文出处。";

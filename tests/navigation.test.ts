@@ -155,11 +155,12 @@ describe("buildOtherNavigation", () => {
 });
 
 describe("SITE_NETWORK", () => {
-  it("links the three ayaseeri.com sister sites and marks the current one", () => {
+  it("links the four ayaseeri.com sister sites and marks the current one", () => {
     expect(SITE_NETWORK.map(({ label, href }) => ({ label, href }))).toEqual([
       { label: "段永平站", href: "https://www.ayaseeri.com/" },
       { label: "芒格", href: "https://munger.ayaseeri.com/" },
-      { label: "巴菲特", href: "https://buffett.ayaseeri.com/" }
+      { label: "巴菲特", href: "https://buffett.ayaseeri.com/" },
+      { label: "帕伯莱", href: "https://pabrai.ayaseeri.com/" }
     ]);
 
     const current = SITE_NETWORK.filter((site) => site.current);
