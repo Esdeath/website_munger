@@ -1,35 +1,29 @@
 ---
 import { Share2 } from "@lucide/astro";
-import { SITE_TITLE } from "../content/site";
-import { buildMarkdownSharePayload } from "../lib/article-share";
 
 interface Props {
   title: string;
   url: string;
-  markdown: string;
 }
 
-const { title, url, markdown } = Astro.props;
-const shareMarkdown = buildMarkdownSharePayload({ siteTitle: SITE_TITLE, title, url, markdown });
-const serializedMarkdown = JSON.stringify(shareMarkdown).replaceAll("<", "\\u003c");
+const { title, url } = Astro.props;
 const statusId = "article-share-status";
 ---
 
-<div class="article-share" data-article-share data-share-title={title} data-share-url={url} data-share-site-title={SITE_TITLE}>
+<div class="article-share" data-article-share data-share-title={title} data-share-url={url}>
   <button class="article-share-button" type="button" data-share-button aria-describedby={statusId}>
     <Share2 size={16} stroke-width={2} aria-hidden="true" />
     <span data-share-label>分享</span>
   </button>
   <span class="article-share-status" id={statusId} role="status" aria-live="polite"></span>
-  <script is:inline type="application/json" data-share-markdown set:html={serializedMarkdown}></script>
 </div>
 
 <script>
-  import { buildHtmlSharePayload } from "../lib/article-share";
+  import { buildFullArticleCopyContent, buildSelectionCopyContent } from "../lib/article-share";
 
   interface SharePayload {
-    markdown: string;
     html: string;
+    text: string;
   }
 
   async function writeSharePayload(payload: SharePayload): Promise<void> {
@@ -41,7 +35,7 @@ const statusId = "article-share-status";
       try {
         const item = new ClipboardItem({
           "text/html": new Blob([payload.html], { type: "text/html" }),
-          "text/plain": new Blob([payload.markdown], { type: "text/plain" })
+          "text/plain": new Blob([payload.text], { type: "text/plain" })
         });
         await navigator.clipboard.write([item]);
         return;
@@ -51,7 +45,7 @@ const statusId = "article-share-status";
     }
 
     if (typeof navigator.clipboard.writeText === "function") {
-      await navigator.clipboard.writeText(payload.markdown);
+      await navigator.clipboard.writeText(payload.text);
       return;
     }
 
@@ -66,13 +60,16 @@ const statusId = "article-share-status";
     const button = root.querySelector<HTMLButtonElement>("[data-share-button]");
     const label = root.querySelector<HTMLElement>("[data-share-label]");
     const status = root.querySelector<HTMLElement>("[role='status']");
-    const markdownElement = root.querySelector<HTMLScriptElement>("[data-share-markdown]");
-    const markdownJson = markdownElement?.textContent;
+    // 正文根是 ReaderPage 里的 .article-body，不含页头的 h1。
     const articleBody = root.closest(".reader-content")?.querySelector<HTMLElement>(".article-body");
-    if (!button || !label || !status || !markdownJson || !articleBody) {
+    if (!button || !label || !status || !articleBody) {
       return;
     }
 
+    const source = {
+      title: root.dataset.shareTitle ?? "",
+      url: root.dataset.shareUrl ?? ""
+    };
     let resetTimer: number | undefined;
     root.dataset.shareInitialized = "true";
 
@@ -83,16 +80,7 @@ const statusId = "article-share-status";
       status.textContent = "";
 
       try {
-        const payload: SharePayload = {
-          markdown: JSON.parse(markdownJson) as string,
-          html: buildHtmlSharePayload({
-            siteTitle: root.dataset.shareSiteTitle ?? "",
-            title: root.dataset.shareTitle ?? "",
-            url: root.dataset.shareUrl ?? "",
-            html: articleBody.innerHTML
-          })
-        };
-        await writeSharePayload(payload);
+        await writeSharePayload(buildFullArticleCopyContent(source, articleBody));
         label.textContent = "已复制";
         status.textContent = "文章和格式已复制";
         resetTimer = window.setTimeout(() => {
@@ -105,6 +93,23 @@ const statusId = "article-share-status";
       } finally {
         button.disabled = false;
       }
+    });
+
+    // 正文内选中复制时补标题 + 原文链接；选到正文外时返回 null，放行浏览器默认复制。
+    document.addEventListener("copy", (event: ClipboardEvent) => {
+      const selection = window.getSelection();
+      if (!selection || !event.clipboardData) {
+        return;
+      }
+
+      const content = buildSelectionCopyContent(source, articleBody, selection);
+      if (!content) {
+        return;
+      }
+
+      event.clipboardData.setData("text/plain", content.text);
+      event.clipboardData.setData("text/html", content.html);
+      event.preventDefault();
     });
   });
 </script>
