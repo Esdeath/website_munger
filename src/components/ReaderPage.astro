@@ -1,5 +1,6 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
+import WeChatCta from "./WeChatCta.astro";
 
 interface Props {
   title: string;
@@ -26,6 +27,7 @@ const { title, description, type, structuredData, html } = Astro.props;
       </header>
       <slot name="actions" />
       <div class="article-body" set:html={html} />
+      <WeChatCta variant="inline" />
     </div>
 
     <input id="reader-drawer-state" class="drawer-state reader-drawer-state" type="checkbox" />

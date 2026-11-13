@@ -7,6 +7,7 @@ import { buildOtherNavigation, buildSidebarSections } from "../lib/navigation";
 import { canonicalUrl } from "../lib/seo";
 import ThemePicker from "../components/ThemePicker.astro";
 import FontSizePicker from "../components/FontSizePicker.astro";
+import WeChatCta from "../components/WeChatCta.astro";
 import {
   ARTICLE_FONT_SIZE_DEFAULT,
   ARTICLE_FONT_SIZE_LEVELS,
@@ -231,6 +232,7 @@ const otherGroupOpen = otherNavigation.some((item) => item.active);
         <slot />
       </main>
     </div>
+    <WeChatCta />
     <script>
       import { setupSidebarScrollPersistence } from "../lib/sidebar-scroll";
 
