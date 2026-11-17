@@ -551,13 +551,12 @@ input:focus-visible {
 }
 
 .wechat-card .wechat-qr {
-  flex: 0 0 96px;
-  width: 96px;
-  height: 96px;
+  flex: 0 0 128px;
+  width: 128px;
+  height: 128px;
   padding: 4px;
   background: #fff;
   border-radius: 6px;
-  image-rendering: pixelated;
 }
 
 .wechat-card .wechat-id {

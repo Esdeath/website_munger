@@ -18,7 +18,10 @@ export function GET() {
       embeddedCovers[0],
       'class="cover-image" src="/books/munger-qa/cover.webp" width="1024" height="1536" fetchpriority="high"'
     )
-    .replace(/class="cover-qr" src="data:image\/png;base64,[A-Za-z0-9+/=]+"/g, 'class="cover-qr" src="/images/wechat-qr.png"');
+    .replace(/class="cover-qr" src="data:image\/png;base64,[A-Za-z0-9+/=]+"/g, 'class="cover-qr" src="/images/wechat-qr.png"')
+    // 站点二维码已换成读者群码，封面联系文案同步，避免「个人微信号」与群码对不上
+    .replace(/作者微信：livemisaka/g, "读者微信群：巴芒段投资学习")
+    .replace(/alt="作者微信二维码"/g, 'alt="读者微信群二维码：巴芒段投资学习"');
 
   return new Response(webHtml, {
     headers: {
