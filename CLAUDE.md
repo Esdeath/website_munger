@@ -18,6 +18,8 @@ npx vitest run -t "parses corpus rows"     # run tests matching a name
 
 npm run validate:content # check article frontmatter (scripts/validate-site-content.mjs)
 npm run check            # FULL GATE: validate:content + astro check + vitest run + astro build
+npm run deploy:oss       # build + upload dist/ to OSS + refresh CDN
+npm run deploy:oss:upload # upload existing dist/ without rebuilding
 
 python3 tools/check_article.py "articles/<file>.md"  # verify one essay's quotes are verbatim
 ```
