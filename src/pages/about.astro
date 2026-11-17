@@ -1,0 +1,147 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import {
+  SITE_AUTHOR,
+  SITE_AUTHOR_ALTERNATE_NAMES,
+  SITE_AUTHOR_PROFILES,
+  SITE_AUTHOR_URL,
+  SITE_DESCRIPTION,
+  SITE_TITLE,
+  SITE_URL
+} from "../content/site";
+import { canonicalUrl } from "../lib/seo";
+
+const editor = {
+  "@type": "Person",
+  "@id": `${SITE_URL}#editor`,
+  name: SITE_AUTHOR,
+  alternateName: SITE_AUTHOR_ALTERNATE_NAMES,
+  url: SITE_AUTHOR_URL,
+  sameAs: SITE_AUTHOR_PROFILES
+};
+
+const structuredData = {
+  "@context": "https://schema.org",
+  "@type": "AboutPage",
+  name: "关于本站",
+  url: canonicalUrl("/about/"),
+  inLanguage: "zh-CN",
+  mainEntity: {
+    "@type": "Organization",
+    "@id": `${SITE_URL}#publisher`,
+    name: SITE_TITLE,
+    url: SITE_URL,
+    description: SITE_DESCRIPTION,
+    founder: editor
+  }
+};
+---
+
+<BaseLayout
+  title="关于本站"
+  seoTitle="关于本站｜查理·芒格知识库的编者、资料来源与更正方式"
+  description="查理·芒格知识库由寻长坡以滚雪球整理：134 篇原文、74 篇主题解读。这里说明编者、资料来源、编辑原则、校对流程与更正方式。"
+  structuredData={structuredData}
+>
+  <article id="article-content" class="about-page">
+    <h1>关于本站</h1>
+    <p class="about-lead">
+      查理·芒格知识库是一个中文资料整理站：按主题地图组织芒格与李录的公开原文，
+      再用解释文章把概念、出处和上下文连起来。
+    </p>
+
+    <h2>收录了什么</h2>
+    <p>
+      目前收录 <strong>134 篇原文</strong>：蓝筹印花、西科金融与每日期刊的股东信和股东会记录，
+      芒格的演讲、访谈与公开声明，以及李录的演讲与访谈；另有 <strong>74 篇主题解读</strong>，
+      按 8 个主题分类，每篇标注引文来源。
+    </p>
+
+    <h2>谁在整理</h2>
+    <p>
+      编者是<strong>寻长坡以滚雪球</strong>（旧署名「滚雪球的Star」）。可以在
+      <a href="https://xueqiu.com/u/lovelive" rel="me noopener" target="_blank">雪球</a>、
+      <a href="https://www.zhihu.com/people/shanks-16-68" rel="me noopener" target="_blank">知乎</a>、
+      <a href="https://www.xiaohongshu.com/user/profile/68125976000000000d00ac5d" rel="me noopener" target="_blank">小红书</a>
+      找到我；公众号是「芒格反着说」。读者群二维码在首页。
+    </p>
+    <p>
+      同一编者还整理了另外三个资料库：
+      <a href="https://www.ayaseeri.com/">段永平原典</a>、
+      <a href="https://buffett.ayaseeri.com/">巴菲特知识库</a>、
+      <a href="https://pabrai.ayaseeri.com/">帕伯莱知识库</a>。
+      四个站各自独立编排，但资料来源、编辑原则和更正方式是同一套。
+    </p>
+
+    <h2>资料从哪来</h2>
+    <p>
+      原文来自伯克希尔·哈撒韦、蓝筹印花、西科金融与每日期刊的公开文件，芒格的演讲、访谈和公开声明，
+      以及李录的公开演讲与文章。每篇尽量标注原始标题、年份、场次和来源；中文文本若是整理或翻译，
+      会与英文原稿分开说明。
+    </p>
+
+    <h2>编辑原则</h2>
+    <ul>
+      <li><strong>先原文，后观点。</strong>原文页面不混入编者的结论；解读文章才做归纳和解释。</li>
+      <li><strong>摘要和原话分开。</strong>页面开头的编者摘要会明确标注，不把整理者的理解写成芒格的话。</li>
+      <li><strong>引文逐句核对。</strong>解读文章里的引文必须能在原文语料中找到，注明出处；不编造年份和场合。</li>
+      <li><strong>不静默改写。</strong>原文不删节、不改写；发现错字或断句问题，在页面或更新记录里说明。</li>
+    </ul>
+
+    <h2>校对与更正</h2>
+    <p>
+      原文按篇校对，解读文章逐条核对引文和出处。如果发现出处错误、断章取义、译文偏差或链接失效，
+      可以在雪球、知乎私信，或在读者群里指出。能回查的会更正；涉及观点或事实的修改，会尽量说明改了什么，
+      不做静默替换。
+    </p>
+
+    <h2>更新频率</h2>
+    <p>
+      按资料整理进度增补和校对，不承诺固定日更。首页和分类页会显示当前收录篇数；
+      新增或大改的内容会进入站点地图，方便搜索引擎和 AI 抓取。
+    </p>
+
+    <h2>怎么引用本站</h2>
+    <p>
+      建议格式：<code>《文章标题》，查理·芒格知识库，网址，访问日期。</code>
+      引用原文时，请尽量同时给出年份和场次；涉及关键数字或判断，回到英文原稿核对。
+    </p>
+
+    <h2>版权与免责</h2>
+    <p>
+      原文版权归查理·芒格、李录、伯克希尔·哈撒韦及相关权利人所有。本站为个人学习研究用途的整理，
+      不构成投资建议，也不代表芒格家族或相关公司的官方立场。权利人如认为内容使用不当，请通过上述渠道联系，
+      本站会及时处理。
+    </p>
+  </article>
+</BaseLayout>
+
+<style>
+  .about-page {
+    max-width: 46rem;
+    margin: 0 auto;
+    line-height: 1.95;
+  }
+  .about-lead {
+    font-size: 1.05rem;
+    color: var(--text-muted);
+    border-left: 3px solid var(--accent);
+    padding-left: 1rem;
+  }
+  .about-page h2 {
+    margin-top: 2.2rem;
+    font-size: 1.15rem;
+  }
+  .about-page ul {
+    padding-left: 1.25rem;
+  }
+  .about-page li {
+    margin: 0.45rem 0;
+  }
+  .about-page code {
+    background: var(--accent-soft);
+    padding: 0.1rem 0.35rem;
+    border-radius: 4px;
+    font-size: 0.9em;
+  }
+</style>

@@ -1,5 +1,8 @@
 import {
   SITE_AUTHOR,
+  SITE_AUTHOR_ALTERNATE_NAMES,
+  SITE_AUTHOR_PROFILES,
+  SITE_AUTHOR_URL,
   SITE_DESCRIPTION,
   SITE_KEYWORDS,
   SITE_TITLE,
@@ -129,8 +132,18 @@ export function buildWebsiteSchema(): Record<string, unknown> {
     url: SITE_URL,
     inLanguage: "zh-CN",
     publisher: {
-      "@type": "Person",
-      name: SITE_AUTHOR
+      "@type": "Organization",
+      "@id": `${SITE_URL}#publisher`,
+      name: SITE_TITLE,
+      url: SITE_URL,
+      founder: {
+        "@type": "Person",
+        "@id": `${SITE_URL}#editor`,
+        name: SITE_AUTHOR,
+        alternateName: SITE_AUTHOR_ALTERNATE_NAMES,
+        url: SITE_AUTHOR_URL,
+        sameAs: SITE_AUTHOR_PROFILES
+      }
     },
     keywords: SITE_KEYWORDS
   };
@@ -184,7 +197,11 @@ export function buildArticleSchema(input: {
     inLanguage: "zh-CN",
     author: {
       "@type": "Person",
-      name: SITE_AUTHOR
+      "@id": `${SITE_URL}#editor`,
+      name: SITE_AUTHOR,
+      alternateName: SITE_AUTHOR_ALTERNATE_NAMES,
+      url: SITE_AUTHOR_URL,
+      sameAs: SITE_AUTHOR_PROFILES
     },
     isPartOf: {
       "@type": "WebSite",
@@ -253,6 +270,7 @@ export function buildSitemapEntries(input: SitemapInput): SitemapEntry[] {
 
   const entries: SitemapEntry[] = [
     { url: canonicalUrl("/"), lastmod: latest },
+    { url: canonicalUrl("/about/"), lastmod: latest },
     { url: canonicalUrl("/stop-doing/"), lastmod: latest },
     { url: canonicalUrl("/book-list/"), lastmod: latest },
     { url: canonicalUrl("/books/munger-qa/"), lastmod: latest },
@@ -363,6 +381,7 @@ export function buildLlmsTxt(input: LlmsInput): string {
     `- 主题索引: ${canonicalUrl("/topics/")}`,
     `- 解释文章索引: ${canonicalUrl("/articles/")}`,
     `- 原文资料索引: ${canonicalUrl("/sources/")}`,
+    `- 关于本站（编者、资料来源与更正）: ${canonicalUrl("/about/")}`,
     "",
     "## 主题入口",
     topicLines,

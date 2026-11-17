@@ -209,7 +209,7 @@ describe("sitemap and llms builders", () => {
 
     expect(new Set(urls).size).toBe(urls.length);
     expect(urls).toHaveLength(
-      6 + // 首页、stop-doing、book-list、books/munger-qa、/topics/、/articles/
+      7 + // 首页、about、stop-doing、book-list、books/munger-qa、/topics/、/articles/
         TOPICS.length +
         repositoryCorpus.articles.length +
         2 + // /sources/、/llms.txt

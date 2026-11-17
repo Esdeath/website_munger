@@ -237,6 +237,15 @@ input:focus-visible {
   border-color: var(--green);
 }
 
+.sidebar-about-link {
+  display: block;
+  margin: 1.4rem 0 0.4rem;
+  padding-top: 0.8rem;
+  border-top: 1px solid var(--border);
+  color: var(--text-muted);
+  font-size: 0.85rem;
+}
+.sidebar-about-link:hover { color: var(--accent); }
 .site-switcher-link.is-current {
   color: var(--green-dark);
   background: var(--green-soft);

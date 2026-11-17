@@ -21,7 +21,15 @@ export const SITE_NETWORK: SiteNetworkLink[] = [
   { label: "巴菲特", href: "https://buffett.ayaseeri.com/" },
   { label: "帕伯莱", href: "https://pabrai.ayaseeri.com/" }
 ];
-export const SITE_AUTHOR = "滚雪球的Star";
+export const SITE_AUTHOR = "寻长坡以滚雪球";
+/** 旧署名与公众号名，保留给搜索引擎做同一实体识别。 */
+export const SITE_AUTHOR_ALTERNATE_NAMES = ["滚雪球的Star", "芒格反着说"];
+export const SITE_AUTHOR_URL = "https://xueqiu.com/u/lovelive";
+export const SITE_AUTHOR_PROFILES = [
+  "https://xueqiu.com/u/lovelive",
+  "https://www.zhihu.com/people/shanks-16-68",
+  "https://www.xiaohongshu.com/user/profile/68125976000000000d00ac5d"
+];
 export const SITE_DESCRIPTION = "按主题地图组织的查理·芒格思想知识库，连接解释文章、股东会记录、演讲访谈与原文出处。";
 export const SITE_KEYWORDS = [
   "查理·芒格",

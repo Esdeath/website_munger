@@ -17,13 +17,17 @@ import { THEMES, THEME_STORAGE_KEY, themeMeta } from "../lib/theme";
 
 interface Props {
   title: string;
+  /** 完整 <title> 覆盖；不传时拼成「页面标题 | 站点名」。 */
+  seoTitle?: string;
   description?: string;
   shell?: "archive" | "reader";
   type?: "website" | "article";
   structuredData?: Record<string, unknown> | Record<string, unknown>[];
+  /** 404 等不应被索引的页面传 true。 */
+  noindex?: boolean;
 }
 
-const pageTitle = `${Astro.props.title} | ${SITE_TITLE}`;
+const pageTitle = Astro.props.seoTitle ?? `${Astro.props.title} | ${SITE_TITLE}`;
 const description = Astro.props.description ?? SITE_DESCRIPTION;
 const shell = Astro.props.shell ?? "archive";
 const pageType = Astro.props.type ?? "website";
@@ -49,7 +53,7 @@ const otherGroupOpen = otherNavigation.some((item) => item.active);
     <meta name="description" content={description} />
     <meta name="author" content={SITE_AUTHOR} />
     <meta name="keywords" content={SITE_KEYWORDS.join(",")} />
-    <meta name="robots" content="index,follow" />
+    <meta name="robots" content={Astro.props.noindex ? "noindex,follow" : "index,follow"} />
     <link rel="canonical" href={pageUrl} />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="theme-color" content={themeMeta.light.color} />
@@ -226,6 +230,7 @@ const otherGroupOpen = otherNavigation.some((item) => item.active);
             </section>
           ))}
         </nav>
+        <a class="sidebar-about-link" href="/about/">关于本站 · 编者与资料来源</a>
       </aside>
 
       <main class="main-stage">
