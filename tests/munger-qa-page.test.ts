@@ -10,7 +10,7 @@ describe("embedded Munger Q&A book", () => {
     expect(page).toContain('<BaseLayout title={title} description={description}>');
     expect(page).toContain('class="standalone-reader-frame"');
     expect(page).toContain('src={readerSrc}');
-    expect(page).toContain('import.meta.env.DEV ? "/books/munger-qa/reader.html" : "/books/munger-qa/reader"');
+    expect(page).toContain('const readerSrc = "/books/munger-qa/reader.html"');
   });
 
   it("serves the generated book as the reader document", () => {

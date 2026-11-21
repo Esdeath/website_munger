@@ -9,6 +9,6 @@ describe("embedded Seeking Wisdom page", () => {
     expect(page).toContain('class="standalone-reader-frame"');
     expect(page).toContain('src={readerSrc}');
     expect(page).toContain('"/sources/seeking-wisdom-中文版/reader.html"');
-    expect(page).toContain('"/sources/seeking-wisdom-中文版/reader"');
+    expect(page).not.toContain('"/sources/seeking-wisdom-中文版/reader"');
   });
 });

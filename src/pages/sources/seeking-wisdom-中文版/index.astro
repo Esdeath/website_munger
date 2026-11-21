@@ -3,9 +3,7 @@ import BaseLayout from "../../../layouts/BaseLayout.astro";
 import { STANDALONE_SOURCES } from "../../../content/standalone-sources";
 
 const source = STANDALONE_SOURCES[0];
-const readerSrc = import.meta.env.DEV
-  ? "/sources/seeking-wisdom-中文版/reader.html"
-  : "/sources/seeking-wisdom-中文版/reader";
+const readerSrc = "/sources/seeking-wisdom-中文版/reader.html";
 ---
 
 <BaseLayout title={source.title} description={source.excerpt}>
