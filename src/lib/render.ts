@@ -27,6 +27,27 @@ interface MarkdownNode {
   children?: MarkdownNode[];
 }
 
+
+/**
+ * 文章模板已经渲染标题 H1；语料 Markdown 又常以 `# 标题` 开头（长访谈还会用 H1 当发言小节）。
+ * 渲染时去掉首个 H1，并把正文其余 H1 降为 H2，保证每页只有一个 H1。
+ */
+function remarkNormalizeHeadings() {
+  return (tree: Node) => {
+    const root = tree as { children?: MarkdownNode[] };
+    if (!root.children?.length) return;
+    const first = root.children[0];
+    if (first?.type === "heading" && (first as { depth?: number }).depth === 1) {
+      root.children.shift();
+    }
+    visit(tree, "heading", (node) => {
+      if ((node as { depth?: number }).depth === 1) {
+        (node as { depth?: number }).depth = 2;
+      }
+    });
+  };
+}
+
 function remarkHeadingIds() {
   return (tree: Node) => {
     visit(tree, "heading", (node) => {
@@ -277,6 +298,7 @@ function remarkWikiLinks(resolve: NonNullable<RenderMarkdownOptions["relativeLin
 export async function renderMarkdownToHtml(body: string, options: RenderMarkdownOptions = {}): Promise<string> {
   const processor = remark()
     .use(remarkGfm)
+    .use(remarkNormalizeHeadings)
     .use(remarkLiteralStrongMarkers)
     .use(remarkHeadingIds);
 

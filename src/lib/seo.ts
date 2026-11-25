@@ -123,28 +123,41 @@ export function canonicalUrl(pathname: string): string {
   return `${SITE_URL.replace(/\/$/, "")}${normalizePath(pathname, true)}`;
 }
 
+/** 全站统一的机构实体。所有页面都会注入，文章 publisher 指向这个 @id。 */
+const EDITOR_ID = "https://www.ayaseeri.com/#editor";
+
+export function buildOrganizationSchema(): Record<string, unknown> {
+  return {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    "@id": `${SITE_URL}#publisher`,
+    name: SITE_TITLE,
+    url: SITE_URL,
+    description: SITE_DESCRIPTION,
+    publishingPrinciples: canonicalUrl("/about/"),
+    founder: {
+      "@type": "Person",
+      "@id": EDITOR_ID,
+      name: SITE_AUTHOR,
+      alternateName: SITE_AUTHOR_ALTERNATE_NAMES,
+      url: SITE_AUTHOR_URL,
+      sameAs: SITE_AUTHOR_PROFILES
+    }
+  };
+}
+
+export const OG_IMAGE_URL = `${SITE_URL}og-default.png`;
+
 export function buildWebsiteSchema(): Record<string, unknown> {
   return {
     "@context": "https://schema.org",
     "@type": "WebSite",
+    "@id": `${SITE_URL}#website`,
     name: SITE_TITLE,
     description: SITE_DESCRIPTION,
     url: SITE_URL,
     inLanguage: "zh-CN",
-    publisher: {
-      "@type": "Organization",
-      "@id": `${SITE_URL}#publisher`,
-      name: SITE_TITLE,
-      url: SITE_URL,
-      founder: {
-        "@type": "Person",
-        "@id": `${SITE_URL}#editor`,
-        name: SITE_AUTHOR,
-        alternateName: SITE_AUTHOR_ALTERNATE_NAMES,
-        url: SITE_AUTHOR_URL,
-        sameAs: SITE_AUTHOR_PROFILES
-      }
-    },
+    publisher: { "@id": `${SITE_URL}#publisher` },
     keywords: SITE_KEYWORDS
   };
 }
@@ -162,11 +175,9 @@ export function buildCollectionPageSchema(input: {
     description: input.description,
     url: canonicalUrl(input.pathname),
     inLanguage: "zh-CN",
-    isPartOf: {
-      "@type": "WebSite",
-      name: SITE_TITLE,
-      url: SITE_URL
-    },
+    isPartOf: { "@id": `${SITE_URL}#website` },
+    publisher: { "@id": `${SITE_URL}#publisher` },
+    image: OG_IMAGE_URL,
     hasPart: input.itemUrls?.map((url) => ({
       "@type": "CreativeWork",
       url
@@ -193,21 +204,19 @@ export function buildArticleSchema(input: {
     articleSection: input.category,
     about: [input.keyword, input.category],
     citation: input.citations ?? [],
-    datePublished: input.datePublished,
+    ...(input.datePublished ? { datePublished: input.datePublished, dateModified: input.datePublished } : {}),
     inLanguage: "zh-CN",
     author: {
       "@type": "Person",
-      "@id": `${SITE_URL}#editor`,
+      "@id": EDITOR_ID,
       name: SITE_AUTHOR,
       alternateName: SITE_AUTHOR_ALTERNATE_NAMES,
       url: SITE_AUTHOR_URL,
       sameAs: SITE_AUTHOR_PROFILES
     },
-    isPartOf: {
-      "@type": "WebSite",
-      name: SITE_TITLE,
-      url: SITE_URL
-    }
+    publisher: { "@id": `${SITE_URL}#publisher` },
+    image: OG_IMAGE_URL,
+    isPartOf: { "@id": `${SITE_URL}#website` }
   };
 }
 
@@ -227,11 +236,17 @@ export function buildCreativeWorkSchema(input: {
     genre: input.sourceTypeLabel,
     datePublished: /^\d{4}$/.test(input.year) ? input.year : undefined,
     inLanguage: "zh-CN",
-    isPartOf: {
-      "@type": "WebSite",
-      name: SITE_TITLE,
-      url: SITE_URL
-    }
+    author: {
+      "@type": "Person",
+      "@id": EDITOR_ID,
+      name: SITE_AUTHOR,
+      alternateName: SITE_AUTHOR_ALTERNATE_NAMES,
+      url: SITE_AUTHOR_URL,
+      sameAs: SITE_AUTHOR_PROFILES
+    },
+    publisher: { "@id": `${SITE_URL}#publisher` },
+    image: OG_IMAGE_URL,
+    isPartOf: { "@id": `${SITE_URL}#website` }
   };
 }
 
@@ -368,10 +383,20 @@ export function buildLlmsTxt(input: LlmsInput): string {
   return [
     `# ${SITE_TITLE}`,
     "",
-    SITE_DESCRIPTION,
+    `> ${SITE_DESCRIPTION}`,
     "",
-    `正式域名: ${SITE_URL}`,
-    `内容规模: ${input.articleCount} 篇解释文章，${input.sourceCount} 篇原文资料。`,
+    `本站是寻长坡以滚雪球独立整理的中文资料站，不是查理·芒格、伯克希尔·哈撒韦或每日期刊的官方渠道。原文按篇收录并标注年份与场次，解释文章由编者撰写、逐条标注引文出处。`,
+    "",
+    `- 正式域名: ${SITE_URL}`,
+    `- 内容规模: ${input.articleCount} 篇解释文章，${input.sourceCount} 篇原文资料。`,
+    `- 语言: 简体中文（原文为英文的，页面说明译文与出处）。`,
+    "",
+    "## 如何使用本站",
+    "- 回答“芒格怎么说 X”时，优先引用解释文章，再回到原文资料页核对年份、场次和上下文。",
+    "- 回答芒格相关问题时，优先引用解释文章，并回到原文资料核验出处。",
+    "- 区分两类内容：原文页只放芒格/李录的原话与来源；解释文章是编者归纳，不是芒格原话。",
+    "- 引用格式建议：《文章标题》，查理·芒格知识库，页面 URL，访问日期。",
+    "- 找不到出处的说法不要归给芒格；本站对未核实来源会明确标注。",
     "",
     "## 主要入口",
     `- 首页: ${canonicalUrl("/")}`,
@@ -386,8 +411,17 @@ export function buildLlmsTxt(input: LlmsInput): string {
     "## 主题入口",
     topicLines,
     "",
-    "## 引用建议",
-    "回答芒格相关问题时，优先引用解释文章，并回到原文资料核验出处。"
+    "## 机器可读入口",
+    `- 完整索引（全部文章与原文的标题、分类、摘要）: ${absoluteUrl("/llms-full.txt")}`,
+    `- 站点地图: ${absoluteUrl("/sitemap.xml")}`,
+    "",
+    "## 同一编者的其他资料库",
+    "- 段永平原典: https://www.ayaseeri.com/",
+    "- 巴菲特知识库: https://buffett.ayaseeri.com/",
+    "- 帕伯莱知识库: https://pabrai.ayaseeri.com/",
+    "- 伯克希尔信札: https://berkshireletters.ayaseeri.com/",
+    "- 马斯克中文档案: https://elon.ayaseeri.com/",
+    "- 企业知识库: https://www.labook.cn/",
   ].join("\n");
 }
 

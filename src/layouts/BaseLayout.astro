@@ -4,7 +4,7 @@ import "../styles/global.css";
 import { SITE_AUTHOR, SITE_DESCRIPTION, SITE_KEYWORDS, SITE_NETWORK, SITE_TITLE } from "../content/site";
 import { loadSiteCorpus } from "../lib/corpus";
 import { buildOtherNavigation, buildSidebarSections } from "../lib/navigation";
-import { canonicalUrl } from "../lib/seo";
+import { OG_IMAGE_URL, buildOrganizationSchema, buildWebsiteSchema, canonicalUrl } from "../lib/seo";
 import ThemePicker from "../components/ThemePicker.astro";
 import FontSizePicker from "../components/FontSizePicker.astro";
 import WeChatCta from "../components/WeChatCta.astro";
@@ -37,7 +37,10 @@ const structuredData = Astro.props.structuredData
     ? Astro.props.structuredData
     : [Astro.props.structuredData]
   : [];
-const structuredDataJson = structuredData.length === 1 ? JSON.stringify(structuredData[0]) : JSON.stringify(structuredData);
+const hasWebsiteSchema = structuredData.some((node) => node["@type"] === "WebSite");
+const siteSchema = [buildOrganizationSchema(), ...(hasWebsiteSchema ? [] : [buildWebsiteSchema()])];
+const allStructuredData = structuredData.concat(siteSchema.map((node) => ({ ...node, "@context": "https://schema.org" })));
+const structuredDataJson = JSON.stringify(allStructuredData);
 const siteCorpus = loadSiteCorpus();
 const currentPath = decodeURIComponent(Astro.url.pathname);
 const sidebarSections = buildSidebarSections(siteCorpus.articles, siteCorpus.sources, currentPath);
@@ -116,9 +119,14 @@ const otherGroupOpen = otherNavigation.some((item) => item.active);
     <meta property="og:url" content={pageUrl} />
     <meta property="og:site_name" content={SITE_TITLE} />
     <meta property="og:locale" content="zh_CN" />
-    <meta name="twitter:card" content="summary" />
+    <meta property="og:image" content={OG_IMAGE_URL} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content={`${SITE_TITLE}：${pageTitle}`} />
+    <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content={pageTitle} />
     <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={OG_IMAGE_URL} />
     {structuredData.length > 0 && <script is:inline type="application/ld+json" set:html={structuredDataJson}></script>}
     <script is:inline>
       var _hmt = _hmt || [];
