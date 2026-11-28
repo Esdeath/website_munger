@@ -32,6 +32,8 @@ const description = Astro.props.description ?? SITE_DESCRIPTION;
 const shell = Astro.props.shell ?? "archive";
 const pageType = Astro.props.type ?? "website";
 const pageUrl = canonicalUrl(Astro.url.pathname);
+// /book 落地页自带二维码，隐藏右下浮层避免遮挡
+const isBookPage = Astro.url.pathname.startsWith("/book");
 const structuredData = Astro.props.structuredData
   ? Array.isArray(Astro.props.structuredData)
     ? Astro.props.structuredData
@@ -238,6 +240,10 @@ const otherGroupOpen = otherNavigation.some((item) => item.active);
             </section>
           ))}
         </nav>
+        <a class="book-offer-link" href="/book/">
+          <span class="book-offer-kicker">价投书房 · ¥199/年</span>
+          <span class="book-offer-text">四套知识库 · 11 本电子书 →</span>
+        </a>
         <a class="sidebar-about-link" href="/about/">关于本站 · 编者与资料来源</a>
       </aside>
 
@@ -245,7 +251,7 @@ const otherGroupOpen = otherNavigation.some((item) => item.active);
         <slot />
       </main>
     </div>
-    <WeChatCta />
+    {!isBookPage && <WeChatCta />}
     <script>
       import { setupSidebarScrollPersistence } from "../lib/sidebar-scroll";
 

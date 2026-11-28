@@ -17,9 +17,9 @@ const OUTPUT_DIR = path.join(ROOT, "output", "munger-qa-book");
 const PDF_DIR = path.join(ROOT, "output", "pdf");
 const TMP_DIR = path.join(ROOT, "tmp", "pdfs", "munger-qa-book");
 const COVER_PATH = path.join(ROOT, "assets", "munger-qa-book", "cover.png");
-// 封面必带：作者微信二维码（与网站首页共用 public/images/wechat-qr.png）+ 微信号 + 三个网站网址
-const WECHAT_QR_PATH = path.join(ROOT, "public", "images", "wechat-qr.png");
-const WECHAT_ID = "livemisaka";
+// 封面必带：知识星球二维码（与网站首页共用 public/images/zsxq-qr.png）+ 星球名 + 三个网站网址
+const ZSXQ_QR_PATH = path.join(ROOT, "public", "images", "zsxq-qr.png");
+const ZSXQ_NAME = "滚雪球的小部落";
 const SITE_LINKS = [
   ["段永平", "https://www.ayaseeri.com/"],
   ["芒格", "https://munger.ayaseeri.com/"],
@@ -28,7 +28,7 @@ const SITE_LINKS = [
 function coverContactHtml(qrSrc, selfClosing = false) {
   const end = selfClosing ? "/>" : ">";
   const sites = SITE_LINKS.map(([name, url]) => `<p>${name}：<a href="${url}">${url}</a></p>`).join("");
-  return `<div class="cover-contact"><img class="cover-qr" src="${qrSrc}" alt="作者微信二维码" width="96" height="96"${end}<div><p class="cover-wechat">作者微信：${WECHAT_ID}</p>${sites}</div></div>`;
+  return `<div class="cover-contact"><img class="cover-qr" src="${qrSrc}" alt="知识星球二维码：滚雪球的小部落" width="96" height="96"${end}<div><p class="cover-wechat">知识星球：${ZSXQ_NAME}</p>${sites}</div></div>`;
 }
 const BOOK_JSON_PATH = path.join(TMP_DIR, "book.json");
 const HTML_PATH = path.join(OUTPUT_DIR, "芒格问答录.html");
@@ -794,7 +794,7 @@ function renderHtml(book) {
       <h1>芒格<br>问答录</h1>
       <p class="subtitle">${escapeHtml(SUBTITLE)}</p>
       <p class="edition"><span>${book.metadata.edition} · ${book.stats.startYear}-${book.stats.endYear}</span><span>据 website_munger 中文语料整理</span></p>
-      ${coverContactHtml(`data:image/png;base64,${fs.readFileSync(WECHAT_QR_PATH).toString("base64")}`)}
+      ${coverContactHtml(`data:image/png;base64,${fs.readFileSync(ZSXQ_QR_PATH).toString("base64")}`)}
     </div>
   </header>
   <div class="shell">
@@ -865,12 +865,12 @@ function writeEpub(book) {
   fs.writeFileSync(path.join(epubRoot, "META-INF", "container.xml"), `<?xml version="1.0" encoding="UTF-8"?>
 <container version="1.0" xmlns="urn:oasis:names:tc:opendocument:xmlns:container"><rootfiles><rootfile full-path="OEBPS/content.opf" media-type="application/oebps-package+xml"/></rootfiles></container>`);
   fs.copyFileSync(COVER_PATH, path.join(epubRoot, "OEBPS", "images", "cover.png"));
-  fs.copyFileSync(WECHAT_QR_PATH, path.join(epubRoot, "OEBPS", "images", "wechat-qr.png"));
+  fs.copyFileSync(ZSXQ_QR_PATH, path.join(epubRoot, "OEBPS", "images", "zsxq-qr.png"));
 
   const css = `body{font-family:"Songti SC","STSong","Noto Serif CJK SC",serif;line-height:1.75;color:#17201d;margin:5%;letter-spacing:0}h1,h2,h3,h4,.label,.source,.kicker,.section-number{font-family:"Hiragino Sans GB","PingFang SC",sans-serif}h1{font-size:2.4em;color:#0d2d25}h2{font-size:1.55em;color:#0d2d25;border-bottom:.14em solid #174c3d;padding-bottom:.3em;margin-top:2.6em}h3{font-size:1.05em;line-height:1.65}.section-kicker{color:#61706a;font-size:.86em}.kicker,.label,.excerpt,.section-number{color:#a63b32}.qa{margin:2.2em 0;padding-bottom:2em;border-bottom:1px solid #cbd5d0}.answer{margin-left:1em}.source{font-size:.7em;color:#61706a}.note{border-left:.25em solid #a63b32;padding-left:1em}.guide li{margin:.65em 0}.cover{margin:0;text-align:center}.cover img{max-width:100%;max-height:68vh}.cover-contact{margin-top:1em;font-family:"Hiragino Sans GB","PingFang SC",sans-serif;font-size:.8em;color:#61706a}.cover-contact p{margin:.15em 0}.cover-contact .cover-wechat{font-weight:bold;color:#17201d}.cover .cover-qr{width:96px;height:96px;max-height:none}.toc li{margin:.6em 0}.sources li{margin:1em 0}.sources code{font-size:.75em;overflow-wrap:anywhere}`;
   fs.writeFileSync(path.join(epubRoot, "OEBPS", "styles", "book.css"), css);
 
-  fs.writeFileSync(path.join(epubRoot, "OEBPS", "text", "cover.xhtml"), xhtmlPage("封面", `<div class="cover"><img src="../images/cover.png" alt="${TITLE}封面插画"/>${coverContactHtml("../images/wechat-qr.png", true)}</div>`));
+  fs.writeFileSync(path.join(epubRoot, "OEBPS", "text", "cover.xhtml"), xhtmlPage("封面", `<div class="cover"><img src="../images/cover.png" alt="${TITLE}封面插画"/>${coverContactHtml("../images/zsxq-qr.png", true)}</div>`));
   const titleBody = `<section><h1>${TITLE}</h1><p class="kicker">${escapeHtml(SUBTITLE)}</p><p>${book.stats.startYear}-${book.stats.endYear} · ${book.stats.questionCount} 问 · ${book.stats.sourceCount} 篇来源</p><h2>给读者的话</h2><p>这一版从 ${book.stats.selectedFromCount} 组可用问答中精选 ${book.stats.questionCount} 组，按普通读者理解价值投资的顺序，重编为 ${book.chapters.length} 章、${book.chapters.reduce((total, chapter) => total + chapter.sections.length, 0)} 个递进小节。重复观点、过时时评、公司琐事和现场闲话均不收入正文。</p><h2>七句编者提要</h2><ol class="guide">${book.guide.map((item) => `<li>${escapeHtml(item)}</li>`).join("")}</ol><p class="note">回答保留本仓库中文语料的原句。少数长回答只删去旁支故事、重复铺陈或其他说话人的内容，并标明“回答为本版节选”。冗长提问删去寒暄与时事背景，个别访谈提示改成简短问句。“原文”指本仓库保存的中文翻译或整理文本。</p></section>`;
   fs.writeFileSync(path.join(epubRoot, "OEBPS", "text", "title.xhtml"), xhtmlPage("给读者的话", titleBody));
 
@@ -903,7 +903,7 @@ function writeEpub(book) {
   fs.writeFileSync(path.join(epubRoot, "OEBPS", "content.opf"), `<?xml version="1.0" encoding="UTF-8"?>
 <package xmlns="http://www.idpf.org/2007/opf" version="3.0" unique-identifier="book-id" xml:lang="zh-CN">
 <metadata xmlns:dc="http://purl.org/dc/elements/1.1/"><dc:identifier id="book-id">${escapeHtml(book.metadata.identifier)}</dc:identifier><dc:title>${TITLE}</dc:title><dc:creator>查理·芒格</dc:creator><dc:contributor>website_munger 语料库</dc:contributor><dc:language>zh-CN</dc:language><dc:date>${book.metadata.buildDate}</dc:date><dc:description>${escapeHtml(SUBTITLE)}</dc:description><meta property="dcterms:modified">${modified}</meta><meta name="cover" content="cover-image"/></metadata>
-<manifest><item id="nav" href="nav.xhtml" media-type="application/xhtml+xml" properties="nav"/><item id="ncx" href="toc.ncx" media-type="application/x-dtbncx+xml"/><item id="css" href="styles/book.css" media-type="text/css"/><item id="cover-image" href="images/cover.png" media-type="image/png" properties="cover-image"/><item id="wechat-qr" href="images/wechat-qr.png" media-type="image/png"/><item id="cover" href="text/cover.xhtml" media-type="application/xhtml+xml"/><item id="title" href="text/title.xhtml" media-type="application/xhtml+xml"/>${manifestChapters}<item id="sources" href="text/sources.xhtml" media-type="application/xhtml+xml"/></manifest>
+<manifest><item id="nav" href="nav.xhtml" media-type="application/xhtml+xml" properties="nav"/><item id="ncx" href="toc.ncx" media-type="application/x-dtbncx+xml"/><item id="css" href="styles/book.css" media-type="text/css"/><item id="cover-image" href="images/cover.png" media-type="image/png" properties="cover-image"/><item id="zsxq-qr" href="images/zsxq-qr.png" media-type="image/png"/><item id="cover" href="text/cover.xhtml" media-type="application/xhtml+xml"/><item id="title" href="text/title.xhtml" media-type="application/xhtml+xml"/>${manifestChapters}<item id="sources" href="text/sources.xhtml" media-type="application/xhtml+xml"/></manifest>
 <spine toc="ncx"><itemref idref="cover" linear="yes"/><itemref idref="title"/>${spineChapters}<itemref idref="sources"/></spine>
 </package>`);
 

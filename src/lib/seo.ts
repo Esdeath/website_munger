@@ -288,6 +288,7 @@ export function buildSitemapEntries(input: SitemapInput): SitemapEntry[] {
     { url: canonicalUrl("/about/"), lastmod: latest },
     { url: canonicalUrl("/stop-doing/"), lastmod: latest },
     { url: canonicalUrl("/book-list/"), lastmod: latest },
+    { url: canonicalUrl("/book/"), lastmod: latest },
     { url: canonicalUrl("/books/munger-qa/"), lastmod: latest },
     { url: canonicalUrl("/topics/"), lastmod: latest },
     ...input.topics.map((topic) => ({ url: canonicalUrl(`/topics/${topic.slug}/`), lastmod: latest })),

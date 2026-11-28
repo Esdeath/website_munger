@@ -552,11 +552,39 @@ input:focus-visible {
 }
 
 .wechat-card {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
   justify-content: flex-start;
-  gap: 18px;
+  gap: 10px;
   width: min(360px, 100%);
   margin-top: 14px;
   padding: 16px 20px;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+.wechat-card:hover { border-color: var(--orange); box-shadow: var(--shadow); }
+
+.wechat-card-link {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  text-decoration: none;
+  color: inherit;
+}
+.wechat-card-link:focus-visible { outline: 2px solid var(--orange); outline-offset: 3px; }
+.wechat-card-direct {
+  align-self: flex-end;
+  font: 700 12.5px / 1.5 var(--sans);
+  color: var(--orange);
+  text-decoration: none;
+  border-bottom: 1px dashed var(--orange-soft);
+}
+.wechat-card-direct:hover { border-bottom-style: solid; }
+.wechat-card-more {
+  display: block;
+  margin-top: 6px;
+  color: var(--orange);
+  font: 700 13px / 1.4 var(--sans);
 }
 
 .wechat-card .wechat-qr {
@@ -1632,3 +1660,18 @@ input:focus-visible {
   gap: 0.75rem;
   line-height: 1.7;
 }
+
+
+/* 侧栏「价投书房」入口，文案与四站一致 */
+.book-offer-link {
+  display: block;
+  margin: 14px 0 0;
+  padding: 10px 12px;
+  border: 1px solid var(--orange-soft);
+  border-radius: 8px;
+  background: var(--orange-soft);
+  text-decoration: none;
+}
+.book-offer-link:hover { border-color: var(--orange); }
+.book-offer-kicker { display: block; font-size: 11px; letter-spacing: 0.06em; color: var(--orange); }
+.book-offer-text { display: block; margin-top: 2px; font-size: 13px; font-weight: 600; color: var(--ink); }
