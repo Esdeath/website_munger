@@ -12,7 +12,8 @@
     "validate:content": "node scripts/validate-site-content.mjs && python3 tools/check_stop_doing.py && python3 tests/test_check_article.py",
     "check": "npm run validate:content && astro check && vitest run && astro build",
     "deploy:oss": "node scripts/deploy-oss.mjs",
-    "deploy:oss:upload": "node scripts/deploy-oss.mjs --upload-only"
+    "deploy:oss:upload": "node scripts/deploy-oss.mjs --upload-only",
+    "book:library": "node scripts/build-library-books.mjs"
   },
   "dependencies": {
     "@astrojs/check": "^0.9.4",
