@@ -4,375 +4,536 @@ import { SITE_AUTHOR, SITE_TITLE } from "../content/site";
 import { canonicalUrl } from "../lib/seo";
 
 /*
-  价投书房 · 电子书会员落地页。
-  四站（段永平 / 巴菲特 / 芒格 / 帕伯莱）共用同一套文案与权益，
-  唯一付款入口是知识星球「滚雪球的小部落」，¥199/年。
+  价投书房 · 电子书会员落地页（四站共用版式与文案，仅 tokens / 二维码 / 试读链接不同）。
+  书目与页数取自各站最新成书：20 本、21,569 页。
   改动价格、权益或二维码时，四站要一起改。
 */
-const OFFER = {
-  price: 199,
-  period: '年',
-  planet: '滚雪球的小部落',
-  planetUrl: "https://t.zsxq.com/xtf5L",
-  qr: "/images/zsxq-qr.png",
-  books: 11,
-  pages: '8,266',
-  trial: {
-    title: '段永平投资问答录 · 核心精简版',
-    url: 'https://www.ayaseeri.com/books/duan-yongping-wendalu-jingjianban.epub',
-    urlPdf: 'https://www.ayaseeri.com/books/duan-yongping-wendalu-jingjianban.pdf',
-    note: '42 页 · 214 组精选问答 · 免费',
-  },
-};
-
-const SITES = [
-  ['段永平', 'https://www.ayaseeri.com/', '段永平原典'],
-  ['巴菲特', 'https://buffett.ayaseeri.com/', '巴菲特知识库'],
-  ['芒格', 'https://munger.ayaseeri.com/', '芒格知识库'],
-  ['帕伯莱', 'https://pabrai.ayaseeri.com/', '帕伯莱知识库'],
-];
-
-const SHELVES = [
-  {
-    name: '巴菲特知识库',
-    key: 'buffett',
-    items: [
-      ['巴菲特问答录', '163 问 · 按主题编排', '527'],
-      ['巴菲特原文主题全编', '286 篇原文 · 4064 则', '5,095'],
-      ['巴菲特与芒格投资问答（精编版）', '23 章 · 163 问', '126'],
-    ],
-  },
-  {
-    name: '段永平原典',
-    key: 'duan',
-    items: [
-      ['段永平投资问答录（全集）', '129 篇：概念 + 访谈 + 七卷问答', '1,083'],
-      ['投资问答录 · 问答录', '七卷 47 章', '677'],
-      ['投资问答录 · 核心概念', '45 个概念词条', '149'],
-      ['投资问答录 · 访谈实录', '37 篇访谈与演讲', '264'],
-      ['投资问答录 · 核心精简版', '214 组精选问答（免费试读）', '42'],
-    ],
-  },
-  {
-    name: '芒格知识库',
-    key: 'munger',
-    items: [['芒格问答录', '300 问 · 37 篇来源', '157']],
-  },
-  {
-    name: '帕伯莱知识库',
-    key: 'pabrai',
-    items: [['帕伯莱知识库', '30 篇：实录 + Mosaic 专栏 + 媒体文章', '78']],
-  },
-  {
-    name: '星球加赠',
-    key: 'elon',
-    items: [['马斯克问答录', '120 组问答 · 13 主题章', '68']],
-  },
-];
-
-const BENEFITS = [
-  '四套知识库全部电子书：EPUB + PDF 两种格式，手机、平板、Kindle 都能读',
-  '会员期内新增与改版的书免费同步，不再另付',
-  '星球内可直接向编者提问，纠错与勘误优先处理',
-  '后续调价不影响已加入的会员',
-];
-
-const STEPS = [
-  ['微信扫码', '扫码打开知识星球「滚雪球的小部落」。'],
-  ['支付 ¥199', '在星球页完成支付，成为会员，有效期一年。'],
-  ['领取电子书', '按星球内的领取说明，下载全部 EPUB 与 PDF。'],
-];
-
-const FAQ = [
-  ['¥199 是年费还是一次性？', '是知识星球的会员年费：¥199/年，到期后是否续费自愿。站上不单独收款。'],
-  ['站上正文不是免费的吗？', '正文一直免费阅读。¥199 买的是整理好的整本书（离线 EPUB/PDF，含目录、页码与来源索引）、后续更新，以及星球内的答疑。'],
-  ['以后出新书要再付钱吗？', '会员期内新增与改版免费同步，不会对同一批内容二次收费。'],
-  ['已经拿到过旧版本怎么办？', '按同一条领取说明就能下到最新版；版本更新会在星球里说明改了什么。'],
-  ['可以退款吗？', '付款发生在知识星球，按平台规则处理；站内没有单独的收款渠道。'],
-];
-
-const url = canonicalUrl("/book/");
-
-const jsonLd = {
+const url = canonicalUrl('/book/');
+const structuredData = {
   '@context': 'https://schema.org',
   '@type': 'Product',
   name: '价投书房 · 四套知识库电子书',
-  description: '巴菲特、芒格、段永平、帕伯莱四套知识库的 EPUB 与 PDF，共 11 本、8,266 页，通过知识星球会员获取。',
-  brand: { "@type": "Organization", name: SITE_AUTHOR },
-  offers: {
-    '@type': 'Offer',
-    url,
-    price: OFFER.price,
-    priceCurrency: 'CNY',
-    availability: 'https://schema.org/InStock',
-  },
+  description: '加入知识星球「滚雪球的小部落」，¥199/年拿全巴菲特、芒格、段永平、帕伯莱四套知识库的 EPUB 与 PDF，共 20 本、21,569 页。',
+  brand: { '@type': 'Organization', name: SITE_AUTHOR },
+  offers: { '@type': 'Offer', url, price: 199, priceCurrency: 'CNY', availability: 'https://schema.org/InStock' },
 };
 ---
 
 <BaseLayout
   title="价投书房 · 四套知识库电子书"
-  seoTitle={`价投书房 · ¥199/年拿走四套知识库电子书 | ${SITE_TITLE}`}
-  description="加入知识星球「滚雪球的小部落」，¥199/年拿全巴菲特、芒格、段永平、帕伯莱四套知识库的 EPUB 与 PDF，共 11 本、8,266 页。"
-  structuredData={jsonLd}
+  seoTitle="价投书房 · ¥199/年拿走四套知识库电子书 | {SITE_TITLE}"
+  description="加入知识星球「滚雪球的小部落」，¥199/年拿全巴菲特、芒格、段永平、帕伯莱四套知识库的 EPUB 与 PDF，共 20 本、21,569 页。"
+  structuredData={structuredData}
   type="website"
 >
+
   <article class="offer">
-    <header class="offer-hero">
-      <p class="eyebrow">价投书房 · ¥{OFFER.price} / {OFFER.period} · 四套知识库</p>
+    <header class="hero">
+      <div class="hero-copy">
+      <p class="kicker">价投书房 · 四套知识库 · ¥199 / 年</p>
       <h1>把四套知识库<br />装进口袋</h1>
-      <p class="lead">
-        「价投书房」是一份长期更新的价值投资资料库合集。加入知识星球「{OFFER.planet}」，一次拿全
-        巴菲特、芒格、段永平、帕伯莱四套知识库的 EPUB 与 PDF —— 共 {OFFER.books} 本、{OFFER.pages} 页
-        A4 精排版，含目录、页码与来源索引；会员期内新增内容免费同步。
+      <p class="lede">
+        段永平原典、巴菲特知识库、芒格知识库、帕伯莱知识库，一次打包成
+        20 本 <strong>EPUB + PDF</strong>，共 <strong>21,569 页</strong>。
+        年费 199 元，下载后永久保存；会员期内新增与改版，免费同步。
       </p>
-      <ul class="stats">
-        <li><strong>4</strong><span>套知识库</span></li>
-        <li><strong>{OFFER.books}</strong><span>本电子书</span></li>
-        <li><strong>{OFFER.pages}</strong><span>页精排版</span></li>
-        <li><strong>¥{OFFER.price}</strong><span>一年</span></li>
-      </ul>
-      <p class="site-row">
-        {SITES.map(([name, href, label], i) => (
-          <>{i > 0 && <span class="dot">·</span>}<a href={href} target="_blank" rel="noopener noreferrer">{label}</a></>
-        ))}
-      </p>
+      <div class="hero-actions">
+        <a class="btn primary" href="#join">¥199 / 年 · 加入价投书房</a>
+        <a class="btn ghost" href="#shelf">先看这 20 本书 ↓</a>
+      </div>
+      </div>
+      <aside class="hero-includes">
+        <p class="inc-title">一次付款，全部解锁</p>
+        <ul>
+          <li><span>巴菲特知识库</span><b>8 本 · 17,206 页</b></li>
+          <li><span>段永平原典</span><b>5 本 · 2,215 页</b></li>
+          <li><span>芒格知识库</span><b>5 本 · 2,002 页</b></li>
+          <li><span>帕伯莱知识库</span><b>1 本 · 78 页</b></li>
+          <li><span>星球加赠</span><b>1 本 · 68 页</b></li>
+        </ul>
+        <p class="inc-note">EPUB + PDF · 下载后永久保存<br />会员期内新增与改版免费同步</p>
+      </aside>
     </header>
 
-    <section class="offer-join" id="join">
-      <div class="join-main">
-        <p class="join-label">加入知识星球「{OFFER.planet}」· 唯一下单入口</p>
-        <p class="price"><span class="cur">¥</span>{OFFER.price}<span class="per">/ {OFFER.period}</span></p>
-        <ul class="benefits">
-          {BENEFITS.map((b) => <li>{b}</li>)}
-        </ul>
-        <p class="join-note">
-          微信扫码后，在星球页完成支付；付款与会员有效期都由知识星球管理，站内不另外收款。
-        </p>
-      </div>
-      <div class="join-qr">
-        <img src={OFFER.qr} alt={`知识星球「${OFFER.planet}」二维码`} width="232" height="232" loading="lazy" />
-        <p class="qr-hint">微信扫码加入星球</p>
-        <p class="qr-sub">扫码 → 支付 ¥{OFFER.price} → 领取电子书</p>
-        <a class="qr-direct" href={OFFER.planetUrl} target="_blank" rel="noopener noreferrer">或直接打开知识星球 ↗</a>
-      </div>
-    </section>
+    <ul class="stats">
+      <li><b>4</b><span>套知识库</span></li>
+      <li><b>20</b><span>本电子书</span></li>
+      <li><b>21,569</b><span>页 A4 排版</span></li>
+      <li><b>¥199</b><span>一年，可永久保存</span></li>
+    </ul>
 
-    <section class="offer-steps" aria-label="领取步骤">
-      <ol>
-        {STEPS.map(([t, d], i) => (
+    <section class="shelf" id="shelf">
+      <div class="sec-head">
+        <p class="kicker">书单</p>
+        <h2>这 20 本书，各自解决一个问题</h2>
+        <p class="sec-lede">全景书用来通读，专题书用来查。巴菲特与芒格的原文按来源整篇成册，段永平按概念、访谈、问答分卷；每本书都有可点击的多级目录、页码与来源标注。</p>
+      </div>
+      <div class="shelves">
+      <section class="shelf-group">
+        <header>
+          <h3>巴菲特知识库</h3>
+          <p>8 本 · 17,206 页</p>
+        </header>
+        <ol>
           <li>
-            <span class="step-no">{i + 1}</span>
-            <strong>{t}</strong>
-            <span>{d}</span>
+            <div class="row-main">
+              <span class="t">巴菲特如何选择一家公司</span>
+              <span class="d">286 篇原文，围绕「选公司」重排的阅读路径</span>
+              <span class="bar" style="--w:100%"></span>
+            </div>
+            <span class="p">5,099<small>页</small></span>
+          </li><li>
+            <div class="row-main">
+              <span class="t">巴菲特原文主题全编</span>
+              <span class="d">286 篇原文、4,064 则，按主题编排的完整导读本</span>
+              <span class="bar" style="--w:100%"></span>
+            </div>
+            <span class="p">5,095<small>页</small></span>
+          </li><li>
+            <div class="row-main">
+              <span class="t">巴菲特股东大会问答</span>
+              <span class="d">33 场股东大会实录，按年份整场排印</span>
+              <span class="bar" style="--w:60%"></span>
+            </div>
+            <span class="p">3,042<small>页</small></span>
+          </li><li>
+            <div class="row-main">
+              <span class="t">巴菲特访谈与文章</span>
+              <span class="d">152 篇访谈、演讲与公开文章</span>
+              <span class="bar" style="--w:35%"></span>
+            </div>
+            <span class="p">1,789<small>页</small></span>
+          </li><li>
+            <div class="row-main">
+              <span class="t">巴菲特致股东信</span>
+              <span class="d">66 封伯克希尔股东信</span>
+              <span class="bar" style="--w:26%"></span>
+            </div>
+            <span class="p">1,318<small>页</small></span>
+          </li><li>
+            <div class="row-main">
+              <span class="t">巴菲特问答录</span>
+              <span class="d">300 问，按主题串成一条线</span>
+              <span class="bar" style="--w:10%"></span>
+            </div>
+            <span class="p">527<small>页</small></span>
+          </li><li>
+            <div class="row-main">
+              <span class="t">巴菲特致合伙人信</span>
+              <span class="d">35 封合伙基金时期的信件</span>
+              <span class="bar" style="--w:4%"></span>
+            </div>
+            <span class="p">210<small>页</small></span>
+          </li><li>
+            <div class="row-main">
+              <span class="t">巴菲特与芒格投资问答（精编版）</span>
+              <span class="d">23 章、163 问的精选小册</span>
+              <span class="bar" style="--w:2%"></span>
+            </div>
+            <span class="p">126<small>页</small></span>
           </li>
-        ))}
-      </ol>
-    </section>
-
-    <section class="offer-books" aria-labelledby="books-title">
-      <h2 id="books-title">书单：{OFFER.books} 本，全部是 A4 精排版</h2>
-      <p class="section-note">每本都带目录、页码和来源索引；PDF 适合打印和平板标注，EPUB 适合手机阅读与可调字号。</p>
-      {SHELVES.map((shelf) => (
-        <div class="shelf">
-          <h3>{shelf.name}<span>{shelf.items.length} 本</span></h3>
-          <table>
-            <thead>
-              <tr><th>电子书</th><th>内容</th><th class="num">页数</th></tr>
-            </thead>
-            <tbody>
-              {shelf.items.map(([title, desc, pages]) => (
-                <tr><td>{title}</td><td>{desc}</td><td class="num">{pages}</td></tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      ))}
-    </section>
-
-    <section class="offer-trial" aria-labelledby="trial-title">
-      <div>
-        <h2 id="trial-title">先免费试读一本</h2>
-        <p>
-          《{OFFER.trial.title}》是整条产品线的样本：同样的排版、同样的来源标注，收录 {OFFER.trial.note}。
-          拿它判断这本书值不值得买，比看任何宣传语都准。
-        </p>
+        </ol>
+      </section>
+      <section class="shelf-group">
+        <header>
+          <h3>段永平原典</h3>
+          <p>5 本 · 2,215 页</p>
+        </header>
+        <ol>
+          <li>
+            <div class="row-main">
+              <span class="t">段永平投资问答录（全集）</span>
+              <span class="d">129 篇：概念 + 访谈 + 七卷问答</span>
+              <span class="bar" style="--w:100%"></span>
+            </div>
+            <span class="p">1,083<small>页</small></span>
+          </li><li>
+            <div class="row-main">
+              <span class="t">投资问答录 · 问答录</span>
+              <span class="d">七卷 47 章</span>
+              <span class="bar" style="--w:63%"></span>
+            </div>
+            <span class="p">677<small>页</small></span>
+          </li><li>
+            <div class="row-main">
+              <span class="t">投资问答录 · 访谈实录</span>
+              <span class="d">37 篇访谈与演讲</span>
+              <span class="bar" style="--w:24%"></span>
+            </div>
+            <span class="p">264<small>页</small></span>
+          </li><li>
+            <div class="row-main">
+              <span class="t">投资问答录 · 核心概念</span>
+              <span class="d">45 个概念词条</span>
+              <span class="bar" style="--w:14%"></span>
+            </div>
+            <span class="p">149<small>页</small></span>
+          </li><li>
+            <div class="row-main">
+              <span class="t">投资问答录 · 核心精简版</span>
+              <span class="d">214 组精选问答，免费试读</span>
+              <span class="bar" style="--w:4%"></span>
+            </div>
+            <span class="p">42<small>页</small></span>
+          </li>
+        </ol>
+      </section>
+      <section class="shelf-group">
+        <header>
+          <h3>芒格知识库</h3>
+          <p>5 本 · 2,002 页</p>
+        </header>
+        <ol>
+          <li>
+            <div class="row-main">
+              <span class="t">芒格股东会与股东信</span>
+              <span class="d">69 篇西科金融、每日期刊股东会与年报</span>
+              <span class="bar" style="--w:100%"></span>
+            </div>
+            <span class="p">705<small>页</small></span>
+          </li><li>
+            <div class="row-main">
+              <span class="t">芒格演讲与访谈</span>
+              <span class="d">49 篇演讲、访谈与公开对谈</span>
+              <span class="bar" style="--w:99%"></span>
+            </div>
+            <span class="p">698<small>页</small></span>
+          </li><li>
+            <div class="row-main">
+              <span class="t">探索智慧（从达尔文到芒格）</span>
+              <span class="d">皮特·贝弗林著，4 章 26 节</span>
+              <span class="bar" style="--w:37%"></span>
+            </div>
+            <span class="p">259<small>页</small></span>
+          </li><li>
+            <div class="row-main">
+              <span class="t">李录演讲和访谈</span>
+              <span class="d">15 篇李录公开演讲与访谈</span>
+              <span class="bar" style="--w:26%"></span>
+            </div>
+            <span class="p">183<small>页</small></span>
+          </li><li>
+            <div class="row-main">
+              <span class="t">芒格问答录</span>
+              <span class="d">300 问，按主题编排</span>
+              <span class="bar" style="--w:22%"></span>
+            </div>
+            <span class="p">157<small>页</small></span>
+          </li>
+        </ol>
+      </section>
+      <section class="shelf-group">
+        <header>
+          <h3>帕伯莱知识库</h3>
+          <p>1 本 · 78 页</p>
+        </header>
+        <ol>
+          <li>
+            <div class="row-main">
+              <span class="t">帕伯莱知识库</span>
+              <span class="d">30 篇：实录 + Mosaic 专栏 + 媒体文章</span>
+              <span class="bar" style="--w:100%"></span>
+            </div>
+            <span class="p">78<small>页</small></span>
+          </li>
+        </ol>
+      </section>
+      <section class="shelf-group bonus">
+        <header>
+          <h3>星球加赠</h3>
+          <p>1 本 · 68 页</p>
+        </header>
+        <ol>
+          <li>
+            <div class="row-main">
+              <span class="t">马斯克问答录</span>
+              <span class="d">120 组问答、13 主题章，加入星球即赠</span>
+              <span class="bar" style="--w:60%"></span>
+            </div>
+            <span class="p">68<small>页</small></span>
+          </li>
+        </ol>
+      </section>
       </div>
-      <p class="trial-links">
-        <a class="btn-ghost" href={OFFER.trial.url} download>下载 EPUB</a>
-        <a class="btn-ghost" href={OFFER.trial.urlPdf} download>下载 PDF</a>
-        <a class="btn-ghost" href="https://www.ayaseeri.com/duanyongping-touzi-wendalu-hexin-jingjianban" target="_blank" rel="noopener noreferrer">在线读</a>
-      </p>
+      <p class="shelf-total">合计 <b>20 本 · 21,569 页</b>，全部收录在 ¥199 / 年的年费里。</p>
     </section>
 
-    <section class="offer-faq" aria-labelledby="faq-title">
-      <h2 id="faq-title">常见问题</h2>
-      {FAQ.map(([q, a]) => (
-        <details>
-          <summary>{q}</summary>
-          <p>{a}</p>
-        </details>
-      ))}
+    <section class="inside">
+      <div class="sec-head">
+        <p class="kicker">到手之后</p>
+        <h2>不是一堆文件，是能读下去的书</h2>
+      </div>
+      <div class="cards">
+        <div class="card"><span class="no">01</span><h3>两种格式，一份内容</h3><p>EPUB 给手机和阅读器，字号可调；PDF 保留版式，适合电脑与打印。不是两套书。</p></div>
+        <div class="card"><span class="no">02</span><h3>能点的目录与来源</h3><p>每篇原文都标了出处与前后关系；读到哪一节、来自哪一年，一目了然。</p></div>
+        <div class="card"><span class="no">03</span><h3>下载后就是你的</h3><p>文件保存在本地，不续费也能继续读；续费是为了拿后续新增与改版。</p></div>
+        <div class="card"><span class="no">04</span><h3>书之外还有四个站</h3><p>四套网站免费开放全文与关联阅读；书是给你离线带走、随时翻的那一份。</p></div>
+      </div>
     </section>
 
-    <footer class="offer-note">
+    <section class="preview" id="preview">
+      <div class="sec-head">
+        <p class="kicker">内页预览</p>
+        <h2>翻开是什么样</h2>
+        <p class="sec-lede">不是把网页截图堆在一起。每本书都有独立封面、可点击的多级目录，正文按书排版，出处与年份留在页面上。</p>
+      </div>
+      <div class="shots">
+        <figure>
+          <img src="/preview/cover.jpg" alt="电子书封面" loading="lazy" width="820" height="1164" />
+          <figcaption><b>封面</b> · 库名、四个站点网址与知识星球二维码</figcaption>
+        </figure>
+        <figure>
+          <img src="/preview/toc.jpg" alt="多级目录" loading="lazy" width="820" height="1164" />
+          <figcaption><b>目录</b> · 篇、章、节三级，点标题直接跳正文</figcaption>
+        </figure>
+        <figure>
+          <img src="/preview/body.jpg" alt="正文排版" loading="lazy" width="820" height="1164" />
+          <figcaption><b>正文</b> · 原文照排，提问、回答与出处各就各位</figcaption>
+        </figure>
+      </div>
+      <p class="shots-note">以上取自《巴菲特问答录》。完整目录、页码与来源标注在每个文件里都能点开。</p>
+    </section>
+
+    <section class="join" id="join">
+      <div class="receipt">
+        <p class="kicker">价投书房 · 年费会员</p>
+        <p class="price"><span class="cur">¥</span>199<span class="per">/ 年</span></p>
+        <ul class="lines">
+          <li><span>巴菲特知识库</span><b>8 本 · 17,206 页</b></li>
+          <li><span>段永平原典</span><b>5 本 · 2,215 页</b></li>
+          <li><span>芒格知识库</span><b>5 本 · 2,002 页</b></li>
+          <li><span>帕伯莱知识库</span><b>1 本 · 78 页</b></li>
+          <li><span>星球加赠</span><b>1 本 · 68 页</b></li>
+        </ul>
+        <p class="total"><span>合计</span><b>20 本 · 21,569 页 · EPUB + PDF</b></p>
+        <p class="fine">会员期内新增与改版免费同步 · 后续调价不影响已加入会员</p>
+      </div>
+      <div class="checkout">
+        <div class="qr-frame"><img class="qr" src="/images/zsxq-qr.png" alt="知识星球「滚雪球的小部落」二维码" width="220" height="220" /></div>
+        <a class="btn primary wide" href="https://t.zsxq.com/xtf5L" target="_blank" rel="noopener">打开知识星球加入 →</a>
+        <p class="hint">微信扫码，或直接打开知识星球。加入后看星球置顶帖，按说明一次下载全部书目。</p>
+        <p class="hint small">先试试免费试读：<a href="https://www.ayaseeri.com/book" target="_blank" rel="noopener">《段永平投资问答录 · 核心精简版》</a> · 42 页 · <a href="https://www.ayaseeri.com/books/duan-yongping-wendalu-jingjianban.pdf" target="_blank" rel="noopener">PDF</a></p>
+      </div>
+    </section>
+
+    <section class="faq">
+      <div class="sec-head">
+        <p class="kicker">常见问题</p>
+        <h2>付款前你大概会问</h2>
+      </div>
+      <details open><summary>¥199 是一次性买断吗？</summary><p>是年费会员：一次付款拿到这 20 本的全部 EPUB 与 PDF，文件下载后永久保存，不续费也能继续读。续费的意义是继续拿后续新增与改版。</p></details>
+      <details><summary>怎么拿到书？</summary><p>加入知识星球「滚雪球的小部落」后，置顶帖里有领取说明与全部下载链接，按书目点开即可，不需要另外申请。</p></details>
+      <details><summary>EPUB 和 PDF 有什么区别？</summary><p>EPUB 适合手机、平板和电子书阅读器，字号与行距可调；PDF 保留完整版式，适合电脑阅读与打印。两者内容一致。</p></details>
+      <details><summary>以后出新的书还要再付费吗？</summary><p>会员期内新增与改版的书免费同步，不另收费；涨价也不影响已加入的会员。</p></details>
+      <details><summary>网站上的内容要付费吗？</summary><p>四个站的全文都免费开放检索与阅读；付费买的是打包好的电子书、离线阅读与社群服务。</p></details>
+      <details><summary>可以退款吗？</summary><p>付款发生在知识星球，按平台规则处理；站内没有单独收款渠道。</p></details>
+    </section>
+
+    <section class="closing">
+      <p class="kicker">价投书房</p>
+      <h2>四套知识库，20 本书，一次带走</h2>
+      <a class="btn primary" href="https://t.zsxq.com/xtf5L" target="_blank" rel="noopener">¥199 / 年 · 打开知识星球</a>
+      <p class="hint">或扫码加入「滚雪球的小部落」，加入即得全部 EPUB + PDF。</p>
+    </section>
+
+    <footer class="note">
       <p>本站是独立的非官方整理站，与所涉人物及机构无从属关系；所收内容为编者整理与翻译，不构成投资建议。</p>
       <p>付费购买的是编者整理的电子书与社群服务，不是官方出版物。星球由编者运营，价格与权益以星球页面为准。</p>
     </footer>
   </article>
+
+  <div class="dock">
+    <div><b>¥199</b><span>/ 年 · 20 本</span></div>
+    <a class="btn primary" href="https://t.zsxq.com/xtf5L" target="_blank" rel="noopener">加入价投书房</a>
+  </div>
+
 </BaseLayout>
 
 <style>
-  /* 本站令牌名与另两站不同，这里做一次局部映射，样式其余部分保持四站一致 */
   .offer {
-    --border: var(--line);
-    --panel: var(--paper);
-    --text: var(--ink);
-    --accent: var(--orange);
-    --accent-soft: var(--orange-soft);
-    --on-accent: #fff;
-    max-width: 940px;
-    padding: 8px 0 56px;
+    --o-bg: var(--bg);
+    --o-card: var(--paper);
+    --o-ink: var(--ink);
+    --o-muted: var(--muted);
+    --o-line: var(--line);
+    --o-accent: var(--orange);
+    --o-on: #ffffff;
+    --o-soft: var(--orange-soft);
+    max-width: 1040px;
+    margin: 0 auto;
+    padding: clamp(28px, 5vw, 64px) clamp(18px, 5vw, 28px) 96px;
+    color: var(--o-ink);
   }
-
-  /* ── 首屏 ── */
-  .offer-hero { padding: 26px 0 10px; border-bottom: 1px solid var(--border); }
-  .eyebrow {
-    margin: 0 0 18px; font-size: 12px; letter-spacing: 0.18em; text-transform: uppercase;
-    color: var(--accent);
+  .offer * { box-sizing: border-box; }
+  .offer .kicker {
+    margin: 0 0 14px;
+    font-family: var(--sans, system-ui, sans-serif);
+    font-size: 12px;
+    letter-spacing: .18em;
+    color: var(--o-accent);
   }
+  .offer h1, .offer h2, .offer h3 { font-family: var(--serif, Georgia, "Noto Serif SC", serif); font-weight: 600; color: var(--o-ink); }
+  .offer b, .offer strong { color: var(--o-ink); }
   .offer h1 {
-    margin: 0 0 18px; font-family: var(--serif); font-weight: 600;
-    font-size: clamp(38px, 6vw, 64px); line-height: 1.14; letter-spacing: -0.01em;
-    color: var(--text);
+    margin: 0 0 20px;
+    font-size: clamp(38px, 6.4vw, 64px);
+    line-height: 1.14;
+    letter-spacing: -.01em;
+    text-wrap: balance;
   }
-  .lead {
-    max-width: 40em; margin: 0 0 28px; font-family: var(--reading); font-size: 17px;
-    line-height: 1.9; color: var(--text);
+  .lede {
+    max-width: 44em;
+    margin: 0 0 26px;
+    font-size: 16.5px;
+    line-height: 1.85;
+    color: var(--o-muted);
   }
+  .lede strong { color: var(--o-ink); font-weight: 600; }
+  .hero { display: block; }
+  .hero-actions { display: flex; flex-wrap: wrap; gap: 12px; margin-bottom: 34px; }
+  .hero-includes {
+    margin: 6px 0 34px; padding: 18px 20px; border: 1px solid var(--o-line); border-radius: 12px;
+    background: var(--o-card);
+  }
+  .inc-title { margin: 0 0 10px; font-family: var(--sans, system-ui, sans-serif); font-size: 11.5px; letter-spacing: .14em; color: var(--o-accent); }
+  .hero-includes ul { margin: 0; padding: 0; list-style: none; }
+  .hero-includes li { display: flex; justify-content: space-between; gap: 14px; padding: 6px 0; font-size: 13.5px; border-bottom: 1px dashed color-mix(in srgb, var(--o-line) 60%, transparent); }
+  .hero-includes li:last-child { border-bottom: none; }
+  .hero-includes li b { font-weight: 600; font-variant-numeric: tabular-nums; }
+  .hero-includes li span { color: var(--o-muted); }
+  .inc-note { margin: 10px 0 0; font-size: 12px; line-height: 1.7; color: var(--o-muted); }
+  @media (min-width: 900px) {
+    .hero { display: grid; grid-template-columns: minmax(0, 1.32fr) minmax(0, .68fr); gap: 48px; align-items: start; }
+    .hero-includes { margin: 8px 0 0; }
+  }
+  .btn {
+    display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+    padding: 13px 22px; border-radius: 999px; border: 1px solid transparent;
+    font-family: var(--sans, system-ui, sans-serif); font-size: 14.5px; font-weight: 600;
+    text-decoration: none; cursor: pointer; transition: transform .18s ease, box-shadow .18s ease, background .18s ease;
+  }
+  .btn.primary { background: var(--o-accent); color: var(--o-on); }
+  .btn.primary:hover { transform: translateY(-1px); box-shadow: 0 8px 22px -10px var(--o-accent); }
+  .btn.ghost { border-color: var(--o-line); color: var(--o-ink); background: transparent; }
+  .btn.ghost:hover { border-color: var(--o-accent); color: var(--o-accent); }
+  .btn.wide { width: 100%; margin: 14px 0 10px; }
   .stats {
-    display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px;
-    margin: 0 0 26px; padding: 0; list-style: none;
+    display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 0;
+    margin: 8px 0 0; padding: 20px 0 0; list-style: none;
+    border-top: 1px solid var(--o-line);
   }
-  .stats li {
-    display: flex; flex-direction: column; gap: 2px; padding: 14px 16px;
-    border: 1px solid var(--border); border-radius: var(--radius); background: var(--panel);
+  .stats li { padding: 0 18px 0 0; }
+  .stats li + li { padding-left: 18px; border-left: 1px solid var(--o-line); }
+  .stats b { display: block; font-family: var(--serif, Georgia, serif); font-size: 30px; font-weight: 600; line-height: 1.2; }
+  .stats span { display: block; margin-top: 2px; font-size: 12px; color: var(--o-muted); }
+  .sec-head { max-width: 52em; margin: 0 0 26px; }
+  .offer h2 { margin: 0 0 10px; font-size: clamp(24px, 3.4vw, 32px); line-height: 1.3; }
+  .sec-lede { margin: 0; font-size: 15px; line-height: 1.85; color: var(--o-muted); }
+  .shelf { margin: 72px 0 0; }
+  .shelves { display: grid; gap: 34px; }
+  .shelf-group header {
+    display: flex; align-items: baseline; justify-content: space-between; gap: 12px;
+    padding-bottom: 10px; border-bottom: 1px solid var(--o-line);
   }
-  .stats strong { font-family: var(--serif); font-size: 27px; font-weight: 600; line-height: 1.1; color: var(--text); white-space: nowrap; }
-  .stats span { font-size: 12px; color: var(--text-muted); }
-  .site-row { margin: 0; font-size: 13px; color: var(--text-muted); display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
-  .site-row a { color: var(--text-muted); text-decoration: none; border-bottom: 1px solid var(--accent-underline); }
-  .site-row a:hover { color: var(--accent); }
-  .site-row .dot { opacity: 0.5; }
-
-  /* ── 价格与二维码 ── */
-  .offer-join {
-    display: grid; grid-template-columns: minmax(0, 1fr) 300px; gap: 36px;
-    margin: 40px 0 0; padding: 32px 34px;
-    border: 1px solid var(--border); border-radius: 14px; background: var(--panel);
-    box-shadow: 0 1px 2px rgba(26, 24, 20, 0.04);
+  .shelf-group h3 { margin: 0; font-size: 18px; }
+  .shelf-group header p { margin: 0; font-size: 12.5px; color: var(--o-muted); font-variant-numeric: tabular-nums; }
+  .shelf-group ol { margin: 0; padding: 0; list-style: none; }
+  .shelf-group li {
+    display: flex; align-items: baseline; gap: 16px;
+    padding: 11px 0; border-bottom: 1px dashed color-mix(in srgb, var(--o-line) 70%, transparent);
   }
-  .join-label { margin: 0 0 10px; font-size: 13px; letter-spacing: 0.04em; color: var(--text-muted); }
-  .price {
-    margin: 0 0 20px; font-family: var(--serif); font-size: 76px; line-height: 0.95;
-    font-weight: 600; color: var(--accent); display: flex; align-items: baseline; gap: 6px;
+  .shelf-group li:last-child { border-bottom: none; }
+  .row-main { flex: 1; min-width: 0; display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 12px; }
+  .row-main .t { font-size: 15px; font-weight: 600; }
+  .row-main .d { font-size: 12.5px; color: var(--o-muted); }
+  .row-main .bar {
+    position: relative; flex-basis: 100%; height: 3px; margin-top: 7px;
+    border-radius: 3px; background: color-mix(in srgb, var(--o-line) 55%, transparent);
+    overflow: hidden;
   }
-  .price .cur { font-size: 34px; }
-  .price .per { font-family: var(--sans); font-size: 15px; font-weight: 400; color: var(--text-muted); letter-spacing: 0.02em; }
-  .benefits { margin: 0 0 18px; padding: 0; list-style: none; display: grid; gap: 9px; }
-  .benefits li { position: relative; padding-left: 22px; font-size: 14.5px; line-height: 1.7; color: var(--text); }
-  .benefits li::before {
-    content: ""; position: absolute; left: 4px; top: 0.62em; width: 7px; height: 7px;
-    border-radius: 50%; background: var(--accent); opacity: 0.75;
+  .row-main .bar::before {
+    content: ""; position: absolute; inset: 0 auto 0 0; width: var(--w);
+    background: var(--o-accent); opacity: .45; border-radius: 3px;
   }
-  .join-note { margin: 0; font-size: 12.5px; line-height: 1.8; color: var(--text-muted); }
-  .join-qr {
-    display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px;
-    padding: 18px; border-left: 1px dashed var(--border);
+  .shelf-group .p { font-family: var(--serif, Georgia, serif); font-size: 15px; font-variant-numeric: tabular-nums; white-space: nowrap; }
+  .shelf-group .p small { margin-left: 2px; font-size: 11px; color: var(--o-muted); }
+  .shelf-total { margin: 24px 0 0; font-size: 13.5px; color: var(--o-muted); }
+  .shelf-total b { color: var(--o-ink); }
+  .inside { margin: 84px 0 0; }
+  .cards { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
+  .card { padding: 22px 22px 24px; border: 1px solid var(--o-line); border-radius: 12px; background: var(--o-card); }
+  .card .no { font-family: var(--serif, Georgia, serif); font-size: 12px; letter-spacing: .12em; color: var(--o-accent); }
+  .card h3 { margin: 8px 0 8px; font-size: 17px; }
+  .card p { margin: 0; font-size: 13.5px; line-height: 1.8; color: var(--o-muted); }
+  .preview { margin: 84px 0 0; }
+  .shots { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 18px; }
+  .shots figure { margin: 0; }
+  .shots img {
+    display: block; width: 100%; height: auto; background: #fff;
+    border: 1px solid var(--o-line); border-radius: 10px;
+    box-shadow: 0 22px 46px -30px rgba(30, 22, 12, .55);
   }
-  .join-qr img {
-    width: 232px; height: 232px; padding: 6px; background: #fff; border-radius: 10px;
-    border: 1px solid var(--border); image-rendering: pixelated;
+  .shots figcaption { margin-top: 10px; font-size: 12.5px; line-height: 1.7; color: var(--o-muted); }
+  .shots figcaption b { color: var(--o-ink); font-weight: 600; }
+  .shots-note { margin: 16px 0 0; font-size: 12px; color: var(--o-muted); }
+  .join {
+    display: grid; grid-template-columns: 1.08fr .92fr; gap: 0;
+    margin: 84px 0 0; border: 1px solid var(--o-line); border-radius: 16px; overflow: hidden;
+    background: var(--o-card);
   }
-  .qr-direct {
-    margin-top: 4px; font-size: 12.5px; font-weight: 600; color: var(--accent);
-    text-decoration: none; border-bottom: 1px dashed var(--accent-underline); padding-bottom: 1px;
+  .receipt { padding: clamp(24px, 4vw, 36px); border-right: 1px dashed var(--o-line); }
+  .receipt .kicker { margin-bottom: 8px; }
+  .price { margin: 0 0 22px; font-family: var(--serif, Georgia, serif); font-size: 62px; line-height: 1; letter-spacing: -.02em; }
+  .price .cur { font-size: 28px; vertical-align: 26px; margin-right: 2px; }
+  .price .per { font-size: 16px; color: var(--o-muted); margin-left: 8px; letter-spacing: 0; }
+  .lines { margin: 0; padding: 0; list-style: none; }
+  .lines li { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; padding: 9px 0; border-bottom: 1px dashed color-mix(in srgb, var(--o-line) 70%, transparent); font-size: 13.5px; }
+  .lines span { color: var(--o-muted); }
+  .lines b { font-weight: 600; font-variant-numeric: tabular-nums; }
+  .total { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; margin: 14px 0 8px; padding-top: 14px; border-top: 2px solid var(--o-ink); font-size: 14px; }
+  .total b { font-variant-numeric: tabular-nums; }
+  .fine { margin: 10px 0 0; font-size: 12px; line-height: 1.75; color: var(--o-muted); }
+  .checkout { padding: clamp(24px, 4vw, 36px); display: flex; flex-direction: column; align-items: center; }
+  .qr-frame { padding: 12px; border: 1px solid var(--o-line); border-radius: 14px; background: #fff; }
+  .qr { display: block; width: 190px; height: 190px; image-rendering: pixelated; }
+  .hint { margin: 0; font-size: 12.5px; line-height: 1.8; color: var(--o-muted); text-align: center; }
+  .hint.small { margin-top: 12px; font-size: 12px; }
+  .hint a { color: var(--o-accent); text-decoration: underline; text-underline-offset: 2px; }
+  .faq { margin: 84px 0 0; }
+  .faq details { border-bottom: 1px solid var(--o-line); padding: 14px 0; }
+  .faq summary { cursor: pointer; font-size: 15px; font-weight: 600; list-style: none; display: flex; justify-content: space-between; gap: 12px; }
+  .faq summary::-webkit-details-marker { display: none; }
+  .faq summary::after { content: "+"; color: var(--o-accent); font-weight: 400; }
+  .faq details[open] summary::after { content: "−"; }
+  .faq details p { margin: 10px 0 0; font-size: 14px; line-height: 1.85; color: var(--o-muted); }
+  .closing { margin: 88px 0 0; padding: 44px 24px; text-align: center; border-top: 1px solid var(--o-line); border-bottom: 1px solid var(--o-line); }
+  .closing h2 { margin: 0 0 22px; font-size: clamp(22px, 3vw, 28px); }
+  .closing .hint { margin-top: 14px; }
+  .note { margin: 36px 0 0; font-size: 12px; line-height: 1.8; color: var(--o-muted); }
+  .note p { margin: 0 0 6px; }
+  .dock {
+    display: none; position: fixed; left: 12px; right: 12px; bottom: 12px; z-index: 40;
+    align-items: center; justify-content: space-between; gap: 12px;
+    padding: 10px 12px 10px 16px; border-radius: 14px;
+    background: var(--o-card); border: 1px solid var(--o-line);
+    box-shadow: 0 14px 40px -18px rgba(0,0,0,.35);
   }
-  .qr-direct:hover { color: var(--accent); border-bottom-style: solid; }
-  .qr-hint { margin: 6px 0 0; font-size: 14px; font-weight: 600; color: var(--text); }
-  .qr-sub { margin: 0; font-size: 12px; color: var(--text-muted); text-align: center; }
-
-  /* ── 步骤 ── */
-  .offer-steps { margin: 28px 0 0; }
-  .offer-steps ol { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; }
-  .offer-steps li {
-    display: grid; gap: 6px; padding: 18px 18px 20px; border-radius: 12px;
-    background: var(--accent-soft); border: 1px solid transparent;
+  .dock b { font-family: var(--serif, Georgia, serif); font-size: 20px; }
+  .dock span { margin-left: 6px; font-size: 12px; color: var(--o-muted); }
+  .dock .btn { padding: 10px 16px; font-size: 13.5px; }
+  @media (max-width: 860px) {
+    .join { grid-template-columns: minmax(0, 1fr); }
+    .receipt { border-right: none; border-bottom: 1px dashed var(--o-line); }
+    .cards { grid-template-columns: minmax(0, 1fr); }
+    .shots { grid-template-columns: minmax(0, 1fr); }
+    .shots figure { max-width: 420px; }
+    .stats { grid-template-columns: repeat(2, minmax(0, 1fr)); row-gap: 18px; }
+    .stats li:nth-child(3) { padding-left: 0; border-left: none; }
+    .dock { display: flex; }
+    .offer { padding-bottom: 120px; }
   }
-  .step-no {
-    width: 22px; height: 22px; border-radius: 50%; background: var(--accent); color: var(--on-accent);
-    font-size: 12px; font-weight: 600; display: inline-flex; align-items: center; justify-content: center;
-  }
-  .offer-steps strong { font-size: 15px; color: var(--text); }
-  .offer-steps li span:last-child { font-size: 13px; line-height: 1.7; color: var(--text-muted); }
-
-  /* ── 书单 ── */
-  .offer-books { margin: 56px 0 0; }
-  .offer-books h2, .offer-trial h2, .offer-faq h2 {
-    margin: 0 0 8px; font-family: var(--serif); font-size: 28px; font-weight: 600; color: var(--text);
-  }
-  .section-note { margin: 0 0 26px; font-size: 13.5px; color: var(--text-muted); line-height: 1.8; }
-  .shelf { margin: 0 0 26px; }
-  .shelf h3 {
-    display: flex; align-items: baseline; gap: 10px; margin: 0 0 10px;
-    font-size: 15px; font-weight: 600; color: var(--text);
-  }
-  .shelf h3 span { font-size: 12px; font-weight: 400; color: var(--text-muted); }
-  table { width: 100%; border-collapse: collapse; font-size: 14px; }
-  th, td { padding: 9px 10px; text-align: left; border-bottom: 1px solid var(--border); vertical-align: top; }
-  thead th { font-size: 12px; font-weight: 600; letter-spacing: 0.04em; color: var(--text-muted); border-bottom: 1px solid var(--text-muted); }
-  tbody tr:last-child td { border-bottom: none; }
-  td:nth-child(2) { color: var(--text-muted); font-size: 13px; }
-  .num { text-align: right; white-space: nowrap; font-variant-numeric: tabular-nums; }
-
-  /* ── 试读 ── */
-  .offer-trial {
-    display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 24px; align-items: center;
-    margin: 56px 0 0; padding: 26px 28px; border: 1px solid var(--border); border-radius: 14px;
-    background: var(--panel);
-  }
-  .offer-trial p { margin: 0; font-size: 14px; line-height: 1.85; color: var(--text-muted); max-width: 46em; }
-  .offer-trial h2 { font-size: 22px; margin-bottom: 10px; }
-  .trial-links { display: flex; flex-wrap: wrap; gap: 8px; margin: 0; }
-  .btn-ghost {
-    display: inline-flex; align-items: center; gap: 6px; padding: 8px 14px; border-radius: 999px;
-    border: 1px solid var(--border); color: var(--text); text-decoration: none; font-size: 13px;
-  }
-  .btn-ghost:hover { border-color: var(--accent); color: var(--accent); }
-
-  /* ── FAQ ── */
-  .offer-faq { margin: 56px 0 0; }
-  .offer-faq details { border-bottom: 1px solid var(--border); padding: 14px 0; }
-  .offer-faq summary {
-    cursor: pointer; list-style: none; font-size: 15px; font-weight: 600; color: var(--text);
-    display: flex; justify-content: space-between; gap: 16px;
-  }
-  .offer-faq summary::-webkit-details-marker { display: none; }
-  .offer-faq summary::after { content: "+"; color: var(--accent); font-weight: 400; }
-  .offer-faq details[open] summary::after { content: "−"; }
-  .offer-faq p { margin: 10px 0 0; max-width: 46em; font-size: 14px; line-height: 1.85; color: var(--text-muted); }
-
-  .offer-note { margin: 52px 0 0; padding-top: 22px; border-top: 1px solid var(--border); }
-  .offer-note p { margin: 0 0 8px; font-size: 12.5px; line-height: 1.8; color: var(--text-muted); }
-
-  @media (max-width: 900px) {
-    .offer-join { grid-template-columns: minmax(0, 1fr); }
-    .join-qr { border-left: none; border-top: 1px dashed var(--border); padding-top: 22px; }
-    .offer-steps ol { grid-template-columns: minmax(0, 1fr); }
-    .offer-trial { grid-template-columns: minmax(0, 1fr); }
-  }
-  @media (max-width: 720px) {
-    .stats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-    .price { font-size: 60px; }
-    .offer-join { padding: 24px 20px; }
+  @media (max-width: 560px) {
+    .price { font-size: 52px; }
+    .shelf-group li { gap: 10px; }
   }
 </style>
