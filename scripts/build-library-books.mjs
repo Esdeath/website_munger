@@ -210,10 +210,17 @@ function buildReaderBook(book) {
   return { title: book.title, subtitle: book.subtitle, statsLine: `${chapters.length} 章 · 约 490 页`, chapters, legacyStyle: style };
 }
 
+// 阅读页自带米色纸底，出书时统一改成白底（保留正文字色与强调色）
+const WHITE_THEME = `<style>
+:root{--paper:#fff;--page:#fff;--panel:#fff;--quote-bg:#fff;--rule-soft:#fff;}
+html,body,.sheet{background:#fff!important;}
+.content-block .notes,.content-block p.yinwen,.content-block nav.mininav,.content-block ul.numlist>li p.li-fn{background:#fff!important;}
+</style>`;
+
 function renderBookHtml(model) {
   const legacy = model.legacyStyle ? `<style>${model.legacyStyle}</style>` : "";
   return `<!DOCTYPE html><html lang="zh-CN"><head><meta charset="utf-8" /><title>${esc(model.title)}</title>
-<style>${BOOK_CSS}</style>${legacy}<style>${model.legacyStyle ? ".bar,.menu-btn,.search,.sidebar,.drawer{display:none!important}" : ""}</style>
+<style>${BOOK_CSS}</style>${legacy}${model.legacyStyle ? WHITE_THEME : ""}<style>${model.legacyStyle ? ".bar,.menu-btn,.search,.sidebar,.drawer{display:none!important}" : ""}</style>
 </head><body>
 ${coverHtml(model, model.statsLine)}
 ${tocHtml(model.chapters)}
