@@ -17,13 +17,14 @@ const OUTPUT_DIR = path.join(ROOT, "output", "munger-qa-book");
 const PDF_DIR = path.join(ROOT, "output", "pdf");
 const TMP_DIR = path.join(ROOT, "tmp", "pdfs", "munger-qa-book");
 const COVER_PATH = path.join(ROOT, "assets", "munger-qa-book", "cover.png");
-// 封面必带：知识星球二维码（与网站首页共用 public/images/zsxq-qr.png）+ 星球名 + 三个网站网址
+// 封面必带：知识星球二维码（与网站首页共用 public/images/zsxq-qr.png）+ 星球名 + 四个网站网址
 const ZSXQ_QR_PATH = path.join(ROOT, "public", "images", "zsxq-qr.png");
 const ZSXQ_NAME = "滚雪球的小部落";
 const SITE_LINKS = [
   ["段永平", "https://www.ayaseeri.com/"],
   ["芒格", "https://munger.ayaseeri.com/"],
   ["巴菲特", "https://buffett.ayaseeri.com/"],
+  ["帕伯莱", "https://pabrai.ayaseeri.com/"],
 ];
 function coverContactHtml(qrSrc, selfClosing = false) {
   const end = selfClosing ? "/>" : ">";

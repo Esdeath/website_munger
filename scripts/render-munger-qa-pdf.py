@@ -43,7 +43,7 @@ PAPER = colors.HexColor("#ffffff")
 ZSXQ_QR = Path(__file__).resolve().parents[1] / "public/images/zsxq-qr.png"
 ZSXQ_NAME = "滚雪球的小部落"
 # 封面必带三个网站网址
-SITE_LINKS = [("段永平", "https://www.ayaseeri.com/"), ("芒格", "https://munger.ayaseeri.com/"), ("巴菲特", "https://buffett.ayaseeri.com/")]
+SITE_LINKS = [("段永平", "https://www.ayaseeri.com/"), ("芒格", "https://munger.ayaseeri.com/"), ("巴菲特", "https://buffett.ayaseeri.com/"), ("帕伯莱", "https://pabrai.ayaseeri.com/")]
 
 
 def register_fonts() -> tuple[str, str]:
